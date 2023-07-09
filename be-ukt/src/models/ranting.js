@@ -40,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
   ranting.init({
     id_ranting: {
       allowNull: false,
-      autoIncrement: true,
+      autoIncrement: false,
       primaryKey: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     id_cabang: DataTypes.STRING,
     name: DataTypes.STRING

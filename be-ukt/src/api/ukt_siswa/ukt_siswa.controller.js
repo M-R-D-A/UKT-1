@@ -147,61 +147,173 @@ module.exports = {
             })
     },
     controllerStatistics: async (req, res) => {
-
+        const attributes = ['keshan', 'senam', 'jurus', 'fisik', 'teknik', 'sambung']
         ukt_siswa.findAll({
             attributes: ['keshan', 'senam', 'jurus', 'fisik', 'teknik', 'sambung']
         })
             .then(result => {
-                const attributes = ['keshan', 'senam', 'jurus', 'fisik', 'teknik', 'sambung'];
-
-
-                const data = []
-                let allRedCount = 0;
-                let allYellowCount = 0;
-                let allGreenCount = 0;
+                // Process the data into the desired format
+                const options = {
+                    series: [
+                        {
+                            name: 'Kurang',
+                            data: [],
+                            color: '#FF6A81'
+                        },
+                        {
+                            name: 'Sedang',
+                            data: [],
+                            color: '#6CE1AE'
+                        },
+                        {
+                            name: 'Cukup Baik',
+                            data: [],
+                            color: '#48B8F1'
+                        },
+                        {
+                            name: 'Baik',
+                            data: [],
+                            color: '#BC5EF6'
+                        },
+                        {
+                            name: 'Memuaskan',
+                            data: [],
+                            color: '#FB934E'
+                        },
+                        {
+                            name: 'Sangat Memuaskan',
+                            data: [],
+                            color: '#E9E059'
+                        },
+                    ],
+                };
+                const tables = {
+                    series: [
+                        {
+                            name: 'Keshan',
+                            data: [],
+                        },
+                        {
+                            name: 'Senam',
+                            data: [],
+                        },
+                        {
+                            name: 'Jurus',
+                            data: [],
+                        },
+                        {
+                            name: 'Fisik',
+                            data: [],
+                        },
+                        {
+                            name: 'Teknik',
+                            data: [],
+                        },
+                        {
+                            name: 'Sambung',
+                            data: [],
+                        },
+                        {
+                            name: 'Rata - rata',
+                            data: [],
+                        },
+                    ],
+                };
+                let allKurang = 0;
+                let allSedang = 0;
+                let allCukupBaik = 0;
+                let allBaik = 0;
+                let allMemuaskan = 0;
+                let allSangatMemuaskan = 0;
                 for (let i = 0; i < 6; i++) {
-                    const subData = {}
-                    const percentages = {};
+                    //untuk mencari data berdasarkan attribut
                     const attribute = attributes[i];
-                    let redCount = 0;
-                    let yellowCount = 0;
-                    let greenCount = 0;
+                    let kurang = 0;
+                    let sedang = 0;
+                    let cukupBaik = 0;
+                    let baik = 0;
+                    let memuaskan = 0;
+                    let sangatMemuaskan = 0;
                     result.map(item => {
-                        for (let b = 0; b < result.length; b++) {
-                            const value = item[attribute]
+                        const value = item[attribute];
+                        if (value <= 50) {
+                            allKurang++;
+                            kurang++;
+                        } else if (value > 50 && value < 61) {
+                            allSedang++;
+                            sedang++;
 
-                            if (value < 50) {
-                                allRedCount++;
-                                redCount++;
-                            } else if (value > 80) {
-                                allGreenCount++;
-                                greenCount++;
-                            } else {
-                                allYellowCount++;
-                                yellowCount++;
-                            }
+                        } else if (value > 60 && value < 71) {
+                            allCukupBaik++;
+                            cukupBaik++;
+
+                        } else if (value > 70 && value < 81) {
+                            allBaik++;
+                            baik++;
+
+                        } else if (value > 80 && value < 91) {
+                            allMemuaskan++;
+                            memuaskan++;
+
+                        } else if (value > 90 && value < 101) {
+                            allSangatMemuaskan++;
+                            sangatMemuaskan++;
+
                         }
-                    })
-                    percentages.red = Math.round((redCount / result.length) * 100 * 100 / result.length) / 100;
-                    percentages.yellow = Math.round((yellowCount / result.length) * 100 * 100 / result.length) / 100;
-                    percentages.green = Math.round((greenCount / result.length) * 100 * 100 / result.length) / 100;
-                    subData.name = attributes[i];
-                    subData.percentages = percentages;
-                    data.push(subData)
+                        // for (let b = 0; b < result.length; b++) {
+                        //     // melakukan mapping dan looping untuk memasukkan data dari result
+
+                        // }
+                    });
+
+
+                    let persenKurang = Math.round((kurang / result.length) * 100 * 100) / 100
+                    let persenSedang = Math.round((sedang / result.length) * 100 * 100) / 100;
+                    let persenCukupBaik = Math.round((cukupBaik / result.length) * 100 * 100) / 100;
+                    let persenBaik = Math.round((baik / result.length) * 100 * 100) / 100;
+                    let persenMemuaskan = Math.round((memuaskan / result.length) * 100 * 100) / 100;
+                    let persenSangatMemuaskan = Math.round((sangatMemuaskan / result.length) * 100 * 100) / 100;
+
+                    kurang > 0 ? options.series[0].data.push(persenKurang) : options.series[0].data.push(0);
+                    sedang > 0 ? options.series[1].data.push(persenSedang) : options.series[1].data.push(0);
+                    cukupBaik > 0 ? options.series[2].data.push(persenCukupBaik) : options.series[2].data.push(0)
+                    baik > 0 ? options.series[3].data.push(persenBaik) : options.series[3].data.push(0)
+                    memuaskan > 0 ? options.series[4].data.push(persenMemuaskan) : options.series[4].data.push(0)
+                    sangatMemuaskan > 0 ? options.series[5].data.push(persenSangatMemuaskan) : options.series[5].data.push(0)
+                    // for (let j = 0; j < 6; j++) {
+                    kurang > 0 ? tables.series[i].data.push(persenKurang) : tables.series[i].data.push(0);
+                    sedang > 0 ? tables.series[i].data.push(persenSedang) : tables.series[i].data.push(0);
+                    cukupBaik > 0 ? tables.series[i].data.push(persenCukupBaik) : tables.series[i].data.push(0)
+                    baik > 0 ? tables.series[i].data.push(persenBaik) : tables.series[i].data.push(0)
+                    memuaskan > 0 ? tables.series[i].data.push(persenMemuaskan) : tables.series[i].data.push(0)
+                    sangatMemuaskan > 0 ? tables.series[i].data.push(persenSangatMemuaskan) : tables.series[i].data.push(0)
+                    // }
                 }
-                const average = {}
-                const percentages = {}
-                percentages.red = Math.round((allRedCount / result.length) * 100 * 100 / result.length / 6) / 100;
-                percentages.yellow = Math.round((allYellowCount / result.length) * 100 * 100 / result.length / 6) / 100;
-                percentages.green = Math.round((allGreenCount / result.length) * 100 * 100 / result.length / 6) / 100;
 
-                average.name = 'rata - rata';
-                average.percentages = percentages;
-                data.push(average);
+                let persenKurang = Math.round((allKurang / result.length) * 100 * 100 / 6) / 100;
+                let persenSedang = Math.round((allSedang / result.length) * 100 * 100 / 6) / 100;
+                let persenCukupBaik = Math.round((allCukupBaik / result.length) * 100 * 100 / 6) / 100;
+                let persenBaik = Math.round((allBaik / result.length) * 100 * 100 / 6) / 100;
+                let persenMemuaskan = Math.round((allMemuaskan / result.length) * 100 * 100 / 6) / 100;
+                let persenSangatMemuaskan = Math.round((allSangatMemuaskan / result.length) * 100 * 100 / 6) / 100;
 
+                allKurang > 0 ? options.series[0].data.push(persenKurang) : options.series[0].data.push(0);
+                allSedang > 0 ? options.series[1].data.push(persenSedang) : options.series[1].data.push(0);
+                allCukupBaik > 0 ? options.series[2].data.push(persenCukupBaik) : options.series[2].data.push(0)
+                allBaik > 0 ? options.series[3].data.push(persenBaik) : options.series[3].data.push(0)
+                allMemuaskan > 0 ? options.series[4].data.push(persenMemuaskan) : options.series[4].data.push(0)
+                allSangatMemuaskan > 0 ? options.series[5].data.push(persenSangatMemuaskan) : options.series[5].data.push(0)
+
+                allKurang > 0 ? tables.series[6].data.push(persenKurang) : tables.series[6].data.push(0);
+                allSedang > 0 ? tables.series[6].data.push(persenSedang) : tables.series[6].data.push(0);
+                allCukupBaik > 0 ? tables.series[6].data.push(persenCukupBaik) : tables.series[6].data.push(0)
+                allBaik > 0 ? tables.series[6].data.push(persenBaik) : tables.series[6].data.push(0)
+                allMemuaskan > 0 ? tables.series[6].data.push(persenMemuaskan) : tables.series[6].data.push(0)
+                allSangatMemuaskan > 0 ? tables.series[6].data.push(persenSangatMemuaskan) : tables.series[6].data.push(0)
                 res.json({
                     // count: data.length,
-                    data: data
+                    data: options,
+                    tables: tables
                 })
             })
             .catch(error => {
@@ -228,53 +340,168 @@ module.exports = {
             }
         })
             .then(result => {
-                const data = []
-                let allRedCount = 0;
-                let allYellowCount = 0;
-                let allGreenCount = 0;
+                // Process the data into the desired format
+                const options = {
+                    series: [
+                        {
+                            name: 'Kurang',
+                            data: [],
+                            color: '#FF6A81'
+                        },
+                        {
+                            name: 'Sedang',
+                            data: [],
+                            color: '#6CE1AE'
+                        },
+                        {
+                            name: 'Cukup Baik',
+                            data: [],
+                            color: '#48B8F1'
+                        },
+                        {
+                            name: 'Baik',
+                            data: [],
+                            color: '#BC5EF6'
+                        },
+                        {
+                            name: 'Memuaskan',
+                            data: [],
+                            color: '#FB934E'
+                        },
+                        {
+                            name: 'Sangat Memuaskan',
+                            data: [],
+                            color: '#E9E059'
+                        },
+                    ],
+                };
+                const tables = {
+                    series: [
+                        {
+                            name: 'Keshan',
+                            data: [],
+                        },
+                        {
+                            name: 'Senam',
+                            data: [],
+                        },
+                        {
+                            name: 'Jurus',
+                            data: [],
+                        },
+                        {
+                            name: 'Fisik',
+                            data: [],
+                        },
+                        {
+                            name: 'Teknik',
+                            data: [],
+                        },
+                        {
+                            name: 'Sambung',
+                            data: [],
+                        },
+                        {
+                            name: 'Rata - rata',
+                            data: [],
+                        },
+                    ],
+                };
+                let allKurang = 0;
+                let allSedang = 0;
+                let allCukupBaik = 0;
+                let allBaik = 0;
+                let allMemuaskan = 0;
+                let allSangatMemuaskan = 0;
                 for (let i = 0; i < 6; i++) {
-                    const subData = {}
-                    const percentages = {};
+                    //untuk mencari data berdasarkan attribut
                     const attribute = attributes[i];
-                    let redCount = 0;
-                    let yellowCount = 0;
-                    let greenCount = 0;
+                    let kurang = 0;
+                    let sedang = 0;
+                    let cukupBaik = 0;
+                    let baik = 0;
+                    let memuaskan = 0;
+                    let sangatMemuaskan = 0;
                     result.map(item => {
-                        for (let b = 0; b < result.length; b++) {
-                            const value = item[attribute]
+                        const value = item[attribute];
+                        if (value <= 50) {
+                            allKurang++;
+                            kurang++;
+                        } else if (value > 50 && value < 61) {
+                            allSedang++;
+                            sedang++;
 
-                            if (value < 50) {
-                                allRedCount++;
-                                redCount++;
-                            } else if (value > 80) {
-                                allGreenCount++;
-                                greenCount++;
-                            } else {
-                                allYellowCount++;
-                                yellowCount++;
-                            }
+                        } else if (value > 60 && value < 71) {
+                            allCukupBaik++;
+                            cukupBaik++;
+
+                        } else if (value > 70 && value < 81) {
+                            allBaik++;
+                            baik++;
+
+                        } else if (value > 80 && value < 91) {
+                            allMemuaskan++;
+                            memuaskan++;
+
+                        } else if (value > 90 && value < 101) {
+                            allSangatMemuaskan++;
+                            sangatMemuaskan++;
+
                         }
-                    })
-                    percentages.red = Math.round((redCount / result.length) * 100 * 100 / result.length) / 100;
-                    percentages.yellow = Math.round((yellowCount / result.length) * 100 * 100 / result.length) / 100;
-                    percentages.green = Math.round((greenCount / result.length) * 100 * 100 / result.length) / 100;
-                    subData.name = attributes[i];
-                    subData.percentages = percentages;
-                    data.push(subData)
+                        // for (let b = 0; b < result.length; b++) {
+                        //     // melakukan mapping dan looping untuk memasukkan data dari result
+
+                        // }
+                    });
+
+
+                    let persenKurang = Math.round((kurang / result.length) * 100 * 100) / 100
+                    let persenSedang = Math.round((sedang / result.length) * 100 * 100) / 100;
+                    let persenCukupBaik = Math.round((cukupBaik / result.length) * 100 * 100) / 100;
+                    let persenBaik = Math.round((baik / result.length) * 100 * 100) / 100;
+                    let persenMemuaskan = Math.round((memuaskan / result.length) * 100 * 100) / 100;
+                    let persenSangatMemuaskan = Math.round((sangatMemuaskan / result.length) * 100 * 100) / 100;
+
+                    kurang > 0 ? options.series[0].data.push(persenKurang) : options.series[0].data.push(0);
+                    sedang > 0 ? options.series[1].data.push(persenSedang) : options.series[1].data.push(0);
+                    cukupBaik > 0 ? options.series[2].data.push(persenCukupBaik) : options.series[2].data.push(0)
+                    baik > 0 ? options.series[3].data.push(persenBaik) : options.series[3].data.push(0)
+                    memuaskan > 0 ? options.series[4].data.push(persenMemuaskan) : options.series[4].data.push(0)
+                    sangatMemuaskan > 0 ? options.series[5].data.push(persenSangatMemuaskan) : options.series[5].data.push(0)
+                    // for (let j = 0; j < 6; j++) {
+                    kurang > 0 ? tables.series[i].data.push(persenKurang) : tables.series[i].data.push(0);
+                    sedang > 0 ? tables.series[i].data.push(persenSedang) : tables.series[i].data.push(0);
+                    cukupBaik > 0 ? tables.series[i].data.push(persenCukupBaik) : tables.series[i].data.push(0)
+                    baik > 0 ? tables.series[i].data.push(persenBaik) : tables.series[i].data.push(0)
+                    memuaskan > 0 ? tables.series[i].data.push(persenMemuaskan) : tables.series[i].data.push(0)
+                    sangatMemuaskan > 0 ? tables.series[i].data.push(persenSangatMemuaskan) : tables.series[i].data.push(0)
+                    // }
                 }
-                const average = {}
-                const percentages = {}
-                percentages.red = Math.round((allRedCount / result.length) * 100 * 100 / result.length / 6) / 100;
-                percentages.yellow = Math.round((allYellowCount / result.length) * 100 * 100 / result.length / 6) / 100;
-                percentages.green = Math.round((allGreenCount / result.length) * 100 * 100 / result.length / 6) / 100;
 
-                average.name = 'rata - rata';
-                average.percentages = percentages;
-                data.push(average);
+                let persenKurang = Math.round((allKurang / result.length) * 100 * 100 / 6) / 100;
+                let persenSedang = Math.round((allSedang / result.length) * 100 * 100 / 6) / 100;
+                let persenCukupBaik = Math.round((allCukupBaik / result.length) * 100 * 100 / 6) / 100;
+                let persenBaik = Math.round((allBaik / result.length) * 100 * 100 / 6) / 100;
+                let persenMemuaskan = Math.round((allMemuaskan / result.length) * 100 * 100 / 6) / 100;
+                let persenSangatMemuaskan = Math.round((allSangatMemuaskan / result.length) * 100 * 100 / 6) / 100;
 
+                allKurang > 0 ? options.series[0].data.push(persenKurang) : options.series[0].data.push(0);
+                allSedang > 0 ? options.series[1].data.push(persenSedang) : options.series[1].data.push(0);
+                allCukupBaik > 0 ? options.series[2].data.push(persenCukupBaik) : options.series[2].data.push(0)
+                allBaik > 0 ? options.series[3].data.push(persenBaik) : options.series[3].data.push(0)
+                allMemuaskan > 0 ? options.series[4].data.push(persenMemuaskan) : options.series[4].data.push(0)
+                allSangatMemuaskan > 0 ? options.series[5].data.push(persenSangatMemuaskan) : options.series[5].data.push(0)
+
+                allKurang > 0 ? tables.series[6].data.push(persenKurang) : tables.series[6].data.push(0);
+                allSedang > 0 ? tables.series[6].data.push(persenSedang) : tables.series[6].data.push(0);
+                allCukupBaik > 0 ? tables.series[6].data.push(persenCukupBaik) : tables.series[6].data.push(0)
+                allBaik > 0 ? tables.series[6].data.push(persenBaik) : tables.series[6].data.push(0)
+                allMemuaskan > 0 ? tables.series[6].data.push(persenMemuaskan) : tables.series[6].data.push(0)
+                allSangatMemuaskan > 0 ? tables.series[6].data.push(persenSangatMemuaskan) : tables.series[6].data.push(0)
                 res.json({
                     // count: data.length,
-                    data: data
+                    data: options,
+                    tables: tables
                 })
             })
             .catch(error => {
@@ -300,10 +527,12 @@ module.exports = {
             }
         })
             .then(result => {
+                console.log(result.cabang_ranting);
                 const data = []
                 for (let i = 0; i < result.cabang_ranting.length; i++) {
                     data.push(result.cabang_ranting[i].id_ranting)
                 }
+                console.log(data);
                 // console.log(result.cabang_ranting.id_ranting);
                 ukt_siswa.findAll({
                     attributes: attributes,
@@ -313,59 +542,172 @@ module.exports = {
                             as: "siswa_ukt_siswa",
                             attributes: ['id_ranting'],
                             where: {
-                                id_ranting: data
+                                id_ranting: {
+                                    [Op.in]: data
+                                }
                             }
                         }
                     ],
                 })
                     .then(result => {
                         // Process the data into the desired format
-                        const data = [];
-                        let allRedCount = 0;
-                        let allYellowCount = 0;
-                        let allGreenCount = 0;
+                        const options = {
+                            series: [
+                                {
+                                    name: 'Kurang',
+                                    data: [],
+                                    color: '#FF6A81'
+                                },
+                                {
+                                    name: 'Sedang',
+                                    data: [],
+                                    color: '#6CE1AE'
+                                },
+                                {
+                                    name: 'Cukup Baik',
+                                    data: [],
+                                    color: '#48B8F1'
+                                },
+                                {
+                                    name: 'Baik',
+                                    data: [],
+                                    color: '#BC5EF6'
+                                },
+                                {
+                                    name: 'Memuaskan',
+                                    data: [],
+                                    color: '#FB934E'
+                                },
+                                {
+                                    name: 'Sangat Memuaskan',
+                                    data: [],
+                                    color: '#E9E059'
+                                },
+                            ],
+                        };
+                        const tables = {
+                            series: [
+                                {
+                                    name: 'Keshan',
+                                    data: [],
+                                },
+                                {
+                                    name: 'Senam',
+                                    data: [],
+                                },
+                                {
+                                    name: 'Jurus',
+                                    data: [],
+                                },
+                                {
+                                    name: 'Fisik',
+                                    data: [],
+                                },
+                                {
+                                    name: 'Teknik',
+                                    data: [],
+                                },
+                                {
+                                    name: 'Sambung',
+                                    data: [],
+                                },
+                                {
+                                    name: 'Rata - rata',
+                                    data: [],
+                                },
+                            ],
+                        };
+                        let allKurang = 0;
+                        let allSedang = 0;
+                        let allCukupBaik = 0;
+                        let allBaik = 0;
+                        let allMemuaskan = 0;
+                        let allSangatMemuaskan = 0;
                         for (let i = 0; i < 6; i++) {
-                            const subData = {};
-                            const percentages = {};
+                            //untuk mencari data berdasarkan attribut
                             const attribute = attributes[i];
-                            let redCount = 0;
-                            let yellowCount = 0;
-                            let greenCount = 0;
+                            let kurang = 0;
+                            let sedang = 0;
+                            let cukupBaik = 0;
+                            let baik = 0;
+                            let memuaskan = 0;
+                            let sangatMemuaskan = 0;
                             result.map(item => {
-                                for (let b = 0; b < result.length; b++) {
-                                    const value = item[attribute];
-                                    if (value < 50) {
-                                        allRedCount++;
-                                        redCount++;
-                                    } else if (value > 80) {
-                                        allGreenCount++;
-                                        greenCount++;
-                                    } else {
-                                        allYellowCount++;
-                                        yellowCount++;
-                                    }
+                                const value = item[attribute];
+                                if (value <= 50) {
+                                    allKurang++;
+                                    kurang++;
+                                } else if (value > 50 && value < 61) {
+                                    allSedang++;
+                                    sedang++;
+
+                                } else if (value > 60 && value < 71) {
+                                    allCukupBaik++;
+                                    cukupBaik++;
+
+                                } else if (value > 70 && value < 81) {
+                                    allBaik++;
+                                    baik++;
+
+                                } else if (value > 80 && value < 91) {
+                                    allMemuaskan++;
+                                    memuaskan++;
+
+                                } else if (value > 90 && value < 101) {
+                                    allSangatMemuaskan++;
+                                    sangatMemuaskan++;
+
                                 }
                             });
-                            percentages.red = Math.round((redCount / result.length) * 100 * 100 / result.length) / 100;
-                            percentages.yellow = Math.round((yellowCount / result.length) * 100 * 100 / result.length) / 100;
-                            percentages.green = Math.round((greenCount / result.length) * 100 * 100 / result.length) / 100;
-                            subData.name = attributes[i];
-                            subData.percentages = percentages;
-                            subData.average = (redCount + yellowCount + greenCount) / 3; // Calculate the average
-                            data.push(subData);
-                        }
-                        const average = {}
-                        const percentages = {}
-                        percentages.red = Math.round((allRedCount / result.length) * 100 * 100 / result.length / 6) / 100;
-                        percentages.yellow = Math.round((allYellowCount / result.length) * 100 * 100 / result.length / 6) / 100;
-                        percentages.green = Math.round((allGreenCount / result.length) * 100 * 100 / result.length / 6) / 100;
 
-                        average.name = 'rata - rata';
-                        average.percentages = percentages;
-                        data.push(average);
+
+                            let persenKurang = Math.round((kurang / result.length) * 100 * 100) / 100
+                            let persenSedang = Math.round((sedang / result.length) * 100 * 100) / 100;
+                            let persenCukupBaik = Math.round((cukupBaik / result.length) * 100 * 100) / 100;
+                            let persenBaik = Math.round((baik / result.length) * 100 * 100) / 100;
+                            let persenMemuaskan = Math.round((memuaskan / result.length) * 100 * 100) / 100;
+                            let persenSangatMemuaskan = Math.round((sangatMemuaskan / result.length) * 100 * 100) / 100;
+
+                            kurang > 0 ? options.series[0].data.push(persenKurang) : options.series[0].data.push(0);
+                            sedang > 0 ? options.series[1].data.push(persenSedang) : options.series[1].data.push(0);
+                            cukupBaik > 0 ? options.series[2].data.push(persenCukupBaik) : options.series[2].data.push(0)
+                            baik > 0 ? options.series[3].data.push(persenBaik) : options.series[3].data.push(0)
+                            memuaskan > 0 ? options.series[4].data.push(persenMemuaskan) : options.series[4].data.push(0)
+                            sangatMemuaskan > 0 ? options.series[5].data.push(persenSangatMemuaskan) : options.series[5].data.push(0)
+                            // for (let j = 0; j < 6; j++) {
+                            kurang > 0 ? tables.series[i].data.push(persenKurang) : tables.series[i].data.push(0);
+                            sedang > 0 ? tables.series[i].data.push(persenSedang) : tables.series[i].data.push(0);
+                            cukupBaik > 0 ? tables.series[i].data.push(persenCukupBaik) : tables.series[i].data.push(0)
+                            baik > 0 ? tables.series[i].data.push(persenBaik) : tables.series[i].data.push(0)
+                            memuaskan > 0 ? tables.series[i].data.push(persenMemuaskan) : tables.series[i].data.push(0)
+                            sangatMemuaskan > 0 ? tables.series[i].data.push(persenSangatMemuaskan) : tables.series[i].data.push(0)
+                            // }
+                        }
+
+                        let persenKurang = Math.round((allKurang / result.length) * 100 * 100 / 6) / 100;
+                        let persenSedang = Math.round((allSedang / result.length) * 100 * 100 / 6) / 100;
+                        let persenCukupBaik = Math.round((allCukupBaik / result.length) * 100 * 100 / 6) / 100;
+                        let persenBaik = Math.round((allBaik / result.length) * 100 * 100 / 6) / 100;
+                        let persenMemuaskan = Math.round((allMemuaskan / result.length) * 100 * 100 / 6) / 100;
+                        let persenSangatMemuaskan = Math.round((allSangatMemuaskan / result.length) * 100 * 100 / 6) / 100;
+
+                        allKurang > 0 ? options.series[0].data.push(persenKurang) : options.series[0].data.push(0);
+                        allSedang > 0 ? options.series[1].data.push(persenSedang) : options.series[1].data.push(0);
+                        allCukupBaik > 0 ? options.series[2].data.push(persenCukupBaik) : options.series[2].data.push(0)
+                        allBaik > 0 ? options.series[3].data.push(persenBaik) : options.series[3].data.push(0)
+                        allMemuaskan > 0 ? options.series[4].data.push(persenMemuaskan) : options.series[4].data.push(0)
+                        allSangatMemuaskan > 0 ? options.series[5].data.push(persenSangatMemuaskan) : options.series[5].data.push(0)
+
+                        allKurang > 0 ? tables.series[6].data.push(persenKurang) : tables.series[6].data.push(0);
+                        allSedang > 0 ? tables.series[6].data.push(persenSedang) : tables.series[6].data.push(0);
+                        allCukupBaik > 0 ? tables.series[6].data.push(persenCukupBaik) : tables.series[6].data.push(0)
+                        allBaik > 0 ? tables.series[6].data.push(persenBaik) : tables.series[6].data.push(0)
+                        allMemuaskan > 0 ? tables.series[6].data.push(persenMemuaskan) : tables.series[6].data.push(0)
+                        allSangatMemuaskan > 0 ? tables.series[6].data.push(persenSangatMemuaskan) : tables.series[6].data.push(0)
                         res.json({
                             // count: data.length,
-                            data: data
+                            data: options,
+                            tables: tables
                         })
                     })
                     .catch(error => {
@@ -441,7 +783,7 @@ module.exports = {
                 {
                     model: models.siswa,
                     as: "siswa_ukt_siswa",
-                    attributes: ['name','tingkatan','nomor_urut'],
+                    attributes: ['name', 'tingkatan', 'nomor_urut'],
                     include: [
                         {
                             model: models.ranting,
@@ -456,7 +798,7 @@ module.exports = {
                 "$siswa_ukt_siswa.name$": {
                     [Op.like]: `%${req.params.id}%`
                 },
-            },  
+            },
         })
             .then(result => {
                 res.json({

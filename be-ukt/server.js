@@ -43,6 +43,10 @@ const cabang = require('./src/api/cabang/cabang.router');
 app.use("/ukt/cabang", cabang)
 
 // endpoint cabang
+const catatan = require('./src/api/catatan/catatan.router');
+app.use("/ukt/catatan", catatan)
+
+// endpoint cabang
 const ranting = require('./src/api/ranting/ranting.router');
 app.use("/ukt/ranting", ranting)
 
@@ -133,6 +137,10 @@ app.use("/ukt/ukt", ukt)
 //endpoint Sambung
 const sambung = require('./src/api/kategori/sambung/sambung.router');
 app.use("/ukt/sambung", sambung)
+
+//endpoint Nilai Sambung
+const nilaiSambung = require('./src/api/nilai_sambung/nilai_sambung.router');
+app.use("/ukt/nilai_sambung", nilaiSambung)
 
 //run server
 server.listen(8080, () => {

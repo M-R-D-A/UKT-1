@@ -1,74 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Component, Fragment } from 'react'
 import Sidebar from './components/sidebar'
 import Header from './components/header'
 import Footer from './components/footer'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic';
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 import axios from 'axios'
+import EditorQuill from './components/editor_quill'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const ChartBar = ({ name, percentages }) => {
-
-    const [animationStarted, setAnimationStarted] = useState(false)
-
-
-    useEffect(() => {
-        const startAnimation = () => {
-            setAnimationStarted(true);
-        };
-
-        setTimeout(startAnimation, 1000); // Waktu penundaan sebelum animasi dimulai (dalam milidetik)
-    }, []);
-
-    return (
-        <div className="flex space-x-3">
-            <div className="w-1/4">
-                <span
-                    // className={` ${
-                    //     animationStarted ? '' : 'animate-opacity-from-left text-white'
-                    // } ' text-white text-lg font-semibold tracking-wider'`}
-                    className="text-white text-lg font-semibold tracking-wider"
-                >{name}
-                </span>
-            </div>
-            <div className="w-3/4">
-                <div className="flex h-6 rounded-full text-white">
-                    <div className='text-center bg-red' style={{ width: `${percentages.red}%` }}>
-                        <div
-                            className={` ${animationStarted ? '' : 'animate-opacity-from-left'
-                                } " text-center bg-red rounded-l-md text-transparent "`}>
-                            {percentages.red}
-                        </div>
-                        <h1 className={` ${animationStarted ? '' : 'animate-opacity-from-left'} ' text-red  '`}>{percentages.red + '%'}</h1>
-                    </div>
-                    <div className='text-center bg-yellow' style={{ width: `${percentages.yellow}%` }}>
-                        <div
-                            className={` ${animationStarted ? '' : 'animate-opacity-from-left'
-                                } " text-center bg-yellow rounded-l-md text-transparent "`}>
-                            {percentages.yellow}
-                        </div>
-                        <h1 className={` ${animationStarted ? '' : 'animate-opacity-from-left'} ' text-yellow  '`}>{percentages.yellow + '%'}</h1>
-                    </div>
-                    <div className='text-center bg-green' style={{ width: `${percentages.green}%` }}>
-                        <div
-                            className={` ${animationStarted ? '' : 'animate-opacity-from-left'
-                                } " text-center bg-green rounded-l-md text-transparent "`}>
-                            {percentages.green}
-                        </div>
-                        <h1 className={` ${animationStarted ? '' : 'animate-opacity-from-left'} ' text-green  '`}>{percentages.green + '%'}</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 
 const index = () => {
     const [data, setData] = useState([])
+    const [dataTable, setDataTable] = useState([])
     const [dataCabang, setDataCabang] = useState([]);
     const [dataRanting, setDataRanting] = useState([]);
     const [ranting, setRanting] = useState();
     const [cabang, setCabang] = useState();
+
     const [go, setGo] = useState(false);
     const [type, setType] = useState('cabang');
 
@@ -78,14 +28,19 @@ const index = () => {
         admin.id_role === 'admin ranting'
             ? axios.get(BASE_URL + 'ukt_siswa/statistic/ranting/' + admin.id_ranting, { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
-                    setData(result.data.data)
+                    console.log(result.data.data.series)
+                    setData(result.data.data.series)
+                    setDataTable(result.data.tables.series)
                 })
                 .catch(error => {
                     console.log(error.message);
                 })
-            : axios.get(BASE_URL + 'ukt_siswa/statistic', { headers: { Authorization: `Bearer ${token}` } })
+            : axios.get(BASE_URL + 'ukt_siswa/statistic/cabang/jatim', { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
-                    setData(result.data.data)
+                    console.log(result)
+                    console.log(result.data.tables.series)
+                    setData(result.data.data.series)
+                    setDataTable(result.data.tables.series)
                 })
                 .catch(error => {
                     console.log(error.message);
@@ -97,18 +52,21 @@ const index = () => {
         type === 'ranting'
             ? axios.get(BASE_URL + 'ukt_siswa/statistic/ranting/' + param, { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
-                    setData(result.data.data)
+                    console.log(result.data.tables.series)
+                    setData(result.data.data.series)
+                    setDataTable(result.data.tables.series)
                 })
                 .catch(error => {
                     console.log(error.message);
                 })
             : axios.get(BASE_URL + 'ukt_siswa/statistic/cabang/' + param, { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
-                    setData(result.data.data)
+                    console.log(result.data.tables.series)
+                    setData(result.data.data.series)
+                    setDataTable(result.data.tables.series)
                 })
                 .catch(error => {
-                    -
-                        console.log(error.message);
+                    console.log(error.message);
                 })
     }
 
@@ -157,6 +115,27 @@ const index = () => {
         }
     }
 
+
+    const thTables = (props) => {
+        const name = ['KESHAN', 'SENAM', 'JURUS', 'FISIK', 'TEKNIK', 'SAMBUNG', 'RATA - RATA']
+        {
+            return (
+                props.map((item, index) => (
+                    <Fragment>
+                        <tr className='p-1.5'>
+                            <th className='border-2 border-navy text-white'>{name[index]}</th>
+                            <th className='border-2 border-navy' style={{ color: '#FF6A81' }}>{item.data[0]}%</th>
+                            <th className='border-2 border-navy' style={{ color: '#6CE1AE' }}>{item.data[1]}%</th>
+                            <th className='border-2 border-navy' style={{ color: '#48B8F1' }}>{item.data[2]}%</th>
+                            <th className='border-2 border-navy' style={{ color: '#BC5EF6' }}>{item.data[3]}%</th>
+                            <th className='border-2 border-navy text-orange-500' style={{ color: '#FB934E' }}>{item.data[4]}%</th>
+                            <th className='border-2 border-navy text-yellow' style={{ color: '#E9E059' }}>{item.data[5]}%</th>
+                        </tr>
+                    </Fragment>
+                ))
+            )
+        }
+    }
     useEffect(() => {
         isLogged()
     }, [])
@@ -201,11 +180,11 @@ const index = () => {
                         </div>
                     </div>
 
+
                     {/* wrapper chart bar description and data set dropdown */}
                     <div className="flex justify-between mb-7">
-
                         {/* wrapper chart bar description */}
-                        <div id='animationElement' className="grid grid-cols-3 gap-x-8 text-white">
+                        <div id='animationElement' className="grid grid-cols-3 gap-x-8 text-white opacity-0">
                             <div className="inline-flex items-center gap-x-2">
                                 <div className="bg-red h-5 w-5">
                                 </div>
@@ -224,12 +203,8 @@ const index = () => {
                         </div>
                         {/* wrapper data set */}
                         <div className="inline-flex space-x-2">
-                            <h1 className='px-3 text-white text-lg font-semibold tracking-wider'>Data {go ? 'ranting ' : 'cabang '}:</h1>
+                            <h1 className='px-3 text-white text-lg font-semibold tracking-wider uppercase'>{go ? 'ranting ' : 'cabang '}</h1>
                             {/* download button */}
-
-                            {/* <button onClick={() => go ? setGo(false) : setGo(true)} className={go ? "bg-white text-purple rounded-md px-5 flex items-center gap-x-2" : "bg-purple text-white rounded-md px-5 flex items-center gap-x-2"}>
-                                <h1>{go ? 'cabang' : 'ranting'}</h1>
-                            </button> */}
                             {/* data set dropdown */}
                             <div className="relative w-full">
 
@@ -268,7 +243,7 @@ const index = () => {
                                         >
                                             <option value="" disabled>Select an option</option>
                                             {dataCabang.map((item, index) => (
-                                                <option key={index}>{item.id_cabang}</option>
+                                                <option key={index} value={item.id_cabang}>{item.name}</option>
                                             ))}
                                         </select>
                                         <button className="bg-green px-1 rounded-r-md">&#10148;</button>
@@ -283,17 +258,111 @@ const index = () => {
 
                     {/* wrapper chart bar */}
                     <div className="bg-navy p-7 rounded-lg space-y-8 mb-8">
-                        <div className="text-white text-2xl font-semibold tracking-wider text-center mb-6 uppercase">
-                            {cabang && type === 'cabang' ? "cabang : " + cabang : ''}
-                            {type === 'ranting' ? "ranting : " + ranting : ''}
+                        <div className='overflow-scroll'>
+                            {/* <h3 className='text-center mt-b3'>Bar Chart In ReactJS</h3> */}
+                            <Chart
+                                type='bar'
+                                width={1280}
+                                height={720}
+                                series={data}
+                                options={{
+                                    title: {
+                                        text: `${type === 'cabang' ? 'STATISTIK CABANG' : 'STATISTIK RANTING ' + ranting}`,
+                                        align: 'center',
+                                        style: { fontSize: 30 },
+                                    },
+                                    chart: {
+                                        background: '#1B2537'
+                                    },
+                                    theme: { mode: 'dark' },
+                                    xaxis: {
+                                        categories: [
+                                            'Keshan',
+                                            'Senam',
+                                            'Jurus',
+                                            'Fisik',
+                                            'Teknik',
+                                            'Sambung',
+                                            'Rata - rata',
+                                        ],
+                                    },
+                                    yaxis: {
+                                        min: 0,
+                                        max: 100,
+                                        labels: {
+                                            formatter: (val) => {
+                                                return `${val}%`;
+                                            },
+                                            style: {
+                                                fontSize: '15',
+                                                colors: ['#FFFFFF'],
+                                            },
+                                        },
+                                    },
+                                    legend: {
+                                        show: true,
+                                        position: 'bottom',
+                                        horizontalAlign: 'left',
+                                    },
+                                    dataLabels: {
+                                        formatter: (val) => {
+                                            return ``;
+                                        },
+                                    },
+                                }}
+                            />
+
                         </div>
-                        {data.map((item, index) => (
-                            <ChartBar key={index} name={item.name} percentages={item.percentages} />
-                        ))}
+
+                        <div className="grid grid-cols-4">
+
+                            {/* statistic color description */}
+                            <div className="flex justify-center items-center">
+                                <div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="bg-yellow w-5 h-5 rounded-md" style={{ backgroundColor: '#E9E059' }}></div>
+                                        <span className='text-lg text-white'  >91 - 100 : Sangat Memuaskan</span>
+                                    </div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="bg-orange-500 w-5 h-5 rounded-md" style={{ backgroundColor: '#FB934E' }}></div>
+                                        <span className='text-lg text-white'>81 - 90 : Memuaskan</span>
+                                    </div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="bg-purple w-5 h-5 rounded-md" style={{ backgroundColor: '#BC5EF6' }}></div>
+                                        <span className='text-lg text-white'>71 - 80 : Baik</span>
+                                    </div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="bg-blue-400 w-5 h-5 rounded-md" style={{ backgroundColor: '#48B8F1' }}></div>
+                                        <span className='text-lg text-white'>61 - 70 : Cukup Baik</span>
+                                    </div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="bg-green w-5 h-5 rounded-md" style={{ backgroundColor: '#6CE1AE' }}></div>
+                                        <span className='text-lg text-white'>51 - 60 : Sedang</span>
+                                    </div>
+                                    <div className="flex items-center gap-x-2">
+                                        <div className="bg-red w-5 h-5 rounded-md" style={{ backgroundColor: '#FF6A81' }}></div>
+                                        <span className='text-lg text-white'> {"< 50"} : Kurang</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-span-3 bg-green">
+                                <table className='w-full table-fixed bg-darkBlue'>
+                                    <thead>
+                                        {thTables(dataTable)}
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
+
+                    {/* wrapper catatan */}
                     <div className="bg-navy p-7 rounded-lg space-y-4">
-                        <h1 className='text-center text-white text-3xl font-semibold tracking-wider'>Catatan</h1>
-                        <textarea className='w-full rounded-md p-2 text-xl bg-gray text-white' name="" id="" cols="30" rows="10"></textarea>
+                        <h1 className='text-center text-white text-3xl font-semibold tracking-wider'>{type === 'cabang' ? 'CATATAN CABANG' : 'CATATAN RANTING ' + ranting}</h1>
+
+                        <div className='w-full rounded-md p-2 text-xl bg-white'>
+                            <EditorQuill type={type} cabang={cabang} ranting={ranting} />
+                        </div>
                     </div>
                 </div>
                 {/* akhir konten utama */}
