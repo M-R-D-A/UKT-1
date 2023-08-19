@@ -71,7 +71,7 @@ const keshan = (props) => {
             ) {
                 // Show a dot for every 10 numbers before or after the current page
                 pages.push(
-                    <span key={i} className="mx-1 p-2">
+                    <span key={i} className="mx-1 p-2 text-white">
                         ...
                     </span>
                 );

@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image';
 import axios from 'axios'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const fisik = (props) => {
     const [dataFisik, setDataFisik] = useState([])
     const [event, setEvent] = useState('')
-    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState();
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
+
 
     const renderPageNumbers = () => {
         const pages = [];
@@ -48,7 +51,7 @@ const fisik = (props) => {
             ) {
                 // Show a dot for every 10 numbers before or after the current page
                 pages.push(
-                    <span key={i} className="mx-1 p-2">
+                    <span key={i} className="mx-1 p-2 text-white">
                         ...
                     </span>
                 );
@@ -62,6 +65,7 @@ const fisik = (props) => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'))
         setEvent(event.name)
+        setLoading(true);
         axios.get(BASE_URL + `fisik/pages/${event.id_event}/50`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 setTotalPages(res.data.totalPages);
@@ -69,6 +73,9 @@ const fisik = (props) => {
             .catch(err => {
                 console.log(err.message);
             })
+            .finally(() => {
+                setLoading(false);
+            });
 
         axios.get(BASE_URL + `fisik/event/${event.id_event}/${page}/50`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
@@ -83,61 +90,75 @@ const fisik = (props) => {
     useEffect(() => {
         getDataFisik()
     }, [page])
+
     return (
-        <div className="min-h-screen bg-darkBlue py-6 h-screen">
-            {dataFisik.length > 0
-                ? <div className="bg-navy rounded-md py-2 h-[65%]">
+        <Fragment>
+            {loading
+                ?
+                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className='flex flex-col justify-center items-center bg-navy rounded-md p-5'>
+                        <Image src="/svg/spinner.svg" className="rounded-md" width={78} height={78} alt="Your SVG" />
+                        <h1 className='text-white text-center'>
+                            Please Wait Data Is Processed
+                        </h1>
+                    </div>
+                </div>
+                : []}
+            <div className="min-h-screen bg-darkBlue py-6 h-screen">
+                {dataFisik.length > 0
+                    ? <div className="bg-navy rounded-md py-2 h-[65%]">
 
-                    {/* table */}
-                    <div className='overflow-x-scroll h-full bg-navy'>
-                        <table className='w-full table-fixed'>
-                            <thead className='sticky top-0 bg-black'>
-                                <>
-                                    <tr className='text-white'>
-                                        <th className='py-3 w-[5%]'>No</th>
-                                        <th className='w-[30%]'>Nama</th>
-                                        <th>Penguji</th>
-                                        <th>MFT</th>
-                                        <th>PUSH UP</th>
-                                        <th>SPIR PERUT ATAS</th>
-                                        <th>SPIR PERUT BAWAH</th>
-                                        <th>SPIR DADA</th>
-                                        <th>PLANK</th>
-                                    </tr>
-                                </>
-
-                            </thead>
-                            <tbody>
-                                {dataFisik.map((item, index) => (
+                        {/* table */}
+                        <div className='overflow-x-scroll h-full bg-navy'>
+                            <table className='w-full table-fixed'>
+                                <thead className='sticky top-0 bg-black'>
                                     <>
-                                        <tr className='text-green text-center' key={item.id_fisik_detail}>
-                                            <td className='border-b-2 text-white py-3 border-gray'>{((page - 1) * 50) + index + 1}</td>
-                                            <td className='border-b-2 text-white border-gray text-left'>{item.siswa_fisik.name}</td>
-                                            <td className='border-b-2 text-white border-gray'>{item.penguji_fisik.name}</td>
-                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{(item.mft).toFixed(1)}</td>
-                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.push_up}</td>
-                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_perut_atas}</td>
-                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_perut_bawah}</td>
-                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_dada}</td>
-                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.plank}</td>
+                                        <tr className='text-white'>
+                                            <th className='py-3 w-[5%]'>No</th>
+                                            <th className='w-[30%]'>Nama</th>
+                                            <th>Penguji</th>
+                                            <th>MFT</th>
+                                            <th>PUSH UP</th>
+                                            <th>SPIR PERUT ATAS</th>
+                                            <th>SPIR PERUT BAWAH</th>
+                                            <th>SPIR DADA</th>
+                                            <th>PLANK</th>
                                         </tr>
                                     </>
-                                ))}
 
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                    {dataFisik.map((item, index) => (
+                                        <>
+                                            <tr className='text-green text-center' key={item.id_fisik_detail}>
+                                                <td className='border-b-2 text-white py-3 border-gray'>{((page - 1) * 50) + index + 1}</td>
+                                                <td className='border-b-2 text-white border-gray text-left'>{item.siswa_fisik.name}</td>
+                                                <td className='border-b-2 text-white border-gray'>{item.penguji_fisik.name}</td>
+                                                <td className='border-b-2 text-white border-gray text-lg font-bold'>{(item.mft).toFixed(1)}</td>
+                                                <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.push_up}</td>
+                                                <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_perut_atas}</td>
+                                                <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_perut_bawah}</td>
+                                                <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_dada}</td>
+                                                <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.plank}</td>
+                                            </tr>
+                                        </>
+                                    ))}
 
-                        </table>
+                                </tbody>
+
+                            </table>
+                        </div>
+
                     </div>
-
+                    : <div className='text-center text-white'>
+                        <h1 className='text-xl font-sans font-bold'> Silahkan masukkan data fisik siswa event: {event.name}</h1>
+                    </div>
+                }
+                <div className="flex justify-center mt-5">
+                    {renderPageNumbers()}
                 </div>
-                : <div className='text-center text-white'>
-                    <h1 className='text-xl font-sans font-bold'> Silahkan masukkan data fisik siswa event: {event.name}</h1>
-                </div>
-            }
-            <div className="flex justify-center mt-5">
-                {renderPageNumbers()}
             </div>
-        </div>
+        </Fragment>
     )
 }
 
