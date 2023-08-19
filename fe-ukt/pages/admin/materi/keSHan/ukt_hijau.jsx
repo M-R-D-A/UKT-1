@@ -10,7 +10,7 @@ import Modal_soal_delete from '../../components/modal_soal_delete'
 import axios from 'axios'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const ukt_jambon = () => {
+const ukt_hijau = () => {
 
     const router = useRouter()
 
@@ -24,7 +24,7 @@ const ukt_jambon = () => {
     const [soal, setSoal] = useState([])
     const [kunciSoal, setKunciSoal] = useState([])
     const [jumlah, setJumlah] = useState(0)
-    const [tipe_ukt, setTipe_ukt] = useState("UKT Jambon")
+    const [tipe_ukt, setTipe_ukt] = useState("UKT Hijau")
     const [idLembar, setIdLembar] = useState("")
     const [idSoal, setIdSoal] = useState("")
     const [pertanyaan, setPertanyaan] = useState("")
@@ -84,12 +84,15 @@ const ukt_jambon = () => {
             opsi: opsi
         }
 
+        console.log(data)
+
         if (action === 'insert') {
             await axios.post(BASE_URL + 'soal', data, headerConfig())
                 .then(res => {
                     console.log(res);
                     setShowModalSoalKeSHan(false)
                     getSoal()
+                    getKunciSoal()
                 })
                 .catch(err => {
                     console.log(err.message);
@@ -99,6 +102,7 @@ const ukt_jambon = () => {
                 .then(res => {
                     setShowModalSoalKeSHan(false)
                     getSoal()
+                    getKunciSoal()
                 })
                 .catch(err => {
                     console.log(err.message);
@@ -136,7 +140,7 @@ const ukt_jambon = () => {
     const getSoal = async () => {
         let id_lembar
         //get id soal
-        await axios.post(BASE_URL + 'lembar_soal/ukt/UKT Jambon', { data: '' }, headerConfig())
+        await axios.post(BASE_URL + 'lembar_soal/ukt/UKT Hijau', { data: '' }, headerConfig())
             .then(res => {
                 console.log(res)
                 setIdLembar(res.data.data?.id_lembar_soal)
@@ -148,6 +152,8 @@ const ukt_jambon = () => {
 
         await axios.get(BASE_URL + 'soal/tipe/' + tipe_ukt, headerConfig())
             .then(res => {
+                console.log('---')
+                console.log(res)
                 setJumlah(res.data.count)
                 setSoal(res.data.data)
                 setActive(res.data.data)
@@ -217,7 +223,7 @@ const ukt_jambon = () => {
                                         <path d="M11.2258 26.4657L0.354838 14.4974C0.225806 14.3549 0.134623 14.2005 0.08129 14.0343C0.0270964 13.8681 0 13.69 0 13.5C0 13.31 0.0270964 13.1319 0.08129 12.9657C0.134623 12.7995 0.225806 12.6451 0.354838 12.5026L11.2258 0.498681C11.5269 0.166227 11.9032 0 12.3548 0C12.8065 0 13.1935 0.1781 13.5161 0.534301C13.8387 0.890501 14 1.30607 14 1.781C14 2.25594 13.8387 2.6715 13.5161 3.0277L4.03226 13.5L13.5161 23.9723C13.8172 24.3048 13.9677 24.7141 13.9677 25.2005C13.9677 25.6878 13.8065 26.1095 13.4839 26.4657C13.1613 26.8219 12.7849 27 12.3548 27C11.9247 27 11.5484 26.8219 11.2258 26.4657Z" />
                                     </svg>
                                 </button>
-                                <h1 className='text-2xl tracking-wider'>KESHAN - UKT Jambon</h1>
+                                <h1 className='text-2xl tracking-wider'>KESHAN - UKT Hijau</h1>
                             </div>
 
                             {/* search and button add data */}
@@ -351,7 +357,7 @@ const ukt_jambon = () => {
             {/* memanggil header */}
             <globalState.Provider value={{ showModalSoalKeSHan, setShowModalSoalKeSHan }}>
                 <Modal_soal_keSHan
-                    tipe="UKT Jambon"
+                    tipe="UKT Hijau"
                     action={action}
                     pertanyaan={pertanyaan}
                     setPertanyaan={setPertanyaan}
@@ -378,4 +384,4 @@ const ukt_jambon = () => {
     )
 }
 
-export default ukt_jambon
+export default ukt_hijau
