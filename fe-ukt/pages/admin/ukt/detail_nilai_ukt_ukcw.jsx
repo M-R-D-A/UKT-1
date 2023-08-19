@@ -22,7 +22,8 @@ const detail_nilai_ukt_ukcw = () => {
     // state set jenis
     const [dataEvent, setDataEvent] = useState([])
     const [active, setActive] = useState('keshan')
-    
+    const [value, setValue] = useState();
+
     // function set jneis
     const onActive = (e) => {
         setActive(e)
@@ -34,32 +35,36 @@ const detail_nilai_ukt_ukcw = () => {
     }
 
     let activeComponent;
-    const data = {tipe_ukt: 'UKCW'}
+    const data = { tipe_ukt: 'UKCW', search: value }
     if (active === 'senam') {
-        activeComponent = <Senam data={data}/>;
-    } else if (active === 'jurus'){
-        activeComponent = <Jurus data={data}/>;
-    } else if (active === 'fisik'){
-        activeComponent = <Fisik data={data}/>;
-    } else if (active === 'teknik'){
-        activeComponent = <Teknik data={data}/>;
-    } else if (active === 'sambung'){
-        activeComponent = <Sambung data={data}/>;
-    } else if (active === 'keshan'){
-        activeComponent = <Keshan data={data}/>;
+        activeComponent = <Senam data={data} />;
+    } else if (active === 'jurus') {
+        activeComponent = <Jurus data={data} />;
+    } else if (active === 'fisik') {
+        activeComponent = <Fisik data={data} />;
+    } else if (active === 'teknik') {
+        activeComponent = <Teknik data={data} />;
+    } else if (active === 'sambung') {
+        activeComponent = <Sambung data={data} />;
+    } else if (active === 'keshan') {
+        activeComponent = <Keshan data={data} />;
     }
 
     // function login checker
     const isLogged = () => {
-        if (localStorage.getItem ('token') === null || localStorage.getItem ('admin') === null) {
-            router.push ('/admin/login')
+        if (localStorage.getItem('token') === null || localStorage.getItem('admin') === null) {
+            router.push('/admin/login')
         }
     }
 
-    
-    useEffect(() =>{
+    const handleChange = (e) => {
+        const newValue = e.target.value
+        setValue(newValue)
+    }
+
+    useEffect(() => {
         getEvent()
-    },[])
+    }, [])
 
     return (
         <>
@@ -102,7 +107,7 @@ const detail_nilai_ukt_ukcw = () => {
                             <button onClick={() => onActive('teknik')} className={active === 'teknik' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md uppercase w-full" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md uppercase w-full"}>Teknik</button>
                             <button onClick={() => onActive('sambung')} className={active === 'sambung' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md uppercase w-full" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md uppercase w-full"}>Sambung</button>
                         </div>
-                    { activeComponent }
+                        {activeComponent}
                     </div>
                     {/* akhir konten utama */}
 
