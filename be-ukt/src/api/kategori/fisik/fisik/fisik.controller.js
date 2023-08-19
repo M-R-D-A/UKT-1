@@ -1,5 +1,7 @@
 const models = require('../../../../models/index');
 const fisik = models.fisik;
+const { Op } = require('sequelize');
+
 
 module.exports = {
     controllerGetAll: async (req, res) => {
@@ -15,6 +17,34 @@ module.exports = {
                     as: "penguji_fisik",
                     attributes: ['name']
                 }
+            ]
+        })
+            .then(fisik => {
+                res.json({
+                    count: fisik.length,
+                    data: fisik
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerSearch: async (req, res) => {
+        fisik.findAll({
+            include: [
+                {
+                    model: models.siswa,
+                    as: "siswa_fisik",
+                    attributes: ['nomor_urut','name'],
+                    where: {
+                        [Op.or]: [
+                            { name: { [Op.like]: `%${req.params.id}%` } },
+                            { nomor_urut: { [Op.like]: `%${req.params.id}%` } }
+                        ]
+                    }
+                },
             ]
         })
             .then(fisik => {
@@ -49,7 +79,7 @@ module.exports = {
     },
     controllerGetByEvent: async (req, res) => {
         const { id, page, limit } = req.params;
-        const pageNumber = Number(page); 
+        const pageNumber = Number(page);
         const itemsPerPage = Number(limit);
 
         const offset = (pageNumber - 1) * itemsPerPage;
@@ -73,8 +103,8 @@ module.exports = {
             where: {
                 id_event: id
             },
-            limit: itemsPerPage, 
-            offset: offset 
+            limit: itemsPerPage,
+            offset: offset
         })
             .then(fisik => {
                 res.json({
@@ -150,7 +180,7 @@ module.exports = {
             })
     },
     controllerAdd: async (req, res) => {
-        let data ={
+        let data = {
             id_penguji: req.body.id_penguji,
             id_event: req.body.id_event,
             id_siswa: req.body.id_siswa,
@@ -163,22 +193,22 @@ module.exports = {
             plank: req.body.plank,
         }
         fisik.create(data)
-        .then(result => {
-            res.json({
-                message: "data has been inserted"
+            .then(result => {
+                res.json({
+                    message: "data has been inserted"
+                })
             })
-        })
-        .catch(error =>{
-            res.json({
-                message: error.message
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
             })
-        })
     },
     controllerEdit: async (req, res) => {
         let param = {
-            id_fisik : req.params.id
+            id_fisik: req.params.id
         }
-        let data ={
+        let data = {
             id_penguji: req.body.id_penguji,
             id_event: req.body.id_event,
             id_siswa: req.body.id_siswa,
@@ -190,32 +220,32 @@ module.exports = {
             spir_dada: req.body.spir_dada,
             plank: req.body.plank,
         }
-        fisik.update(data, {where: param})
-        .then(result => {
-            res.json({
-                message : "data has been updated"
+        fisik.update(data, { where: param })
+            .then(result => {
+                res.json({
+                    message: "data has been updated"
+                })
             })
-        })
-        .catch(error => {
-            res.json({
-                message  : error.message
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
             })
-        })
     },
     controllerDelete: async (req, res) => {
         let param = {
-            id_fisik : req.params.id
+            id_fisik: req.params.id
         }
-        fisik.destroy({where: param})
-        .then(result => {
-            res.json({
-                massege : "data has been deleted"
+        fisik.destroy({ where: param })
+            .then(result => {
+                res.json({
+                    massege: "data has been deleted"
+                })
             })
-        })
-        .catch(error => {
-            res.json({
-                message: error.message
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
             })
-        })
     },
 }

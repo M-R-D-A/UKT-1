@@ -16,12 +16,14 @@ const {
     controllerGetByUktEvent,
     controllerGetByEvent,
     controllerGetTotalPage,
+    controllerSearch,
 } = require('./fisik.controller');
 
 
 const verifyRoles = require("../../../../middleware/verifyRoles")
 
 router.get('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetAll)
+router.get('/search/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerSearch)
 router.get('/pages/:id/:limit', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetTotalPage)
 router.get('/event/:id/:page/:limit', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEvent)
 router.get('/ukt/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByUkt)

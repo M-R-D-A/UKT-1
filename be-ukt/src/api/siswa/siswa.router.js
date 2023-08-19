@@ -11,15 +11,15 @@ const path = require('path');
 const multer = require("multer");
 const localStorage = process.env.LOCAL_STORAGE
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // set file storage
-    cb(null, localStorage);
-},
-filename: (req, file, cb) => {
-    // generate file name
-    cb(null, "foto-" + Date.now() + path.extname(file.originalname));
-},
-});
+    destination: (req, file, cb) => {
+        // set file storage
+        cb(null, localStorage);
+    },
+    filename: (req, file, cb) => {
+        // generate file name
+        cb(null, "csv" + Date.now() + path.extname(file.originalname));
+    },
+})
 
 let upload2 = multer({ storage: storage });
 

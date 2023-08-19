@@ -1,11 +1,104 @@
 const models = require('../../models/index');
 const soal = models.soal;
+const lembar_soal = models.lembar_soal;
 const kunciSoal = models.kunci_soal;
+const { Sequelize, Op } = require("sequelize");
 const { randomUUID } = require('crypto');
 
 module.exports = {
     controllerGetAll: async (req, res) => {
         soal.findAll()
+            .then(soal => {
+                res.json({
+                    count: soal.length,
+                    data: soal
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerGetCount: async (req, res) => {
+        try {
+            let data = await lembar_soal.findAll({
+                raw: true,
+                include: [
+                    {
+                        model: models.soal,
+                        as: "lembar_soal_ujian",
+                        attributes: [],
+                        required: false,
+                    }
+                ],
+                attributes: ['tipe_ukt', [Sequelize.fn('COUNT', Sequelize.col('lembar_soal_ujian.id_lembar_soal')), 'count']],
+                group: ['lembar_soal.id_lembar_soal']
+            }
+            )
+
+            let UKCW = data.find(e => { return e.tipe_ukt === 'UKCW' })?.count
+            let Jambon = data.find(e => { return e.tipe_ukt === 'UKT Jambon' })?.count
+            let Hijau = data.find(e => { return e.tipe_ukt === 'UKT Hijau' })?.count
+            let Putih = data.find(e => { return e.tipe_ukt === 'UKT Putih' })?.count
+
+            res.json({
+                jambon: Jambon,
+                hijau: Hijau,
+                putih: Putih,
+                ukcw: UKCW,
+            })
+        } catch (error) {
+            res.json({
+                message: error.message
+            })
+        }
+
+    },
+    controllerGetByTipe: async (req, res, next) => {
+        let lembarSoal = await lembar_soal.findOne({
+            where: { tipe_ukt: req.params.tipe_ukt }
+        })
+
+        let id_lembar_soal
+        if (!lembarSoal) {
+            const id = randomUUID();
+            let data = {
+                id_lembar_soal: id,
+                id_ranting: req.body.id_ranting,
+                tipe_ukt: req.params.tipe_ukt,
+                waktu_pengerjaan: req.body.waktu_pengerjaan
+            }
+            await lembar_soal.create(data)
+                .then(res => {
+                    id_lembar_soal = res.id_lembar_soal
+                })
+                .catch(error => {
+                    return res.json({
+                        message: error.message
+                    })
+                })
+        } else {
+            id_lembar_soal = lembarSoal?.id_lembar_soal
+        }
+
+
+        soal.findAll({
+            where: {
+                id_lembar_soal: id_lembar_soal
+            },
+            include: [
+                {
+                    model: kunciSoal,
+                    as: "kunci_soal",
+                    attributes: ['id_soal', 'opsi'],
+                    required: true,
+                }
+            ],
+            order: [
+                ["createdAt", "ASC"]
+            ]
+        })
             .then(soal => {
                 res.json({
                     count: soal.length,
@@ -46,37 +139,21 @@ module.exports = {
                 })
             })
     },
-    controllerGetByLembarSoal: async (req, res) => {
-        soal.findAll({
-            where: {
-                id_lembar_soal: req.params.id
-            },
-            order: [
-                ["createdAt", "ASC"]
-            ]
-        })
-            .then(soal => {
-                res.json({
-                    count: soal.length,
-                    data: soal
-                })
-            })
-            .catch(error => {
-                res.json({
-                    message: error.message
-                })
-            })
-    },
     controllerGetAnswerByLembarSoal: async (req, res) => {
+        let lembarSoal = await lembar_soal.findOne({
+            where: { tipe_ukt: req.params.tipe_ukt }
+        })
+        const id_lembar_soal = lembarSoal?.id_lembar_soal
         soal.findAll({
             where: {
-                id_lembar_soal: req.params.id
+                id_lembar_soal: id_lembar_soal
             },
+            attributes: [],
             include: [
                 {
                     model: kunciSoal,
                     as: "kunci_soal",
-                    attributes: ['opsi'],
+                    attributes: ['id_soal', 'opsi'],
                     required: true,
                 }
             ],
@@ -119,6 +196,11 @@ module.exports = {
             })
     },
     controllerAdd: async (req, res) => {
+        // let lembarSoal = await lembar_soal.findOne({
+        //     where: {tipe_ukt: req.params.tipe_ukt}
+        // })
+
+        // const id_lembar_soal = lembarSoal?.id_lembar_soal
         const id = randomUUID();
         let data = {
             id_soal: id,

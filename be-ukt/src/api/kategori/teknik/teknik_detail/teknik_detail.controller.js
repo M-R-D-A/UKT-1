@@ -16,6 +16,34 @@ module.exports = {
                 })
             })
     },
+    controllerSearch: async (req, res) => {
+        teknik_detail.findAll({
+            include: [
+                {
+                    model: models.siswa,
+                    as: "teknik_siswa",
+                    attributes: ['nomor_urut','name'],
+                    where: {
+                        [Op.or]: [
+                            { name: { [Op.like]: `%${req.params.id}%` } },
+                            { nomor_urut: { [Op.like]: `%${req.params.id}%` } }
+                        ]
+                    }
+                },
+            ]
+        })
+            .then(result => {
+                res.json({
+                    count: result.length,
+                    data: result
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetByTipeUkt: async (req, res) => {
         teknik_detail.findAll({
             where: {
@@ -60,11 +88,33 @@ module.exports = {
                 })
             })
     },
+    controllerGetTotalPage: async (req, res) => {
+        const limit = Number(req.params.limit);
+        fisik.findAll({
+            where: {
+                id_event: req.params.id
+            },
+            attributes: ['id_fisik']
+        })
+            .then(result => {
+                const totalPages = Math.ceil(result.length / limit);
+                res.json({ totalPages });
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetByUktEvent: async (req, res) => {
+        const { id, page, limit } = req.params;
+        const pageNumber = Number(page);
+        const itemsPerPage = Number(limit);
+
+        const offset = (pageNumber - 1) * itemsPerPage;
         teknik_detail.findAll({
             where: {
-                tipe_ukt: req.params.id,
-                id_event: req.params.event
+                id_event: id
             },
             attributes: ['id_teknik_detail', 'id_penguji', 'id_event', 'id_siswa', 'tipe_ukt'],
             include: [
@@ -92,6 +142,8 @@ module.exports = {
                     order: [['id_teknik', 'DESC']]
                 }
             ],
+            limit: itemsPerPage,
+            offset: offset
         })
             .then(teknik => {
                 res.json({
