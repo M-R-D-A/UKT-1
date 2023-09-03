@@ -5,75 +5,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const jurus = (props) => {
     const [dataJurus, setDataJurus] = useState([])
-
-    const [totalPages, setTotalPages] = useState();
-    const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
-
-    const renderPageNumbers = () => {
-        const pages = [];
-
-        // Generate page numbers based on the total number of pages
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === 1 || i === totalPages || i === page) {
-                // Show the first, last, and current page numbers
-                pages.push(
-                    <button
-                        key={i}
-                        onClick={() => setPage(i)}
-                        className={`mx-1 p-2 rounded ${i === page ? 'bg-blue-500 text-white' : 'bg-gray-200 text-white'
-                            }`}
-                    >
-                        {i}
-                    </button>
-                );
-            } else if (
-                i >= page - 5 &&
-                i <= page + 5 &&
-                (i % 10 !== 0 || Math.abs(page - i) <= 10)
-            ) {
-                // Show the page numbers within a range of 10 from the current page
-                pages.push(
-                    <button
-                        key={i}
-                        onClick={() => setPage(i)}
-                        className={`mx-1 p-2 rounded ${i === page ? 'bg-blue-500 text-white' : 'bg-gray-200 text-white'
-                            }`}
-                    >
-                        {i}
-                    </button>
-                );
-            } else if (
-                (i === page - 10 && page > 15) ||
-                (i === page + 10 && page < totalPages - 15)
-            ) {
-                // Show a dot for every 10 numbers before or after the current page
-                pages.push(
-                    <span key={i} className="mx-1 p-2 text-white">
-                        ...
-                    </span>
-                );
-            }
-        }
-
-        return pages;
-    };
-    
+    console.log(props.data?.tipe_ukt);
     const getDataJurus = () => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'))
-        setLoading(true);
-        axios.get(BASE_URL + `jurus_detail/pages/${event.id_event}/50`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                setTotalPages(res.data.totalPages);
-            })
-            .catch(err => {
-                console.log(err.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-        axios.get(BASE_URL + `jurus_detail/event/${event.id_event}/${page}/50`, { headers: { Authorization: `Bearer ${token}` } })
+
+        axios.get(BASE_URL + `jurus_detail/ukt/${props.data?.tipe_ukt}/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 setDataJurus(res.data.data)
             })
@@ -104,16 +41,16 @@ const jurus = (props) => {
                 {item.predikat === null && (
                     <div className="bg-purple rounded-md p-0.5 col-span-4">
                         <div className="font-semibold bg-navy rounded-md text-white py-1 px-12 uppercase">
-
+                                        
                         </div>
                     </div>
-                )}
+                )}        
             </td>
         ));
     }
     useEffect(() => {
         getDataJurus()
-    }, [page])
+    }, [])
 
     return (
         <div className="min-h-screen bg-darkBlue h-screen">
@@ -150,9 +87,6 @@ const jurus = (props) => {
 
                     </table>
                 </div>
-            </div>
-            <div className="flex justify-center mt-5">
-                {renderPageNumbers()}
             </div>
         </div>
     )

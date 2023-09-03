@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
+import Sidebar from '../../components/sidebar'
+import Header from '../../components/header'
+import Footer from '../../components/footer'
 import { useRouter } from 'next/router'
+import axios from 'axios'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const keSHan = () => {
 
     // deklarasi router
     const router = useRouter ()
+
+    //state 
+    const [ukcw,setUkcw] = useState(0)
+    const [jambon,setJambon] = useState(0)
+    const [hijau,setHijau] = useState(0)
+    const [putih,setPutih] = useState(0)
 
     // function login checker
     const isLogged = () => {
@@ -17,8 +25,32 @@ const keSHan = () => {
         }
     }
 
+    const headerConfig = () =>{
+        const token = localStorage.getItem("token")
+        let header = {
+            headers: {Authorization: `Bearer ${token}`}
+        }
+        return header
+    }
+
+    const getJumlah = async () => {
+        console.log(BASE_URL + 'soal/count');
+        await axios.get(BASE_URL + 'soal/count', headerConfig())
+        .then(res => {
+            setJambon(res.data.jambon || 0)
+            setHijau(res.data.hijau || 0)
+            setPutih(res.data.putih || 0)
+            setUkcw(res.data.ukcw || 0)
+        })
+        .catch(err => {
+            console.log(err.message);
+            console.log(err.response.data.message);
+        })
+    }
+
     useEffect (() => {
         isLogged ()
+        getJumlah()
     }, [])
 
     return (
@@ -31,7 +63,7 @@ const keSHan = () => {
 
             {/* awal wrapper konten utama */}
             {/* supaya konten header dapat di scroll dan tidak mempengaruhi sidebar */}
-            <div className="w-full overflow-y-auto h-screen">
+            <div className="w-full overflow-y-auto min-h-screen h-auto flex flex-col">
 
                 {/* overlap untuk device sm */}
                 {/* <div className="absolute hidden lg:hidden inset-0 bg-slate-400 opacity-50 z-10">
@@ -42,7 +74,7 @@ const keSHan = () => {
                 {/* akhir header */}
 
                 {/* konten utama */}
-                <div className="min-h-full bg-darkBlue p-6">
+                <div className="h-full bg-darkBlue p-6">
 
                     {/* wrapper page name and search */}
                     <div className="flex justify-between items-center text-white mb-7">
@@ -64,7 +96,7 @@ const keSHan = () => {
                     <div className="grid grid-cols-2 gap-5">
 
                         {/* card ukt jambon */}
-                        <Link href={'./keSHan/ukt_jambon'} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+                        <Link href={'./keSHan/ukt-jambon'} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
 
                             {/* inner bg */}
                             <div className="bg-navy p-5 rounded-md space-y-5">
@@ -78,12 +110,12 @@ const keSHan = () => {
                                 </div>
 
                                 {/* data count */}
-                                <h1 className='text-white text-4xl font-semibold tracking-wider'>1180</h1>
+                                <h1 className='text-white text-4xl font-semibold tracking-wider'>{jambon}</h1>
                             </div>
                         </Link>
 
                         {/* card ukt hijau */}
-                        <Link href={'./keSHan/ukt_hijau'} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+                        <Link href={'./keSHan/ukt-hijau'} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
 
                             {/* inner bg */}
                             <div className="bg-navy p-5 rounded-md space-y-5">
@@ -97,12 +129,12 @@ const keSHan = () => {
                                 </div>
 
                                 {/* data count */}
-                                <h1 className='text-white text-4xl font-semibold tracking-wider'>1180</h1>
+                                <h1 className='text-white text-4xl font-semibold tracking-wider'>{hijau}</h1>
                             </div>
                         </Link>
 
                         {/* card ukt putih */}
-                        <Link href={'./keSHan/ukt_putih'} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+                        <Link href={'./keSHan/ukt-putih'} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
 
                             {/* inner bg */}
                             <div className="bg-navy p-5 rounded-md space-y-5">
@@ -116,7 +148,7 @@ const keSHan = () => {
                                 </div>
 
                                 {/* data count */}
-                                <h1 className='text-white text-4xl font-semibold tracking-wider'>1180</h1>
+                                <h1 className='text-white text-4xl font-semibold tracking-wider'>{putih}</h1>
                             </div>
                         </Link>
 
@@ -136,7 +168,7 @@ const keSHan = () => {
                                 </div>
 
                                 {/* data count */}
-                                <h1 className='text-white text-4xl font-semibold tracking-wider'>1180</h1>
+                                <h1 className='text-white text-4xl font-semibold tracking-wider'>{ukcw}</h1>
                             </div>
                         </Link>
                     </div>
@@ -145,7 +177,7 @@ const keSHan = () => {
                 {/* akhir konten utama */}
 
                 {/* footer */}
-                <Footer />
+                <Footer/>
                 {/* akhir footer */}
 
             </div>

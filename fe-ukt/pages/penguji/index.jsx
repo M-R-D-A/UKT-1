@@ -12,9 +12,9 @@ const index = () => {
     }
 
     useEffect(() => {
-      getDataPenguji()
+        getDataPenguji()
     }, [])
-    
+
     return (
         <div className="font-lato">
 
@@ -24,16 +24,16 @@ const index = () => {
                 {/* header */}
                 <Header />
                 {/* akhir header */}
-                
+
                 {/* konten utama */}
                 <div className="min-h-full bg-darkBlue px-4 py-8">
-                    
+
                     {/* wrapper user information */}
                     <div className="flex flex-col justify-center items-center mb-7">
 
                         {/* photo profile */}
                         <div className="bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] p-0.5 rounded-full mb-3">
-                            <img className='rounded-full object-cover w-28 h-28' src={IMAGE_URL + dataPenguji?.foto} alt="" />
+                            <img className='rounded-full object-cover w-28 h-28' src={IMAGE_URL + dataPenguji.foto} alt="" />
                         </div>
 
                         {/* username */}
@@ -77,14 +77,15 @@ const index = () => {
                         </Link>
 
                         {/* card ukcw */}
-                        <Link href={'/penguji/event_ukcw'}>
+                        {dataPenguji.id_role === 'penguji cabang' && <Link href={'/penguji/event_ukcw'}>
                             <div className="hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5  mt-4">
                                 <div className="bg-navy shadow drop-shadow-lg rounded-md p-5 text-center">
                                     <h1 className='text-xl font-semibold text-green tracking-wide'>UKCW</h1>
                                     <h1 className='text-white tracking-wider'>1216 Siswa</h1>
                                 </div>
                             </div>
-                        </Link>
+                        </Link>}
+
                     </div>
                 </div>
             </div>

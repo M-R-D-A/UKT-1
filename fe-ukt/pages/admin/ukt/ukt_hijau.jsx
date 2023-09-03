@@ -29,7 +29,7 @@ const ukt_hijau = () => {
 
     // function get data event
     const getDataEvent = () => {
-        const token = localStorage.getItem ('tokenPenguji')
+        const token = localStorage.getItem ('token')
 
         axios.get (BASE_URL + `event/ukt/UKT Hijau`, { headers: { Authorization: `Bearer ${token}`}})
         .then (res => {

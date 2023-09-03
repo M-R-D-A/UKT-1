@@ -24,7 +24,7 @@ const ukcw = () => {
     const [soal, setSoal] = useState([])
     const [kunciSoal, setKunciSoal] = useState([])
     const [jumlah, setJumlah] = useState(0)
-    const [tipe_ukt, setTipe_ukt] = useState("UKCW")
+    const [tipe_ukt, setTipe_ukt] = useState("ukcw")
     const [idLembar, setIdLembar] = useState("")
     const [idSoal, setIdSoal] = useState("")
     const [pertanyaan, setPertanyaan] = useState("")

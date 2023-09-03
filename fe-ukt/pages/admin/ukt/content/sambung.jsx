@@ -5,6 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const sambung = (props) => {
     const [dataSambung, setDatasambung] = useState([])
+    console.log(props.data?.tipe_ukt);
     const getDataSambung = () => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'))
@@ -23,10 +24,10 @@ const sambung = (props) => {
             <td key={item.id_senam} className='border-b-2 border-gray w-[40%]'>
                 <div className="flex flex-row justify-center">
                     <div className="font-semibold w-3/4 bg-navy border-2 border-purple rounded-md rounded-br-none rounded-tr-none text-white py-1.5 px-2">
-                        {item.sambung_siswa.nomor_urut} - {item.sambung_siswa.name}
+                    {item.sambung_siswa.nomor_urut} - {item.sambung_siswa.name}
                     </div>
                     <div className="flex items-center justify-center text-bold font-semibold w-[15%] bg-purple rounded-md rounded-l-none text-white py-1.5 px-2">
-                        {item.nilai}
+                            {item.nilai}
                     </div>
                 </div>
             </td>

@@ -125,7 +125,7 @@ const sambung = () => {
         const posisi1 = localStorage.getItem('posisi1')
         const posisi2 = localStorage.getItem('posisi2')
         let score1 = nilai1 > 100 ? 100 : nilai1
-        let score2 = nilai2 > 100 ? 100 : nilai2 
+        let score2 = nilai2 > 100 ? 100 : nilai2
         setShowModalAlert(true);
         if (alert) {
             const id_penguji = penguji.id_penguji
