@@ -6,58 +6,59 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const modal_event = () => {
 
     // state modal
-    const {showModalEvent, setShowModalEvent} = useContext (globalState)
+    const { showModalEvent, setShowModalEvent } = useContext(globalState)
 
     // state
-    const {setDataEvent, action, idEvent} = useContext (globalState)
-    const {name, setName} = useContext (globalState)
-    const {date, setDate} = useContext (globalState)
-    const {tipe, setTipe} = useContext (globalState)
+    const { setDataEvent, action, idEvent } = useContext(globalState)
+    const { name, setName } = useContext(globalState)
+    const { date, setDate } = useContext(globalState)
+    const { tipe, setTipe } = useContext(globalState)
+    const { isActive, setIsActive } = useContext(globalState)
 
     // function get data event
     const getDataEvent = () => {
-        const token = localStorage.getItem ('token')
-        axios.get(BASE_URL + `event/ukt/${tipe}`, { headers: { Authorization: `Bearer ${token}`}})
-        .then (res => {
-            setDataEvent (res.data.data)
-        })
-        .catch (err => {
-            console.log(err.message);
-        })
+        const token = localStorage.getItem('token')
+        axios.get(BASE_URL + `event/ukt/${tipe}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                setDataEvent(res.data.data)
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
     }
-    
+
     // function handle add and edit
     const handleSave = (e) => {
         e.preventDefault()
 
-        const token = localStorage.getItem ('token')
-        
+        const token = localStorage.getItem('token')
+
         let form = {
-            name : name,
-            tanggal : date,
-            tipe_ukt : tipe,
+            name: name,
+            tanggal: date,
+            tipe_ukt: tipe,
         }
 
         if (action === 'insert') {
-            axios.post (BASE_URL + `event`, form, { headers: { Authorization: `Bearer ${token}`}})
-            .then (res => {
-                setShowModalEvent (false)
-                getDataEvent ()
-                console.log(res.data.message);
-            })
-            .catch (err => {
-                console.log(err.message);
-            })
+            axios.post(BASE_URL + `event`, form, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res => {
+                    setShowModalEvent(false)
+                    getDataEvent()
+                    console.log(res.data.message);
+                })
+                .catch(err => {
+                    console.log(err.message);
+                })
         } else if (action === 'update') {
-            axios.put (BASE_URL + `event/${idEvent}`, form, { headers: { Authorization: `Bearer ${token}`}})
-            .then (res => {
-                setShowModalEvent (false)
-                getDataEvent ()
-                console.log(res.data.message);
-            })
-            .catch (err => {
-                console.log(err.message);
-            })
+            axios.put(BASE_URL + `event/${idEvent}`, form, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res => {
+                    setShowModalEvent(false)
+                    getDataEvent()
+                    console.log(res.data.message);
+                })
+                .catch(err => {
+                    console.log(err.message);
+                })
         }
     }
 
@@ -68,10 +69,10 @@ const modal_event = () => {
                     {/* Main modal */}
                     <div className="fixed flex justify-center top-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0">
                         <div className="relative w-full h-full max-w-2xl md:h-auto">
-                            
+
                             {/* Modal content */}
                             <div className="relative bg-navy text-white rounded-lg shadow">
-                                
+
                                 <form action="POST" onSubmit={handleSave}>
 
                                     {/* Modal header */}
@@ -95,7 +96,7 @@ const modal_event = () => {
                                             <svg className="w-7 h-7 fill-white hover:fill-purple duration-300" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd">
                                                 </path>
-                                            </svg>  
+                                            </svg>
                                         </button>
                                     </div>
 
@@ -110,11 +111,11 @@ const modal_event = () => {
                                             </div>
                                             <div className="w-4/6">
                                                 <input className='w-full bg-darkBlue rounded-md focus:outline-none px-2'
-                                                type="text"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)}
-                                                required
-                                                >        
+                                                    type="text"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    required
+                                                >
                                                 </input>
                                             </div>
                                         </div>
@@ -127,12 +128,24 @@ const modal_event = () => {
                                             </div>
                                             <div className="w-4/6">
                                                 <input className='w-full bg-darkBlue rounded-md focus:outline-none px-2 stroke-white'
-                                                type="date"
-                                                value={date}
-                                                onChange={(e) => setDate(e.target.value)}
-                                                required
-                                                >        
+                                                    type="date"
+                                                    value={date}
+                                                    onChange={(e) => setDate(e.target.value)}
+                                                    required
+                                                >
                                                 </input>
+                                            </div>
+                                        </div>
+
+                                        {/* Input Status */}
+                                        <div className="flex flex-row space-x-3 w-full">
+                                            <div className="w-2/6 flex justify-between">
+                                                <span>{isActive ? 'Aktif' : 'Non Aktif'}</span>
+                                                <span>:</span>
+                                            </div>
+                                            <div className="w-4/6 gap-3">
+                                                <button onClick={() => setIsActive(true)} className={`w-1/2 ${isActive ? 'text-white bg-green duration-300' : 'text-green bg-white duration-300'} rounded-l-lg font-medium px-5 py-2.5 focus:z-10`}>Aktifkan</button>
+                                                <button onClick={() => setIsActive(false)} className={`w-1/2 ${isActive ? 'text-red bg-white duration-300' : 'text-white bg-red  duration-300'}  font-medium rounded-r-lg px-5 py-2.5 text-center`}>Non Aktfikan</button>
                                             </div>
                                         </div>
                                     </div>
@@ -160,7 +173,7 @@ const modal_event = () => {
                     <div className="bg-black opacity-70 fixed inset-0 z-40"></div>
                 </>
 
-            ): null}
+            ) : null}
         </>
     )
 }
