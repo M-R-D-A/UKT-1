@@ -89,11 +89,11 @@ const rekap_nilai_ukt_ukt_hijau = () => {
         console.log(name)
         if (name != null) {
             const delay = 500; // Adjust the delay time (in milliseconds) as per your requirement
-    
+
             const timeoutId = setTimeout(() => {
                 getDataByName();
             }, delay);
-    
+
             return () => {
                 clearTimeout(timeoutId); // Clear the timeout if the effect is cleaned up before the delay
             };
@@ -297,8 +297,8 @@ const rekap_nilai_ukt_ukt_hijau = () => {
                                                     <td className={`border-b-2 border-gray border text-lg ${item.keshan < 50 && 'text-[#ca3030]'} ${item.keshan > 89.99 && 'text-[#7dff5d]'}`}>{(item.keshan)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item.senam < 50 && 'text-[#ca3030]'} ${item.senam > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.senam)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item.jurus < 50 && 'text-[#ca3030]'} ${item.jurus > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.jurus)}</td>
-                                                    <td className={`border-b-2 border-gray border text-lg ${item.fisik < 50 && 'text-[#ca3030]'} ${item.fisik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.fisik)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item.teknik < 50 && 'text-[#ca3030]'} ${item.teknik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.teknik)}</td>
+                                                    <td className={`border-b-2 border-gray border text-lg ${item.fisik < 50 && 'text-[#ca3030]'} ${item.fisik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.fisik)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item.sambung < 50 && 'text-[#ca3030]'} ${item.sambung > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.sambung)}</td>
                                                     <td className={`border-b-2 border-gray border font-bold text-lg ${((item.keshan + item.senam + item.jurus + item.fisik + item.teknik + item.sambung) / 6) < 50 && 'bg-[#371b1b]'} ${((item.keshan + item.senam + item.jurus + item.fisik + item.teknik + item.sambung) / 6) > 89.99 && 'bg-[#1f371b]'} `}>
                                                         {((item.keshan + item.senam + item.jurus + item.fisik + item.teknik + item.sambung) / 6).toLocaleString('id', { minimumFractionDigits: 1, maximumFractionDigits: 2 })}
