@@ -38,7 +38,8 @@ module.exports = {
         let data = {
             name: req.body.name,
             tanggal: req.body.tanggal,
-            tipe_ukt: req.body.tipe_ukt
+            tipe_ukt: req.body.tipe_ukt,
+            is_active: req.body.is_active
         }
         event.create(data)
             .then(result => {
@@ -59,7 +60,8 @@ module.exports = {
         let data = {
             name: req.body.name,
             tanggal: req.body.tanggal,
-            tipe_ukt: req.body.tipe_ukt
+            tipe_ukt: req.body.tipe_ukt,
+            is_active: req.body.is_active
         }
         event.update(data, { where: param })
             .then(result => {
