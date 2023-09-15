@@ -89,11 +89,11 @@ const rekap_nilai_ukt_ukt_jambon = () => {
         console.log(name)
         if (name != null) {
             const delay = 500; // Adjust the delay time (in milliseconds) as per your requirement
-    
+
             const timeoutId = setTimeout(() => {
                 getDataByName();
             }, delay);
-    
+
             return () => {
                 clearTimeout(timeoutId); // Clear the timeout if the effect is cleaned up before the delay
             };
@@ -241,17 +241,6 @@ const rekap_nilai_ukt_ukt_jambon = () => {
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>
-                                            <th className='text-base border font-oswald'>Fisik {jenis == 'fisik' && updown == 'upToDown'
-                                                ? <button className='rounded-md bg-gray text-lg' onClick={() => {
-                                                    setJenis('fisik');
-                                                    setUpDown('downToUp');
-
-                                                }}>⌄</button>
-                                                : <button className='rounded-md bg-gray text-lg' onClick={() => {
-                                                    setJenis('fisik');
-                                                    setUpDown('upToDown');
-
-                                                }}>⌃</button>}</th>
                                             <th className='text-base border font-oswald'>Teknik {jenis == 'teknik' && updown == 'upToDown'
                                                 ? <button className='rounded-md bg-gray text-lg' onClick={() => {
                                                     setJenis('teknik');
@@ -260,6 +249,17 @@ const rekap_nilai_ukt_ukt_jambon = () => {
                                                 }}>⌄</button>
                                                 : <button className='rounded-md bg-gray text-lg' onClick={() => {
                                                     setJenis('teknik');
+                                                    setUpDown('upToDown');
+
+                                                }}>⌃</button>}</th>
+                                            <th className='text-base border font-oswald'>Fisik {jenis == 'fisik' && updown == 'upToDown'
+                                                ? <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('fisik');
+                                                    setUpDown('downToUp');
+
+                                                }}>⌄</button>
+                                                : <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('fisik');
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>

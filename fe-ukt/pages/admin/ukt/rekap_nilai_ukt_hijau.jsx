@@ -241,17 +241,6 @@ const rekap_nilai_ukt_ukt_hijau = () => {
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>
-                                            <th className='text-base border font-oswald'>Fisik {jenis == 'fisik' && updown == 'upToDown'
-                                                ? <button className='rounded-md bg-gray text-lg' onClick={() => {
-                                                    setJenis('fisik');
-                                                    setUpDown('downToUp');
-
-                                                }}>⌄</button>
-                                                : <button className='rounded-md bg-gray text-lg' onClick={() => {
-                                                    setJenis('fisik');
-                                                    setUpDown('upToDown');
-
-                                                }}>⌃</button>}</th>
                                             <th className='text-base border font-oswald'>Teknik {jenis == 'teknik' && updown == 'upToDown'
                                                 ? <button className='rounded-md bg-gray text-lg' onClick={() => {
                                                     setJenis('teknik');
@@ -260,6 +249,17 @@ const rekap_nilai_ukt_ukt_hijau = () => {
                                                 }}>⌄</button>
                                                 : <button className='rounded-md bg-gray text-lg' onClick={() => {
                                                     setJenis('teknik');
+                                                    setUpDown('upToDown');
+
+                                                }}>⌃</button>}</th>
+                                            <th className='text-base border font-oswald'>Fisik {jenis == 'fisik' && updown == 'upToDown'
+                                                ? <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('fisik');
+                                                    setUpDown('downToUp');
+
+                                                }}>⌄</button>
+                                                : <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('fisik');
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>
