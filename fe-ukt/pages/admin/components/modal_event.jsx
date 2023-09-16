@@ -37,6 +37,7 @@ const modal_event = () => {
             name: name,
             tanggal: date,
             tipe_ukt: tipe,
+            is_active: isActive
         }
 
         if (action === 'insert') {

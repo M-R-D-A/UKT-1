@@ -21,6 +21,7 @@ const ukt_hijau = () => {
 
     // state
     const [dataEvent, setDataEvent] = useState ([])
+    const [isActive, setIsActive] = useState(false)
     const [action, setAction] = useState ('')
     const [idEvent, setIdEvent] = useState ('')
     const [name, setName] = useState ('')
@@ -47,6 +48,7 @@ const ukt_hijau = () => {
         setName ('')
         setDate ('')
         setTipe ('UKT Hijau')
+        setIsActive(true)
     }
 
     // function modal edit
@@ -57,6 +59,7 @@ const ukt_hijau = () => {
         setName (selectedItem.name)
         setDate (selectedItem.tanggal)
         setTipe ('UKT Hijau')
+        setIsActive (selectedItem.is_active)
     }
 
     // function modal delete
@@ -190,7 +193,7 @@ const ukt_hijau = () => {
             </div>
 
             {/* memanggil modal */}
-            <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe }}>
+            <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe, isActive, setIsActive }}>
                 <Modal_event />
             </globalState.Provider>
 
