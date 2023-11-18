@@ -19,7 +19,8 @@ module.exports = {
     controllerGetByTipeUkt: async (req, res) => {
         event.findAll({
             where: {
-                tipe_ukt: req.params.id
+                tipe_ukt: req.params.id,
+                is_active: true
             }
         })
             .then(event => {
