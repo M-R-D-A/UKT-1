@@ -19,7 +19,27 @@ module.exports = {
     controllerGetByTipeUkt: async (req, res) => {
         event.findAll({
             where: {
-                tipe_ukt: req.params.id
+                tipe_ukt: req.params.id,
+                is_active: true
+            }
+        })
+            .then(event => {
+                res.json({
+                    count: event.length,
+                    data: event
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerGetByTipeUktPUBLIC: async (req, res) => {
+        event.findAll({
+            where: {
+                tipe_ukt: req.params.id,
+                is_active: true
             }
         })
             .then(event => {
