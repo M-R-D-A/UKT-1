@@ -38,8 +38,7 @@ const Modal_Sambung = (props) => {
     const searchSiswa = () => {
         const token = localStorage.getItem('tokenPenguji')
         axios.get(BASE_URL + `siswa/search/${dataEvent.id_event}/${searchName}/sambung`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                console.log(res);
+            .then(res => { 
                 setDataSiswa(res.data.data)
             })
             .catch(err => {
@@ -51,8 +50,7 @@ const Modal_Sambung = (props) => {
         const token = localStorage.getItem('tokenPenguji')
         if (data) {
             axios.get(BASE_URL + `siswa/ranting/${dataEvent.id_event}/${data.id_ranting}/sambung`, { headers: { Authorization: `Bearer ${token}` } })
-                .then(res => {
-                    console.log(res)
+                .then(res => { 
                     setDataSiswa(res.data.data)
                 })
                 .catch(err => {
@@ -106,7 +104,7 @@ const Modal_Sambung = (props) => {
 
     useEffect(() => {
         getDataSiswa()
-    }, [])
+    }, [action])
 
     return (
         <>
