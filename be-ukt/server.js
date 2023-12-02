@@ -75,6 +75,10 @@ app.use("/ukt/senam_siswa", senam_siswa)
 const senam_detail = require('./src/api/kategori/senam/senam_detail/senam_detail.router');
 app.use("/ukt/senam_detail", senam_detail)
 
+//endpoint gerakan
+const gerakan= require('./src/api/gerakan/gerakan.router');
+app.use('/ukt/gerakan', gerakan)
+
 const jurus = require('./src/api/kategori/jurus/jurus/jurus.router');
 app.use("/ukt/jurus", jurus)
 
