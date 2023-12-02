@@ -46,11 +46,23 @@ const sambung = (props) => {
                 <div className='h-full overflow-y-auto'>
                     <table className='w-full'>
                         <thead className='sticky top-0 bg-black'>
-                            <tr className='text-white'>
-                                <th className='py-3 w-[5%]'>No</th>
-                                <th>Penguji</th>
-                                <th>SISWA 1</th>
-                                <th>SISWA 2</th>
+                            <tr className='text-white text-xs'>
+                                <th className='py-3 w-[5%]'>NO</th>
+                                <th>NAME</th>
+                                <th>PUKULAN</th>
+                                <th>SIKUTAN</th>
+                                <th>DENGKULAN</th>
+                                <th>TENDANGAN A</th>
+                                <th>TENDANGAN C</th>
+                                <th>TENDANGAN T</th>
+                                <th>TENDANGAN B</th>
+                                <th>SERKEL ATAS</th>
+                                <th>SERKEL BAWAH</th>
+                                <th>POLA LANGKAH</th>
+                                <th>JATUHAN SERANGA</th>
+                                <th>KAIT/PENGKOL</th>
+                                <th>GUNTINGAN</th>
+                                <th>BANTINGAN SAUTAN</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,7 +71,7 @@ const sambung = (props) => {
                                     <tr className='text-green text-center' key={item.id_sambung}>
                                         <td className='border-b-2 text-white py-3 border-gray'>{index + 1}</td>
                                         <td className='border-b-2 text-white border-gray '>{item.penguji_sambung.name}</td>
-                                        <TdComponent items={(item.detail_sambung)} />
+                                        {/* <TdComponent items={(item.detail_sambung)} /> */}
                                     </tr>
                                 </>
                             ))}
