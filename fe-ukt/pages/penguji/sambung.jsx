@@ -26,10 +26,28 @@ const sambung = () => {
     const [plus, setPlus] = useState(0);
     const [nilai1, setNilai1] = useState(50)
     const [nilai2, setNilai2] = useState(50)
+    const [arraySiswa1, setArraySiswa1] = useState([])
+    const [arraySiswa2, setArraySiswa2] = useState([])
 
     const { active, setActive } = useContext(globalState)
     const getData = () => {
         const token = localStorage.getItem('tokenPenguji')
+        const array = [
+            {id:1,green:null},
+            {id:2,green:null},
+            {id:3,green:null},
+            {id:4,green:null},
+            {id:5,green:null},
+            {id:6,green:null},
+            {id:7,green:null},
+            {id:9,green:null},
+            {id:10,green:null},
+            {id:11,green:null},
+            {id:12,green:null},
+            {id:13,green:null},
+            {id:14,green:null},
+            {id:15,green:null},
+        ]
 
         axios.get(BASE_URL + `nilai_sambung`, { headers: { Authorization: `Bearer ${token}` } },)
             .then(result => {
@@ -43,46 +61,85 @@ const sambung = () => {
                 setDataNilai1(data);
                 setDataNilai2(data);
                 setPlus(count);
+                setArraySiswa1(array)
+                setArraySiswa2(array)
                 console.log(plus);
             })
             .catch(error => {
                 console.log(error.message)
             })
     }
+    const updateArrays = (id, value, posisi) => {
+    // Determine which array to update based on the posisi condition
+    const dummyArray = posisi > 1 ? [...arraySiswa2] : [...arraySiswa1];
+
+    // Map through the dummyArray to update the required item
+    const updatedArray = dummyArray.map(item => {
+        if (item.id === id) {
+            return { ...item, green: value };
+        }
+        return item;
+    });
+
+    // Update the appropriate state array based on the posisi condition
+    if (posisi > 1) {
+        setArraySiswa2(updatedArray);
+    } else {
+        setArraySiswa1(updatedArray);
+    }
+};
 
     const handleClick = (id, siswa, score1, score2, status, tipe) => {
         const data = siswa > 1 ? dataNilai2 : dataNilai1
         const copyData = [...data]
+
         const index = copyData.findIndex(
             (option) => option.id_nilai_sambung === id
         )
         if (status === null) {
             copyData[index] = { ...data[index], status: 'ungu' }
-            siswa === 1
-                ? setNilai1(nilai1 + score1)
-                : setNilai2(nilai2 + score1)
+            if(siswa === 1){
+                setNilai1(nilai1 + score1)
+                updateArrays(id, false, 1)
+            } else {
+                setNilai2(nilai2 + score1)
+                updateArrays(id, false, 2)
+            }
         } else if (status === 'ungu' && tipe === true) {
             copyData[index] = { ...data[index], status: 'hijau' }
             index.status === 'hijau'
-            siswa === 1
-                ? setNilai1(nilai1 + (score2 - score1))
-                : setNilai2(nilai2 + (score2 - score1))
+            if(siswa === 1){
+                setNilai1(nilai1 + (score2 - score1))
+                updateArrays(id, true, 1) 
+            } else {
+                setNilai2(nilai2 + (score2 - score1))
+                updateArrays(id, true, 2) 
+            }
         } else if (status === 'hijau') {
             copyData[index] = { ...data[index], status: null }
             index.status === null
-            siswa === 1
-                ? setNilai1(nilai1 - score2)
-                : setNilai2(nilai2 - score2)
+            if(siswa === 1){
+                setNilai1(nilai1 - score2)
+                updateArrays(id, null, 1) 
+            } else {
+                setNilai2(nilai2 - score2)
+                updateArrays(id, null, 2) 
+            }
         } else {
             copyData[index] = { ...data[index], status: null }
             index.status === null
-            siswa === 1
-                ? setNilai1(nilai1 - score1)
-                : setNilai2(nilai2 - score1)
+            if(siswa === 1){
+                setNilai1(nilai1 - score1)
+                updateArrays(id, null, 1) 
+            } else {
+                setNilai2(nilai2 - score1)
+                updateArrays(id, null, 2) 
+            }
         }
         siswa > 1 ? setDataNilai2(copyData) : setDataNilai1(copyData)
 
     }
+
     // function set jneis
     const onActive = (e) => {
         setActive(e)
@@ -165,14 +222,6 @@ const sambung = () => {
     useEffect(() => {
         getData()
     }, [])
-    useEffect(() => {
-        console.log(nilai1)
-        console.log(nilai2)
-    }, [nilai1, nilai2])
-
-    useEffect(() => {
-        console.log(plus)
-    }, [plus])
 
     return (
         <>
