@@ -19,7 +19,7 @@ module.exports = {
     controllerAdd: async (req, res) => {
         let data = {
             id_nilai_sambung: req.body.id_nilai_sambung,
-            id_detail_sambung: req.body.id_detail_sambung,
+            id_siswa: req.body.id_siswa,
             green: req.body.green
         }
         gerakan.create(data)

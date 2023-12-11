@@ -20,12 +20,12 @@ module.exports = {
           key: "id_nilai_sambung"
         }
       },
-      id_detail_sambung: {
+      id_siswa: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "detail_sambung",
-          key: "id_detail_sambung"
+          model: "siswa",
+          key: "id_siswa"
         }
       },
       green: {

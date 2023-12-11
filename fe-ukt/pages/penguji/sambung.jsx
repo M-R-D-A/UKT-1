@@ -30,6 +30,8 @@ const sambung = () => {
     const [arraySiswa2, setArraySiswa2] = useState([])
 
     const { active, setActive } = useContext(globalState)
+
+    //function get data siswa
     const getData = () => {
         const token = localStorage.getItem('tokenPenguji')
         const array = [
@@ -87,8 +89,13 @@ const sambung = () => {
     } else {
         setArraySiswa1(updatedArray);
     }
-};
+    };
 
+    // handle perubahan score siswa sesuai ketika button ditekan
+    // sesuai status button ketika ditekan
+    // status = null, ditambah nilai pertama, status jadi 'ungu'
+    // status = 'ungu' ditambah nilai kedua minus nilai pertama, status jadi 'hijau'
+    // status = 'hijau' nilai dikurangi sejumlah nilai kedua, status jadi null
     const handleClick = (id, siswa, score1, score2, status, tipe) => {
         const data = siswa > 1 ? dataNilai2 : dataNilai1
         const copyData = [...data]
@@ -139,13 +146,11 @@ const sambung = () => {
         siswa > 1 ? setDataNilai2(copyData) : setDataNilai1(copyData)
 
     }
-
     // function set jneis
     const onActive = (e) => {
         setActive(e)
     }
 
-    // function get data siswa
     const handleChildData = (data) => {
         if (data) {
             data.posisi < 2
