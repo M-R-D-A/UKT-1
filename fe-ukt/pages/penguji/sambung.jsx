@@ -72,10 +72,10 @@ const sambung = () => {
             })
     }
     const updateArrays = (id, value, posisi) => {
-    // Determine which array to update based on the posisi condition
+    // menentukan array mana yang diubah berdasakan kondisi posisi
     const dummyArray = posisi > 1 ? [...arraySiswa2] : [...arraySiswa1];
 
-    // Map through the dummyArray to update the required item
+    // Mapping dummy array untuk mengubah item yang diperlukan
     const updatedArray = dummyArray.map(item => {
         if (item.id === id) {
             return { ...item, green: value };
@@ -203,6 +203,24 @@ const sambung = () => {
             axios.post(BASE_URL + `sambung`, data, { headers: { Authorization: `Bearer ${token}` } },)
                 .then((res) => {
                     console.log(res);
+                    // console.log('arraySiswa1')
+                    // console.log(arraySiswa1)
+                    // console.log('arraySiswa2')
+                    // console.log(arraySiswa2)
+                    axios.post(BASE_URL + `gerakan/array`, {dataArray: arraySiswa1, id_siswa: dataSiswa2.id_siswa}, { headers: { Authorization: `Bearer ${token}`}},)
+                    .then((res) => {
+                        console.log(res);
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    })
+                    axios.post(BASE_URL + `gerakan/array`, {dataArray: arraySiswa2, id_siswa: dataSiswa2.id_siswa}, { headers: { Authorization: `Bearer ${token}`}},)
+                    .then((res) => {
+                        console.log(res);
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    })
                 })
                 .catch((error) => {
                     console.log(error.message);
