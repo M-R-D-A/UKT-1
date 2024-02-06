@@ -2,31 +2,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('catatan', {
-      id_catatan: {
+    await queryInterface.createTable('gerakan', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_cabang: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      id_gerakan: {
+        type: Sequelize.INTEGER
+      },
+      id_nilai: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: "cabang",
-          key: "id_cabang"
+          model: "nilai_sambung",
+          key: "id_nilai_sambung"
         }
       },
-      id_ranting: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      id_detail: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: "ranting",
-          key: "id_ranting"
+          model: "gerakan_detail",
+          key: "id_detail"
         }
       },
-      text: {
-        type: Sequelize.TEXT
+      green: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('catatan');
+    await queryInterface.dropTable('gerakan');
   }
 };

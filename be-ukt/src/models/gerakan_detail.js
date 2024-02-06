@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class detail_sambung extends Model {
+  class gerakan_detail extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,33 +13,28 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.sambung, {
         foreignKey: "id_sambung",
-        as: "detail_sambung"
-      })
-      this.belongsTo(models.siswa, {
-        foreignKey: "id_siswa",
-        as: "sambung_siswa"
+        as: "gdetail_sambung"
       })
       this.hasMany(models.gerakan, {
-        foreignKey: "id_gerakan",
-        as: "detail_gerakan"
+        foreignKey: "id_detail",
+        as: "gerak_detail"
       })
     }
   }
-  detail_sambung.init({
-    id_detail_sambung: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
+  gerakan_detail.init({
+    id_detail: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
     },
     id_sambung: DataTypes.INTEGER,
-    posisi: DataTypes.INTEGER,
-    id_siswa: DataTypes.INTEGER,
-    nilai: DataTypes.INTEGER
+    name: DataTypes.STRING,
+    posisi: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'detail_sambung',
-    tableName: 'detail_sambung',
+    modelName: 'gerakan_detail',
+    tableName: 'gerakan_detail',
   });
-  return detail_sambung;
+  return gerakan_detail;
 };

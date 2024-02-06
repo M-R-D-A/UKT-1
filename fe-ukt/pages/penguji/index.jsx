@@ -33,7 +33,7 @@ const index = () => {
 
                         {/* photo profile */}
                         <div className="bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] p-0.5 rounded-full mb-3">
-                            <img className='rounded-full object-cover w-28 h-28' src={IMAGE_URL + dataPenguji.foto} alt="" />
+                            <img className='rounded-full object-cover w-28 h-28' src={IMAGE_URL + dataPenguji?.foto} alt="" />
                         </div>
 
                         {/* username */}

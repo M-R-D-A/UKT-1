@@ -15,16 +15,21 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "id_nilai_sambung",
         as: "gerakan_nilai_sambung"
       })
-      this.belongsTo(models.siswa, {
-        foreignKey: "id_siswa",
-        as: "gerakan_siswa"
+      this.belongsTo(models.gerakan_detail, {
+        foreignKey: "id_detail",
+        as: "gerakan_detail"
       })
     }
   }
   gerakan.init({
-    id_gerakan: DataTypes.INTEGER,
-    id_nilai_sambung: DataTypes.INTEGER,
-    id_siswa: DataTypes.INTEGER,
+    id_gerakan: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
+    id_nilai: DataTypes.INTEGER,
+    id_detail: DataTypes.INTEGER,
     green: DataTypes.BOOLEAN
   }, {
     sequelize,

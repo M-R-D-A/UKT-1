@@ -35,20 +35,20 @@ const sambung = () => {
     const getData = () => {
         const token = localStorage.getItem('tokenPenguji')
         const array = [
-            {id:1,green:null},
-            {id:2,green:null},
-            {id:3,green:null},
-            {id:4,green:null},
-            {id:5,green:null},
-            {id:6,green:null},
-            {id:7,green:null},
-            {id:9,green:null},
-            {id:10,green:null},
-            {id:11,green:null},
-            {id:12,green:null},
-            {id:13,green:null},
-            {id:14,green:null},
-            {id:15,green:null},
+            { id: 1, green: null },
+            { id: 2, green: null },
+            { id: 3, green: null },
+            { id: 4, green: null },
+            { id: 5, green: null },
+            { id: 6, green: null },
+            { id: 7, green: null },
+            { id: 8, green: null },
+            { id: 9, green: null },
+            { id: 10, green: null },
+            { id: 11, green: null },
+            { id: 12, green: null },
+            { id: 13, green: null },
+            { id: 14, green: null },
         ]
 
         axios.get(BASE_URL + `nilai_sambung`, { headers: { Authorization: `Bearer ${token}` } },)
@@ -72,23 +72,23 @@ const sambung = () => {
             })
     }
     const updateArrays = (id, value, posisi) => {
-    // menentukan array mana yang diubah berdasakan kondisi posisi
-    const dummyArray = posisi > 1 ? [...arraySiswa2] : [...arraySiswa1];
+        // menentukan array mana yang diubah berdasakan kondisi posisi
+        const dummyArray = posisi > 1 ? [...arraySiswa2] : [...arraySiswa1];
 
-    // Mapping dummy array untuk mengubah item yang diperlukan
-    const updatedArray = dummyArray.map(item => {
-        if (item.id === id) {
-            return { ...item, green: value };
+        // Mapping dummy array untuk mengubah item yang diperlukan
+        const updatedArray = dummyArray.map(item => {
+            if (item.id === id) {
+                return { ...item, green: value };
+            }
+            return item;
+        });
+
+        // Update the appropriate state array based on the posisi condition
+        if (posisi > 1) {
+            setArraySiswa2(updatedArray);
+        } else {
+            setArraySiswa1(updatedArray);
         }
-        return item;
-    });
-
-    // Update the appropriate state array based on the posisi condition
-    if (posisi > 1) {
-        setArraySiswa2(updatedArray);
-    } else {
-        setArraySiswa1(updatedArray);
-    }
     };
 
     // handle perubahan score siswa sesuai ketika button ditekan
@@ -105,7 +105,7 @@ const sambung = () => {
         )
         if (status === null) {
             copyData[index] = { ...data[index], status: 'ungu' }
-            if(siswa === 1){
+            if (siswa === 1) {
                 setNilai1(nilai1 + score1)
                 updateArrays(id, false, 1)
             } else {
@@ -115,32 +115,32 @@ const sambung = () => {
         } else if (status === 'ungu' && tipe === true) {
             copyData[index] = { ...data[index], status: 'hijau' }
             index.status === 'hijau'
-            if(siswa === 1){
+            if (siswa === 1) {
                 setNilai1(nilai1 + (score2 - score1))
-                updateArrays(id, true, 1) 
+                updateArrays(id, true, 1)
             } else {
                 setNilai2(nilai2 + (score2 - score1))
-                updateArrays(id, true, 2) 
+                updateArrays(id, true, 2)
             }
         } else if (status === 'hijau') {
             copyData[index] = { ...data[index], status: null }
             index.status === null
-            if(siswa === 1){
+            if (siswa === 1) {
                 setNilai1(nilai1 - score2)
-                updateArrays(id, null, 1) 
+                updateArrays(id, null, 1)
             } else {
                 setNilai2(nilai2 - score2)
-                updateArrays(id, null, 2) 
+                updateArrays(id, null, 2)
             }
         } else {
             copyData[index] = { ...data[index], status: null }
             index.status === null
-            if(siswa === 1){
+            if (siswa === 1) {
                 setNilai1(nilai1 - score1)
-                updateArrays(id, null, 1) 
+                updateArrays(id, null, 1)
             } else {
                 setNilai2(nilai2 - score1)
-                updateArrays(id, null, 2) 
+                updateArrays(id, null, 2)
             }
         }
         siswa > 1 ? setDataNilai2(copyData) : setDataNilai1(copyData)
@@ -202,25 +202,38 @@ const sambung = () => {
 
             axios.post(BASE_URL + `sambung`, data, { headers: { Authorization: `Bearer ${token}` } },)
                 .then((res) => {
-                    console.log(res);
-                    // console.log('arraySiswa1')
-                    // console.log(arraySiswa1)
-                    // console.log('arraySiswa2')
-                    // console.log(arraySiswa2)
-                    axios.post(BASE_URL + `gerakan/array`, {dataArray: arraySiswa1, id_siswa: dataSiswa2.id_siswa}, { headers: { Authorization: `Bearer ${token}`}},)
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((error) => {
-                        console.log(error.message);
-                    })
-                    axios.post(BASE_URL + `gerakan/array`, {dataArray: arraySiswa2, id_siswa: dataSiswa2.id_siswa}, { headers: { Authorization: `Bearer ${token}`}},)
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((error) => {
-                        console.log(error.message);
-                    })
+                    const dataSambung = res.data.data
+
+                    const detail1 = {
+                        id_sambung: dataSambung.id_sambung,
+                        name: dataSiswa1.name,
+                        posisi: 1
+                    }
+                    const detail2 = {
+                        id_sambung: dataSambung.id_sambung,
+                        name: dataSiswa2.name,
+                        posisi: 2
+                    }
+                    for(let i=0; i<2; i++) {
+                        axios.post(BASE_URL + `gerakan/detail`, i < 1 ? detail1 : detail2, { headers: { Authorization: `Bearer ${token}` } },)
+                            .then((res) => {
+                                axios.post(BASE_URL + `gerakan/array`,
+                                    {
+                                        dataArray: i < 1 ? arraySiswa1 : arraySiswa2,
+                                        id_detail: res.data.data.id_detail
+                                    }, { headers: { Authorization: `Bearer ${token}` } },)
+                                    .then((res) => {
+                                        console.log(res);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error.message);
+                                    })
+                            })
+                            .catch((error) => {
+                                console.log(error.message);
+                            })
+                    }
+
                 })
                 .catch((error) => {
                     console.log(error.message);

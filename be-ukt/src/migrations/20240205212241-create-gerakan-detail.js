@@ -2,34 +2,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('gerakan', {
-      id: {
+    await queryInterface.createTable('gerakan_detail', {
+      id_detail: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_gerakan: {
+      id_sambung: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "sambung",
+          key: "id_sambung"
+        }
+      },
+      name: {
+        type: Sequelize.STRING
+      },
+      posisi: {
         type: Sequelize.INTEGER
-      },
-      id_nilai_sambung: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "nilai_sambung",
-          key: "id_nilai_sambung"
-        }
-      },
-      id_siswa: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "siswa",
-          key: "id_siswa"
-        }
-      },
-      green: {
-        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -42,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('gerakan');
+    await queryInterface.dropTable('gerakan_detail');
   }
 };

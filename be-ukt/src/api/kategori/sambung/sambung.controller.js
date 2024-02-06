@@ -174,22 +174,32 @@ module.exports = {
             nilai: req.body.nilai2,
           },
         ];
+        const insertedDetailIds = [];
+
         for (let i = 0; i < 2; i++) {
           if (data[i]) {
             let dataDetail = detail_sambung.build(data[i]);
             await dataDetail.save();
+
+            // Assuming id_detail_sambung is a property of dataDetail
+            const generatedId = dataDetail.id_detail_sambung;
+            insertedDetailIds.push(generatedId);
           } else {
             console.log(`data ${i} tidak ditemukan`);
           }
         }
+
         const response = {
           message: "data has been inserted",
           data: {
             id_siswa1: req.body.id_siswa1,
             id_siswa2: req.body.id_siswa2,
+            id_sambung: id_sambung,
           },
         };
+
         res.json(response);
+
       })
       .catch((error) => {
         res.json({

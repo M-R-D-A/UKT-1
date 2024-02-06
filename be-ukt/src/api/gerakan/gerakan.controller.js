@@ -1,5 +1,12 @@
+const detail_sambung = require('../../models/detail_sambung');
 const models = require('../../models/index');
 const gerakan = models.gerakan;
+const siswa = models.siswa;
+const detail = models.detail_sambung;
+const detailGerak = models.gerakan_detail
+const sambung = models.sambung;
+const event = models.event;
+const Sequelize = models.Sequelize
 
 module.exports = {
     controllerGetAll: async (req, res) => {
@@ -16,6 +23,64 @@ module.exports = {
                 })
             })
     },
+    controllerGetArray: async(req, res) => {
+        let idEvent = req.params.id
+        let whereClause = {
+            id_event: idEvent
+        };
+        // gerakan.findAll({
+        //     include: [
+        //         {
+        //             model: detail,
+        //             as: 'gerakan_detail',
+        //             required: true
+        //         }
+        //     ]
+        // })
+        sambung.findAll({
+            attributes: ['id_penguji'],
+            include: [
+                {
+                    model: models.penguji,
+                    as: 'penguji_sambung',
+                    required: true,
+                    attributes: ['name']
+                },
+                {
+                    model: detailGerak,
+                    as: 'detail_gerak',
+                    required: true,
+                    attributes: ['name','posisi'],
+                    include: [
+                        {
+                            model: gerakan,
+                            as: 'gerak_detail',
+                            required: false,
+                            attributes: ['id_nilai','green'],
+                            // where: {
+                            //     id_detail: Sequelize.col('detail_sambung.id_detail_sambung')
+                            // }
+                        }
+                    ],
+                    order: [
+                        ['posisi', 'DESC']
+                    ],
+                }
+            ],
+            where: whereClause
+        })
+        .then(gerakan => {
+            res.json({
+                count: gerakan.length,
+                data: gerakan
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
+            })
+        })
+    },
     controllerAdd: async (req, res) => {
         let data = {
             id_nilai_sambung: req.body.id_nilai_sambung,
@@ -26,6 +91,25 @@ module.exports = {
             .then(result => {
                 res.json({
                     message: "data has been inserted"
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerAddDetail: async (req, res) => {
+        let data = {
+            id_sambung: req.body.id_sambung,
+            name: req.body.name,
+            posisi: req.body.posisi
+        }
+        detailGerak.create(data)
+            .then(result => {
+                res.json({
+                    message: "data has been inserted",
+                    data: result
                 })
             })
             .catch(error => {
@@ -47,8 +131,8 @@ module.exports = {
     
             dataArray.forEach(data => {
                 const newData = {
-                    id_nilai_sambung: data.id,
-                    id_siswa: req.body.id_siswa,
+                    id_detail: req.body.id_detail,
+                    id_nilai: data.id,
                     green: data.green
                 };
     
