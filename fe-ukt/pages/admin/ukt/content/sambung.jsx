@@ -10,10 +10,18 @@ const sambung = (props) => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'))
 
-        axios.get(BASE_URL + `sambung/ukt/${props.data?.tipe_ukt}/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
+        // axios.get(BASE_URL + `sambung/ukt/${props.data?.tipe_ukt}/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
+        //     .then(res => {
+        //         console.log(res.data.data);
+        //         setDatasambung(res.data.data)
+        //     })
+        //     .catch(err => {
+        //         console.log(err.message);
+        //     })
+        axios.get(BASE_URL + `gerakan/array/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                console.log(res.data.data);
-                setDatasambung(res.data.data)
+                console.log(res.data.data)
+                setDatasambung(res.data.data);
             })
             .catch(err => {
                 console.log(err.message);
@@ -31,6 +39,119 @@ const sambung = (props) => {
                     </div>
                 </div>
             </td>
+        ));
+    }
+
+    function checkBG(data){
+        const colorBG = `h-16 p-4 border border-white ${data == true ? 'bg-green' : data == false ? 'bg-purple' : '' }`
+
+        return colorBG;
+    }
+
+    function NewDetailRow(data) {
+        return data.map((item, index) => (
+            <>
+                <tr className='text-green text-center' key={item.id_sambung}>
+                    <td className='border-b-2 text-white py-3 border-gray'>{index + 1}</td>
+                    <td className='border-b-2 text-white border-gray text-[10px]'>
+                        <div className="flex flex-col justify-center">
+                            <div className='h-10 sm:h-5 flex justify-center items-center'>
+                                {item.penguji_sambung.name}
+                            </div>
+                            <div className='flex flex-col'>{item.detail_gerak.map((item, index) => (
+                                <table className='border border-white rounded-md '>
+                                    <tr className='h-10 sm:h-16'>
+                                        <div className='py-4'>
+                                            {item.name}
+                                        </div>
+                                    </tr>
+
+                                </table>
+                            ))
+                            }</div>
+                        </div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[0].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[0].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[1].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[1].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[2].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[2].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[3].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[3].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[4].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[4].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[5].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[5].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[6].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[6].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[7].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[7].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[8].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[8].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[9].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[9].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[10].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[10].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[11].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[11].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[12].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[12].green)}></div>
+                    </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0].gerak_detail[13].green)}></div>
+                        <div className={checkBG(item.detail_gerak[1].gerak_detail[13].green)}></div>
+                    </td>
+                    {/* {item.detail_gerak.map((item, index) => (
+                        //2
+                        <>
+                            {item.gerak_detail.map((item, index) => (
+                                //14
+                            ))}
+                        </>
+                    ))} */}
+
+                </tr>
+            </>
         ));
     }
 
@@ -66,79 +187,7 @@ const sambung = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {dataSambung.map((item, index) => (
-                                <>
-                                    <tr className='text-green text-center' key={item.id_sambung}>
-                                        <td className='border-b-2 text-white py-3 border-gray'>{index + 1}</td>
-                                        <td className='border-b-2 text-white border-gray text-[10px]'>
-                                            <div className="flex flex-col justify-center">
-                                                <div className='h-10 sm:h-5 flex justify-center items-center'>
-                                                    {item.penguji_sambung.name}
-                                                </div>
-                                                <div className='flex flex-col'>{item.detail_sambung.map((item, index) => (
-                                                    <table className='border border-white rounded-md '>
-                                                        <tr className='h-10 sm:h-16'>
-                                                            <div className='py-4'>
-                                                                {item.sambung_siswa.name}
-                                                            </div>
-                                                        </tr>
-
-                                                    </table>
-                                                ))
-                                                }</div>
-                                                {/* <div>{item.detail_sambung[1].sambung_siswa.name}</div> */}
-                                            </div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        <td className='h-full flex-col'>
-                                            <div className='h-5  bg-transparent'></div>
-                                            <div className='h-16 p-4 border border-white bg-green'></div>
-                                            <div className='h-16 p-4 border border-white bg-purple'></div>
-                                        </td>
-                                        {/* <TdComponent items={(item.detail_sambung)} /> */}
-                                    </tr>
-                                </>
-                            ))}
-
+                            {NewDetailRow(dataSambung)}
                         </tbody>
 
                     </table>
