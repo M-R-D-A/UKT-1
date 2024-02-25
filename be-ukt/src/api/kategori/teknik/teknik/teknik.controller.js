@@ -1,5 +1,6 @@
 const models = require('../../../../models/index');
-const teknik = models.teknik;;
+const teknik = models.teknik;
+const TeknikSiswa = models.teknik_siswa;
 
 module.exports = {
     controllerGetAll: async (req, res) => {
@@ -74,19 +75,20 @@ module.exports = {
         })
     },
     controllerDelete: async (req, res) => {
-        let param = {
-            id_teknik : req.params.id
+        try {
+            const idTeknik = req.params.id;
+            
+            // Delete the teknik row and its related teknik_siswa rows
+            await teknik.destroy({ 
+                where: { id_teknik: idTeknik },
+                include: [TeknikSiswa] // Include TeknikSiswa to trigger cascade delete
+            });
+    
+            res.json({
+                message: "Data has been deleted along with related rows in teknik_siswa"
+            });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
-        teknik.destroy({where: param})
-        .then(result => {
-            res.json({
-                massege : "data has been deleted"
-            })
-        })
-        .catch(error => {
-            res.json({
-                message: error.message
-            })
-        })
-    },
+    }
 }

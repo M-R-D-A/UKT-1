@@ -50,13 +50,15 @@ const detail_teknik = () => {
         setName(name)
         setTipe(queryValue)
     }
-
+    
     useEffect(() => {
         getData();
     }, [queryValue])
-
+    
     // funtion modal delete
-    const deleteModal = () => {
+    const deleteModal = async (idTeknik) => {
+        setAction('deleteTeknik')
+        setIdTeknik(idTeknik)
         setShowModalDelete(true)
     }
 
@@ -130,7 +132,7 @@ const detail_teknik = () => {
                                             <path d="M26.125 5.54166C26.7549 4.91177 27.6092 4.55791 28.5 4.55791C28.9411 4.55791 29.3778 4.64478 29.7853 4.81358C30.1928 4.98237 30.5631 5.22977 30.875 5.54166C31.1869 5.85355 31.4343 6.22382 31.6031 6.63132C31.7719 7.03883 31.8588 7.47559 31.8588 7.91666C31.8588 8.35774 31.7719 8.7945 31.6031 9.202C31.4343 9.60951 31.1869 9.97977 30.875 10.2917L11.0833 30.0833L4.75 31.6667L6.33333 25.3333L26.125 5.54166Z" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <button onClick={() => deleteModal()} className="bg-red hover:bg-white duration-300 p-1.5 rounded-md flex items-center group">
+                                    <button onClick={() => deleteModal(item.id_teknik)} className="bg-red hover:bg-white duration-300 p-1.5 rounded-md flex items-center group">
                                         <svg className='stroke-white group-hover:stroke-red duration-300' width="28" height="28" viewBox="0 0 29 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M4.1543 5.76929L5.64468 29.6154C5.71547 30.9933 6.71776 32.0001 8.0293 32.0001H21.7408C23.0576 32.0001 24.0412 30.9933 24.1255 29.6154L25.6158 5.76929" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                             <path d="M1.76953 5.76929H28.0003H1.76953Z" fill="black" />
@@ -156,7 +158,7 @@ const detail_teknik = () => {
             <globalState.Provider value={{ showModalTeknik, setShowModalTeknik, name, setName, tipe, setTipe, action, setDataTeknik, idTeknik, name }}>
                 <Modal_teknik />
             </globalState.Provider>
-            <globalState.Provider value={{ showModalDelete, setShowModalDelete }}>
+            <globalState.Provider value={{ showModalDelete, setShowModalDelete, idTeknik, action }}>
                 <Modal_delete />
             </globalState.Provider>
         </>

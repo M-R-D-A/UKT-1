@@ -28,15 +28,6 @@ module.exports = {
         let whereClause = {
             id_event: idEvent
         };
-        // gerakan.findAll({
-        //     include: [
-        //         {
-        //             model: detail,
-        //             as: 'gerakan_detail',
-        //             required: true
-        //         }
-        //     ]
-        // })
         sambung.findAll({
             attributes: ['id_penguji'],
             include: [
@@ -57,6 +48,7 @@ module.exports = {
                             as: 'gerak_detail',
                             required: false,
                             attributes: ['id_nilai','green'],
+                            order: ['id_nilai','DESC']
                             // where: {
                             //     id_detail: Sequelize.col('detail_sambung.id_detail_sambung')
                             // }

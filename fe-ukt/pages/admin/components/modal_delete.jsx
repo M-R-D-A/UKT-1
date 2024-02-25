@@ -214,15 +214,14 @@ const modal_delete = () => {
                 console.log(err.message);
             })
         } else if (action === 'deleteTeknik') {
-            axios.delete (BASE_URL + `teknik/${idTeknik}`, { headers: { Authorization: `Bearer ${token}`}})
-            .then (res => {
-                getDataTeknik ()
-                setShowModalDelete (false)
-                console.log(res.data.message);
-            })
-            .catch (err => {
-                console.log(err.message);
-            })
+            axios.delete(BASE_URL + `teknik/${idTeknik}`, { headers: { Authorization: `Bearer ${token}` } })
+                .then(result => {
+                    console.log(result)
+                    setDataTeknik(result.data.data);
+                })
+                .catch(error => {
+                    console.log(error.message)
+                })
         }
     }
 
