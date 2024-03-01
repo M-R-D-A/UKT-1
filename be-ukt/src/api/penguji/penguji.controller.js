@@ -137,6 +137,29 @@ module.exports = {
                 });
             });
     },
+    controllerGetRanting: async (req, res) => {
+        const rantings = req.body.ranting || ['BENDUNGAN', 'DONGKO', 'DURENAN', 'GANDUSARI', 'KAMPAK', 'KARANGAN', 'MUNJUNGAN', 'PANGGUL', 'POGALAN', 'PULE', 'SURUH', 'TRENGGALEK', 'TUGU', 'WATULIMO']
+        penguji
+            .findAll({
+                where: {
+                    rantings: {
+                        [Op.like]: "%" + rantings + "%",
+                    },
+                    id_role: 'penguji ranting'
+                },
+            })
+            .then((penguji) => {
+                res.json({
+                    count: penguji.length,
+                    data: penguji,
+                });
+            })
+            .catch((error) => {
+                res.json({
+                    message: error.message,
+                });
+            });
+    },
     controllerAdd: async (req, res) => {
         const Ranting = models.ranting;
         const hash = await bcrypt.hash(req.body.password, salt);
