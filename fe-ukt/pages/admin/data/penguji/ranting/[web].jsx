@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import { globalState } from '@/context/context'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Modal_penguji_ranting from '../components/modal_penguji_ranting'
-import Modal_delete from '../components/modal_delete'
+import Sidebar from '../../../components/sidebar'
+import Header from '../../../components/header'
+import Footer from '../../../components/footer'
+import Modal_penguji_ranting from '../../../components/modal_penguji_ranting'
+import Modal_delete from '../../../components/modal_delete'
 import { useRouter } from 'next/router'
-import ModalFilterPengujiRanting from '../components/modal_filter_penguji_ranting'
+import ModalFilterPengujiRanting from '../../../components/modal_filter_penguji_ranting'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 const penguji_ranting = () => {
 
-    // deklarasi router
+    // state pathname
     const router = useRouter()
+    const { web } = router.query
 
     // state modal
     const [showModalPengujiRanting, setShowModalPengujiRanting] = useState(false)
@@ -25,6 +26,7 @@ const penguji_ranting = () => {
     const [dataPengujiRanting, setDataPengujiRanting] = useState([])
     const [dataRanting, setDataRanting] = useState([])
     const [modalFilter, setModalFilter] = useState(false)
+    const [newWeb, setNewWeb] = useState('')
     const [loading, setLoading] = useState(false);
 
 
@@ -40,41 +42,25 @@ const penguji_ranting = () => {
     const [foto, setFoto] = useState('')
 
     // function get data penguji cabang
-    const getDataPengujiRanting = () => {
+    const getDataPengujiRanting  = async () => {
         const token = localStorage.getItem('token')
-        axios.get(BASE_URL + `penguji`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                setDataPengujiRanting(res.data.data)
-            })
-            .catch(err => {
-                console.log(err.message);
-            })
-    }
-
-    const getDataPengujiRantingFiltered = async () => {
-        const token = localStorage.getItem('token')
-        const Ranting = JSON.parse(localStorage.getItem('filterPengujiRanting'))
-        let form = {
-            ranting: Ranting
+        console.log('webquery')
+        console.log(web)
+        // const web1 = web ? web : null
+        setNewWeb(web)
+        const form = {
+            id_ranting: web ? web : newWeb,
+            id_role: 'penguji ranting'
         }
-        setLoading(true);
-        await axios.post(BASE_URL + `penguji/ranting`, form, { headers: { Authorization: `Bearer ${token}` } })
+        axios.post(BASE_URL + `penguji/pengujiperranting`, form, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                console.log(res);
                 setDataPengujiRanting(res.data.data)
             })
             .catch(err => {
                 console.log(err.message);
-                // console.log(err.response.data);
             })
-            .finally(() => {
-                setLoading(false);
-            });
     }
 
-    useEffect(() => {
-        getDataPengujiRantingFiltered()
-    }, [`${dataRanting}`])
 
     // function modal add
     const addModal = () => {
@@ -120,6 +106,7 @@ const penguji_ranting = () => {
     }
 
     useEffect(() => {
+        setNewWeb(web)
         getDataPengujiRanting()
         isLogged()
     }, [])
@@ -152,7 +139,7 @@ const penguji_ranting = () => {
 
                             {/* page name and button back */}
                             <div className="flex justify-center items-center gap-x-3">
-                                <Link href={'./penguji'} className="bg-purple hover:bg-white rounded-md w-9 h-9 flex justify-center items-center group duration-300">
+                                <Link href={'./penguji_ranting'} className="bg-purple hover:bg-white rounded-md w-9 h-9 flex justify-center items-center group duration-300">
                                     <svg className='-translate-x-0.5 fill-white group-hover:fill-purple' width="13" height="22" viewBox="0 0 14 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.2258 26.4657L0.354838 14.4974C0.225806 14.3549 0.134623 14.2005 0.08129 14.0343C0.0270964 13.8681 0 13.69 0 13.5C0 13.31 0.0270964 13.1319 0.08129 12.9657C0.134623 12.7995 0.225806 12.6451 0.354838 12.5026L11.2258 0.498681C11.5269 0.166227 11.9032 0 12.3548 0C12.8065 0 13.1935 0.1781 13.5161 0.534301C13.8387 0.890501 14 1.30607 14 1.781C14 2.25594 13.8387 2.6715 13.5161 3.0277L4.03226 13.5L13.5161 23.9723C13.8172 24.3048 13.9677 24.7141 13.9677 25.2005C13.9677 25.6878 13.8065 26.1095 13.4839 26.4657C13.1613 26.8219 12.7849 27 12.3548 27C11.9247 27 11.5484 26.8219 11.2258 26.4657Z" />
                                     </svg>
@@ -174,15 +161,7 @@ const penguji_ranting = () => {
                                     <h1>Tambah Data</h1>
                                 </button>
 
-                                {/* filter */}
-                                <button onClick={() => setModalFilter(true)} className="bg-green hover:bg-[#0ea97f] transition-all duration-300 rounded-md px-5 py-2 flex items-center gap-x-2">
-
-                                    <svg width="21" height="21" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16.5 2.25H1.5L7.5 9.345V14.25L10.5 15.75V9.345L16.5 2.25Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-
-                                    <h1 className='text-white'>Filter</h1>
-                                </button>
+                                
 
                             </div>
                         </div>
@@ -214,7 +193,7 @@ const penguji_ranting = () => {
                                             <td className='border-b-2 border-gray'>{item.username}</td>
                                             <td className='border-b-2 border-gray'>{item.no_wa}</td>
                                             <td className='border-b-2 border-gray p-3'>
-                                                <img className='rounded-lg object-cover h-28 w-28' src={IMAGE_URL + item?.image?.split('http://localhost:8080/image/')[1]} alt="" />
+                                                <img className='rounded-lg object-cover h-28 w-28' src={IMAGE_URL + item?.foto} alt="" />
                                             </td>
                                             <td className='border-b-2 border-gray'>
                                                 <div className="flex gap-x-2">
@@ -253,7 +232,7 @@ const penguji_ranting = () => {
             </div>
 
             {/*memanggil modal  */}
-            <globalState.Provider value={{ showModalPengujiRanting, setShowModalPengujiRanting, dataPengujiRanting, setDataPengujiRanting, action, setAction, idPengujiRanting, setIdPengujiRanting, niw, setNiw, name, setName, ranting, setRanting, username, setUsername, password, setPassword, noWa, setNoWa, role, setRole, foto, setFoto }}>
+            <globalState.Provider value={{ showModalPengujiRanting, setShowModalPengujiRanting, dataPengujiRanting, setDataPengujiRanting, action, setAction, idPengujiRanting, setIdPengujiRanting, niw, setNiw, name, setName, ranting, setRanting, username, setUsername, password, setPassword, noWa, setNoWa, role, setRole, foto, setFoto, newWeb, setNewWeb }}>
                 <Modal_penguji_ranting />
             </globalState.Provider>
 

@@ -137,15 +137,17 @@ module.exports = {
                 });
             });
     },
-    controllerGetRanting: async (req, res) => {
+    controllerGetRantingFiltered: async (req, res) => {
         const rantings = req.body.ranting || ['BENDUNGAN', 'DONGKO', 'DURENAN', 'GANDUSARI', 'KAMPAK', 'KARANGAN', 'MUNJUNGAN', 'PANGGUL', 'POGALAN', 'PULE', 'SURUH', 'TRENGGALEK', 'TUGU', 'WATULIMO']
         penguji
             .findAll({
                 where: {
-                    rantings: {
-                        [Op.like]: "%" + rantings + "%",
+                    id_role: {
+                        [Op.like]: "%" + "penguji ranting" + "%",
                     },
-                    id_role: 'penguji ranting'
+                    id_ranting: {
+                        [Op.in]: rantings
+                    }
                 },
             })
             .then((penguji) => {
