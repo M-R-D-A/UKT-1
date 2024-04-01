@@ -1,0 +1,8 @@
+TODO LIST:
+1. RnD Ujian keSHan siswa
+
+KELUHAN:
+1. Loading soal lama
+2. Gagal login
+3. Stuck saat pengumpulan terutama ketika waktu habis
+4. Nilai tidak tersimpan
