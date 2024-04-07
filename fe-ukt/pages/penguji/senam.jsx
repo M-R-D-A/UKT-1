@@ -207,7 +207,7 @@ const senam = () => {
                                                 option.id_senam === item.id_senam &&
                                                 option.selectedOption === 2
                                         ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_senam, 2)}>PLUS</button>
+                                            onClick={() => handleButtonClick(item.id_senam, 2)}>+</button>
                                     </div>
                                 </div>
                             ))}

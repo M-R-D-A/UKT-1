@@ -200,7 +200,7 @@ const jurus = () => {
                                                 option.id_jurus === item.id_jurus &&
                                                 option.selectedOption === 10
                                         ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 10)}>PLUS</button>
+                                            onClick={() => handleButtonClick(item.id_jurus, 10)}>+</button>
 
 
                                     </div>
