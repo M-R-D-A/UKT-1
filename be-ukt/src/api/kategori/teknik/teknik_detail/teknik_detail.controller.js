@@ -122,6 +122,7 @@ module.exports = {
                     model: models.siswa,
                     attributes: ['name', 'nomor_urut'],
                     as: "teknik_siswa",
+                    require: true
                 },
                 {
                     model: models.penguji,
