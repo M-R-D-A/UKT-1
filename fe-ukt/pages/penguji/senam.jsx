@@ -11,7 +11,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const senam = () => {
 
-    const [showModalAlert, setShowModalAlert ] = useState(false);
+    const [showModalAlert, setShowModalAlert] = useState(false);
     const router = useRouter()
     // state
     const [alert, setAlert] = useState(false)
@@ -23,9 +23,9 @@ const senam = () => {
         const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
         setDataSiswa(dataSiswa)
     }
-    
+
     const updatedOptions = [...selectedButton];
-    const getDataSenam = async () =>{
+    const getDataSenam = async () => {
         const token = localStorage.getItem('tokenPenguji')
         const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
 
@@ -35,7 +35,7 @@ const senam = () => {
                 console.log(res)
                 setDataSenam(res.data.data)
                 const data = res.data.data
-                for(let i=0; i<res.data.limit; i++){
+                for (let i = 0; i < res.data.limit; i++) {
                     const id_senam = data[i].id_senam
                     const selectedOption = null
                     updatedOptions.push({ id_senam, selectedOption })
@@ -64,7 +64,7 @@ const senam = () => {
         console.log(data.data)
         if (data.data === true) {
             setAlert(true)
-        } else if (data.data === false){
+        } else if (data.data === false) {
             setShowModalAlert(false)
         }
     }
@@ -89,25 +89,29 @@ const senam = () => {
             id_event: dataSiswa.id_event,
             tipe_ukt: dataSiswa.tipe_ukt
         }
-        if(alert == true){
+        if (alert == true) {
             axios.post(BASE_URL + `senam_detail`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
                 .then(async res => {
                     console.log(res)
-                    
+
                     const data = selectedButton.map((option) => {
                         return {
                             id_senam: option.id_senam,
                             predikat: option.selectedOption,
                         }
                     })
-    
+
                     const id_senam_detail = res.data.data.id_senam_detail
-    
-                    let nilai = [];
+
+                    let nilai8 = [];
+                    let nilai10 = [];
+
                     // -- senam siswa -- //
                     for (let i = 0; i < data.length; i++) {
-                        if (data[i].predikat == 'true') {
-                            nilai.push('1')
+                        if (data[i].predikat === 1) {
+                            nilai8.push('1')
+                        } else if (data[i].predikat === 2) {
+                            nilai10.push('1')
                         }
                         axios.post(BASE_URL + `senam_siswa`, {
                             id_senam_detail: id_senam_detail,
@@ -116,16 +120,20 @@ const senam = () => {
                         }, { headers: { Authorization: `Bearer ${token}` } })
                             .then(res => {
                                 console.log(res.data.message);
-    
+
                             })
                             .catch(err => {
                                 console.log(err.message);
                             })
                     }
-    
+
                     // -- ukt siswa  -- //
-                    const nilaiUkt = ((nilai.length / data.length) * 100).toFixed(2)
-                    console.log("nilai" + nilai)
+                    const nilaiUkt10 = ((nilai10.length / data.length) * 100).toFixed(2)
+                    const nilaiUkt8 = ((nilai8.length / data.length) * 80).toFixed(2)
+                    const nilaiUkt = (parseInt(nilaiUkt10) + parseInt(nilaiUkt8)).toFixed(2)
+                    console.log("nilai10: " + nilai10.length)
+                    console.log("nilai8: " + nilai8.length)
+                    console.log("nilai: " + nilaiUkt)
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
                         senam: nilaiUkt
                     }, { headers: { Authorization: `Bearer ${token}` } })
@@ -183,15 +191,23 @@ const senam = () => {
                                         <button className={selectedButton.find(
                                             (option) =>
                                                 option.id_senam === item.id_senam &&
-                                                option.selectedOption === 'true'
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_senam, 'true')}>Benar</button>
+                                                option.selectedOption === 0
+                                        ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-red rounded-md text-red py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_senam, 0)}>SALAH</button>
 
                                         <button className={selectedButton.find(
                                             (option) =>
                                                 option.id_senam === item.id_senam &&
-                                                option.selectedOption === 'false'
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"} onClick={() => handleButtonClick(item.id_senam, 'false')}>Salah</button>
+                                                option.selectedOption >= 1
+                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_senam, 1)}>BENAR</button>
+
+                                        <button className={selectedButton.find(
+                                            (option) =>
+                                                option.id_senam === item.id_senam &&
+                                                option.selectedOption === 2
+                                        ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_senam, 2)}>PLUS</button>
                                     </div>
                                 </div>
                             ))}
@@ -201,7 +217,7 @@ const senam = () => {
                 </div>
             </div>
 
-            <globalState.Provider value={{ showModalAlert, setShowModalAlert}}>
+            <globalState.Provider value={{ showModalAlert, setShowModalAlert }}>
                 <Modal_Alert onData={handleAlertData} />
             </globalState.Provider>
         </>

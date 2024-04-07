@@ -175,7 +175,7 @@ const jurus = () => {
                             <h1 className='tracking-wide'>{dataSiswa.id_ranting}</h1>
                         </div>
 
-                        {/* senam list */}
+                        {/* jurus list */}
                         <div className="space-y-3 mb-10">
                             {dataJurus.map((item, index) => (
                                 <div key={index + 1} className="grid grid-cols-2 items-center">
