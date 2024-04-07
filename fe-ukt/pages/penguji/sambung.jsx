@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import axios from 'axios'
 import { globalState } from '@/context/context'
 import Header from './components/header'
@@ -30,6 +30,39 @@ const sambung = () => {
     const [arraySiswa2, setArraySiswa2] = useState([])
 
     const { active, setActive } = useContext(globalState)
+
+    // state timer
+    const [seconds, setSeconds] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
+    const intervalRef = useRef(null);
+
+    // function untuk timer
+    useEffect(() => {
+        if (isRunning) {
+            intervalRef.current = setInterval(() => {
+                setSeconds(seconds => seconds + 1);
+            }, 1000);
+            return () => clearInterval(intervalRef.current);
+        }
+    }, [isRunning]);
+
+    function handleStart() {
+        setIsRunning(true);
+    }
+
+    function handlePause() {
+        setIsRunning(false);
+        clearInterval(intervalRef.current);
+    }
+
+    function handleRestart() {
+        setSeconds(0);
+        clearInterval(intervalRef.current);
+        setIsRunning(false);
+    }
+
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
 
     //function get data siswa
     const getData = () => {
@@ -214,7 +247,7 @@ const sambung = () => {
                         name: dataSiswa2.name,
                         posisi: 2
                     }
-                    for(let i=0; i<2; i++) {
+                    for (let i = 0; i < 2; i++) {
                         axios.post(BASE_URL + `gerakan/detail`, i < 1 ? detail1 : detail2, { headers: { Authorization: `Bearer ${token}` } },)
                             .then((res) => {
                                 axios.post(BASE_URL + `gerakan/array`,
@@ -381,8 +414,24 @@ const sambung = () => {
                             </div>
                         ))}
 
-                        <div className='bg-yellow rounded-md p-3 text-white mb-8 shadow shadow-slate-700 text-center font-bold uppercase'
+                        <div className='bg-yellow mb-28 rounded-md p-3 text-white shadow shadow-slate-700 text-center font-bold uppercase'
                             onClick={postDataSambung}>Selesai</div>
+                        {/* wrapper timer */}
+                        <div className="fixed bottom-0 left-0 w-full bg-navy text-white px-4 py-2">
+                            <div className="flex justify-center items-center">
+                                <div className="flex items-center space-x-3">
+                                    <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handleRestart}>⥀</button>
+                                    <div className="flex items-center space-x-3">
+                                        <div className="text-center text-white text-3xl font-bold">{minutes.toString().padStart(2, '0')}:{remainingSeconds.toString().padStart(2, '0')}</div>
+                                    </div>
+                                    {!isRunning ?
+                                        <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handleStart}>▶</button>
+                                        :
+                                        <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handlePause}>⦷</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div >

@@ -442,17 +442,17 @@ const fisik = () => {
                         {/* wrapper timer */}
                         <div className="fixed bottom-0 left-0 w-full bg-navy text-white px-4 py-2">
                             <div className="flex justify-center items-center">
+                                <div className="flex items-center space-x-3">
+                                    <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handleRestart}>⥀</button>
                                     <div className="flex items-center space-x-3">
-                                        <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handleRestart}>⥀</button>
-                                        <div className="flex items-center space-x-3">
                                         <div className="text-center text-white text-3xl font-bold">{minutes.toString().padStart(2, '0')}:{remainingSeconds.toString().padStart(2, '0')}</div>
-                                        </div>
-                                        {!isRunning ?
-                                            <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handleStart}>▶</button>
-                                            :
-                                            <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handlePause}>⦷</button>
-                                        }
                                     </div>
+                                    {!isRunning ?
+                                        <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handleStart}>▶</button>
+                                        :
+                                        <button className="bg-green rounded-md text-center text-2xl font-bold px-4 py-2" onClick={handlePause}>⦷</button>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
