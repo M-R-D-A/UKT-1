@@ -65,15 +65,14 @@ const jurus = () => {
     }
 
     // function set selected button
-    function handleButtonClick(id_jurus, selectedOption, warning) {
+    function handleButtonClick(id_jurus, selectedOption) {
         const index = updatedOptions.findIndex(
             (option) => option.id_jurus === id_jurus
         );
         if (index === -1) {
-            updatedOptions.push({ id_jurus, name, selectedOption, warning });
+            updatedOptions.push({ id_jurus, selectedOption });
         } else {
             updatedOptions[index].selectedOption = selectedOption;
-            updatedOptions[index].warning = warning;
         }
         setSelectedButton(updatedOptions);
     }
@@ -103,11 +102,14 @@ const jurus = () => {
 
                     const id_jurus_detail = res.data.data.id_jurus_detail
 
-                    let nilai = [];
+                    let nilai8 = [];
+                    let nilai10 = [];
 
                     for (let i = 0; i < data.length; i++) {
-                        if (data[i].predikat === 'true') {
-                            nilai.push('1')
+                        if (data[i].predikat === 8) {
+                            nilai8.push('1')
+                        } else if (data[i].predikat === 10) {
+                            nilai10.push('1')
                         }
 
                         try {
@@ -122,8 +124,12 @@ const jurus = () => {
                         }
                     }
 
-                    const nilaiUkt = ((nilai.length / data.length) * 100).toFixed(2)
-                    console.log("nilai" + nilai)
+                    const nilaiUkt10 = ((nilai10.length / data.length) * 100).toFixed(2)
+                    const nilaiUkt8 = ((nilai8.length / data.length) * 80).toFixed(2)
+                    const nilaiUkt = (parseInt(nilaiUkt10) + parseInt(nilaiUkt8)).toFixed(2)
+                    console.log("nilai10: " + nilai10.length)
+                    console.log("nilai8: " + nilai8.length)
+                    console.log("nilai: " + nilaiUkt)
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
                         jurus: nilaiUkt
                     }, { headers: { Authorization: `Bearer ${token}` } })
@@ -179,22 +185,22 @@ const jurus = () => {
                                             (option) =>
                                                 option.id_jurus === item.id_jurus &&
                                                 option.selectedOption === 0
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 0)}>Kurang</button>
+                                        ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-red rounded-md text-red py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_jurus, 0)}>SALAH</button>
 
                                         <button className={selectedButton.find(
                                             (option) =>
                                                 option.id_jurus === item.id_jurus &&
-                                                option.selectedOption === 1
+                                                option.selectedOption >= 8
                                         ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 1)}>Cukup</button>
+                                            onClick={() => handleButtonClick(item.id_jurus, 8)}>BENAR</button>
 
                                         <button className={selectedButton.find(
                                             (option) =>
                                                 option.id_jurus === item.id_jurus &&
-                                                option.selectedOption === 2
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 2)}>Baik</button>
+                                                option.selectedOption === 10
+                                        ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_jurus, 10)}>PLUS</button>
 
 
                                     </div>
