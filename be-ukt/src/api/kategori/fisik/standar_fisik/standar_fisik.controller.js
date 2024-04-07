@@ -96,6 +96,13 @@ module.exports = {
                     Privat_lk: standar_fisik[2].spir_dada,
                     Privat_prpn: standar_fisik[3].spir_dada,
                 }
+                let spirPaha = {
+                    jenis: "spir_paha",
+                    Remaja_lk: standar_fisik[0].spir_paha,
+                    Remaja_prpn: standar_fisik[1].spir_paha,
+                    Privat_lk: standar_fisik[2].spir_paha,
+                    Privat_prpn: standar_fisik[3].spir_paha,
+                }
                 let plank = {
                     jenis: "plank",
                     Remaja_lk: standar_fisik[0].plank,
@@ -109,6 +116,7 @@ module.exports = {
                     spir_perut_atas: spirPerutAtas,
                     spir_perut_bawah: spirPerutBawah,
                     spir_dada: spirDada,
+                    spir_paha: spirPaha,
                     plank: plank,
                 }
 
@@ -273,6 +281,7 @@ module.exports = {
             spir_perut_atas: req.body.spir_perut_atas,
             spir_perut_bawah: req.body.spir_perut_bawah,
             spir_dada: req.body.spir_dada,
+            spir_paha: req.body.spir_paha,
             plank: req.body.plank,
         };
         standar_fisik
@@ -300,6 +309,7 @@ module.exports = {
             spir_perut_atas: req.body.spir_perut_atas,
             spir_perut_bawah: req.body.spir_perut_bawah,
             spir_dada: req.body.spir_dada,
+            spir_paha: req.body.spir_paha,
             plank: req.body.plank,
         };
         standar_fisik
@@ -492,6 +502,47 @@ module.exports = {
             },
             {
                 spir_dada: req.body.spir_dada_privat_perempuan,
+            },
+        ];
+        standar_fisik
+            .findAll({
+                where: {
+                    tipe_ukt: req.params.id,
+                },
+                order: [["peserta", "ASC"]],
+            })
+            .then((result) => {
+                for (let i = 0; i < 4; i++) {
+                    console.log(result[i].id_standar_fisik);
+                    console.log(result[i].peserta);
+                    const idStandarFisik = result[i].id_standar_fisik;
+                    standar_fisik.update(data[i], {
+                        where: { id_standar_fisik: idStandarFisik },
+                    });
+                }
+                res.json({
+                    msg: "data has been updated",
+                });
+            })
+            .catch((e) => {
+                res.json({
+                    msg: e.message,
+                });
+            });
+    },
+    controllerEditSpirPaha: async (req, res) => {
+        let data = [
+            {
+                spir_paha: req.body.spir_paha_remaja_laki,
+            },
+            {
+                spir_paha: req.body.spir_paha_remaja_perempuan,
+            },
+            {
+                spir_paha: req.body.spir_paha_privat_laki,
+            },
+            {
+                spir_paha: req.body.spir_paha_privat_perempuan,
             },
         ];
         standar_fisik

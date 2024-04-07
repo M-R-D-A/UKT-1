@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     spir_perut_atas: DataTypes.INTEGER,
     spir_perut_bawah: DataTypes.INTEGER,
     spir_dada: DataTypes.INTEGER,
+    spir_paha: DataTypes.INTEGER,
     plank: DataTypes.INTEGER
   }, {
     sequelize,

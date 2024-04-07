@@ -23,6 +23,7 @@ const fisik = () => {
     const [spirPA, setSpirPA] = useState(0);
     const [spirPB, setSpirPB] = useState(0);
     const [spirDada, setSpirDada] = useState(0);
+    const [spirPaha, setSpirPaha] = useState(0);
     const [plank, setPlank] = useState(0);
 
     // state timer
@@ -66,12 +67,6 @@ const fisik = () => {
             .then(res => {
                 console.log(res.data);
                 setDataStandartFisik(res.data);
-                // setMft(res.data.mft);
-                // setPushUp(res.data.push_up);
-                // setSpirPA(res.data.spir_perut_atas);
-                // setSpirPB(res.data.spir_perut_bawah);
-                // setSpirDada(res.data.spir_dada);
-                // setPlank(res.data.plank);
             })
             .catch(err => {
                 console.log(err.message);
@@ -91,6 +86,7 @@ const fisik = () => {
             const spirPANew = (spirPA / dataStandartFisik.spir_perut_atas) * 100
             const spirPBNew = (spirPB / dataStandartFisik.spir_perut_bawah) * 100
             const spirDadaNew = ((spirDada / dataStandartFisik.spir_dada) * 100)
+            const spirPaha = ((spirPaha / dataStandartPaha.spir_paha) * 100)
             const plankNew = ((plank / dataStandartFisik.plank) * 100)
             const data = {
                 id_penguji: dataPenguji.id_penguji,
@@ -101,6 +97,7 @@ const fisik = () => {
                 spir_perut_atas: spirPA,
                 spir_perut_bawah: spirPB,
                 spir_dada: spirDada,
+                spir_paha: spirPaha,
                 plank: plank
             }
             axios.post(BASE_URL + `fisik`, data, { headers: { Authorization: `Bearer ${token}` } },)
@@ -111,7 +108,7 @@ const fisik = () => {
                     console.log(error.message);
                 });
             // -- ukt siswa  -- //
-            const nilaiUkt = ((mftNew + pushUpNew + spirPANew + spirPBNew + spirDadaNew + plankNew) / 6).toFixed(2)
+            const nilaiUkt = ((mftNew + pushUpNew + spirPANew + spirPBNew + spirDadaNew + spirPaha + plankNew) / 7).toFixed(2)
             await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
                 fisik: nilaiUkt
             }, { headers: { Authorization: `Bearer ${token}` } })
@@ -364,6 +361,40 @@ const fisik = () => {
                                 {/* button plus */}
                                 <button className='bg-purple rounded-md text-center text-2xl font-bold'
                                     onClick={() => setSpirDada(spirDada + 1)}>
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        {/* wrapper spir_paha */}
+                        <div className="bg-navy rounded-md p-2 text-center text-white space-y-3 mb-3">
+                            <h1 className='text-xl font-semibold tracking-wider uppercase'>Spir Paha</h1>
+
+                            {/* fisik list */}
+                            <div className="grid grid-cols-3 gap-x-3 items-center">
+
+                                {/* button minus */}
+                                <button className='bg-red rounded-md text-center text-2xl font-bold'
+                                    onClick={() => setSpirPaha(spirPaha - 1)}
+                                >
+                                    -
+                                </button>
+
+                                {/* score indicator */}
+                                <h1 className='outline outline-purple rounded-md h-full flex items-center justify-center text-xl font-semibold'>
+                                    <input
+                                        type="number"
+                                        value={spirPaha}
+                                        onChange={(e) => setSpirPaha(e.target.value)}
+                                        step="0.1"
+                                        min="0"
+                                        max="100"
+                                        className='w-full text-center bg-transparent outline-none'
+                                    />
+                                </h1>
+
+                                {/* button plus */}
+                                <button className='bg-purple rounded-md text-center text-2xl font-bold'
+                                    onClick={() => setSpirDada(spirPaha + 1)}>
                                     +
                                 </button>
                             </div>
