@@ -12,21 +12,21 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const jurus = () => {
 
-    const [showModalAlert, setShowModalAlert ] = useState(false);
+    const [showModalAlert, setShowModalAlert] = useState(false);
     const router = useRouter()
     // state
     const [alert, setAlert] = useState(false)
-    const [dataSiswa, setDataSiswa] = useState ([])
-    const [dataJurus, setDataJurus] = useState ([])
-    const [selectedButton, setSelectedButton] = useState ([])
+    const [dataSiswa, setDataSiswa] = useState([])
+    const [dataJurus, setDataJurus] = useState([])
+    const [selectedButton, setSelectedButton] = useState([])
 
     // function get data siswa
     const getDataSiswa = () => {
-        const dataSiswa = JSON.parse (localStorage.getItem ('dataSiswa'))
-        setDataSiswa (dataSiswa)
+        const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
+        setDataSiswa(dataSiswa)
     }
 
-    const updatedOptions= [... selectedButton]
+    const updatedOptions = [...selectedButton]
 
     const handleAlertData = (data) => {
         console.log(data.data)
@@ -44,43 +44,44 @@ const jurus = () => {
 
     // function get data jurus
     const getDataJurus = () => {
-        const token = localStorage.getItem ('tokenPenguji')
-        const dataSiswa = JSON.parse (localStorage.getItem ('dataSiswa'))
+        const token = localStorage.getItem('tokenPenguji')
+        const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
 
-        axios.get (BASE_URL + `jurus/ukt/${dataSiswa.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}`}})
-        .then (res => {
-            setDataJurus (res.data.data)
-            const data = res.data.data
-            console.log(res);
-                for(let i=0; i<res.data.data.length; i++){
+        axios.get(BASE_URL + `jurus/ukt/${dataSiswa.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                setDataJurus(res.data.data)
+                const data = res.data.data
+                console.log(res);
+                for (let i = 0; i < res.data.data.length; i++) {
                     const id_jurus = data[i].id_jurus
                     const selectedOption = null
                     updatedOptions.push({ id_jurus, selectedOption })
                     setSelectedButton(updatedOptions)
                 }
-        })
-        .catch (err => {
-            console.log(err.message);
-        })
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
     }
 
     // function set selected button
-    const handleButtonClick = (id_jurus, selectedOption) => {
-        const index = updatedOptions.findIndex (
+    function handleButtonClick(id_jurus, selectedOption, warning) {
+        const index = updatedOptions.findIndex(
             (option) => option.id_jurus === id_jurus
         );
         if (index === -1) {
-            updatedOptions.push ({ id_jurus, selectedOption })
+            updatedOptions.push({ id_jurus, name, selectedOption, warning });
         } else {
-            updatedOptions [index].selectedOption = selectedOption
+            updatedOptions[index].selectedOption = selectedOption;
+            updatedOptions[index].warning = warning;
         }
-        setSelectedButton (updatedOptions)
+        setSelectedButton(updatedOptions);
     }
 
     // function handle save nilai jurus
     const handleSave = () => {
         setShowModalAlert(true);
-        if(alert){
+        if (alert) {
             // -- data detail -- //
             const uktSiswa = JSON.parse(localStorage.getItem('dataUktSiswa'))
             const token = localStorage.getItem('tokenPenguji')
@@ -91,36 +92,36 @@ const jurus = () => {
                 id_event: dataSiswa.id_event,
                 tipe_ukt: dataSiswa.tipe_ukt
             }
-            axios.post(BASE_URL + `jurus_detail`, dataDetail, { headers: { Authorization: `Bearer ${token}`}})
-            .then(async res => {
-                    const data = selectedButton.map ((option) => {
+            axios.post(BASE_URL + `jurus_detail`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
+                .then(async res => {
+                    const data = selectedButton.map((option) => {
                         return {
-                            id_jurus : option.id_jurus,
-                            predikat : option.selectedOption,
+                            id_jurus: option.id_jurus,
+                            predikat: option.selectedOption,
                         }
                     })
-    
+
                     const id_jurus_detail = res.data.data.id_jurus_detail
-    
+
                     let nilai = [];
-    
+
                     for (let i = 0; i < data.length; i++) {
-                        if(data[i].predikat === 'true'){
+                        if (data[i].predikat === 'true') {
                             nilai.push('1')
                         }
 
                         try {
-                            const res = await axios.post (BASE_URL + `jurus_siswa`, {
-                                id_jurus_detail : id_jurus_detail,
-                                id_jurus : data[i].id_jurus,
+                            const res = await axios.post(BASE_URL + `jurus_siswa`, {
+                                id_jurus_detail: id_jurus_detail,
+                                id_jurus: data[i].id_jurus,
                                 predikat: data[i].predikat,
-                            }, { headers: { Authorization: `Bearer ${token}`}})
+                            }, { headers: { Authorization: `Bearer ${token}` } })
                             console.log(res);
                         } catch (error) {
                             console.log(error.message)
                         }
                     }
-    
+
                     const nilaiUkt = ((nilai.length / data.length) * 100).toFixed(2)
                     console.log("nilai" + nilai)
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
@@ -138,9 +139,9 @@ const jurus = () => {
         }
     }
 
-    useEffect (() => {
-        getDataSiswa ()
-        getDataJurus ()
+    useEffect(() => {
+        getDataSiswa()
+        getDataJurus()
     }, [])
 
     useEffect(() => {
@@ -160,7 +161,7 @@ const jurus = () => {
 
                     {/* konten utama */}
                     <div className="min-h-full bg-darkBlue px-5 py-8">
-                        
+
                         {/* card siswa information */}
                         <div className="bg-navy rounded-md p-3 text-white mb-8 shadow shadow-slate-700 hover:shadow-purple transition ease-in-out duration-300">
                             <h1 className='text-green tracking-wide text-lg'>{dataSiswa.nomor_urut}</h1>
@@ -170,21 +171,32 @@ const jurus = () => {
 
                         {/* senam list */}
                         <div className="space-y-3 mb-10">
-                            {dataJurus.map ((item, index) => (
-                            <div key={index + 1} className="grid grid-cols-2 items-center">
+                            {dataJurus.map((item, index) => (
+                                <div key={index + 1} className="grid grid-cols-2 items-center">
                                     <h1 className='text-white text-xl font-semibold'>{item.name}</h1>
                                     <div className="flex gap-x-2">
-                                        <button className={selectedButton.find (
-                                            (option) => 
+                                        <button className={selectedButton.find(
+                                            (option) =>
                                                 option.id_jurus === item.id_jurus &&
-                                                option.selectedOption === 'true'
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"} onClick={() => handleButtonClick(item.id_jurus, 'true')}>Benar</button>
+                                                option.selectedOption === 0
+                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_jurus, 0)}>Kurang</button>
 
-                                        <button className={selectedButton.find (
-                                            (option) => 
+                                        <button className={selectedButton.find(
+                                            (option) =>
                                                 option.id_jurus === item.id_jurus &&
-                                                option.selectedOption === 'false'
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"} onClick={() => handleButtonClick(item.id_jurus, 'false')}>Salah</button>
+                                                option.selectedOption === 1
+                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_jurus, 1)}>Cukup</button>
+
+                                        <button className={selectedButton.find(
+                                            (option) =>
+                                                option.id_jurus === item.id_jurus &&
+                                                option.selectedOption === 2
+                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
+                                            onClick={() => handleButtonClick(item.id_jurus, 2)}>Baik</button>
+
+
                                     </div>
                                 </div>
                             ))}
@@ -194,7 +206,7 @@ const jurus = () => {
                 </div>
             </div>
 
-            <globalState.Provider value={{ showModalAlert, setShowModalAlert}}>
+            <globalState.Provider value={{ showModalAlert, setShowModalAlert }}>
                 <Modal_Alert onData={handleAlertData} />
             </globalState.Provider>
         </>

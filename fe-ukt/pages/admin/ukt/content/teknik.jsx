@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
 import axios from 'axios'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -10,14 +9,14 @@ const teknik = (props) => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'))
 
-        axios.get(BASE_URL + `teknik_detail/ukt/${props.data?.tipe_ukt}/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                console.log(res.data.data[0].siswa_teknik_detail.length);
-                setDataTeknik(res.data.data)
-            })
-            .catch(err => {
-                console.log(err.message);
-            })
+        axios.get(BASE_URL + `teknik_detail/event/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => {
+            console.log(res.data.data[0].siswa_teknik_detail.length);
+            setDataTeknik(res.data.data)
+        })
+        .catch(err => {
+            console.log(err.message);
+        })
     }
 
     function ThComponent({ items }) {
@@ -59,12 +58,12 @@ const teknik = (props) => {
 
                     </thead>
                     <tbody>
-                        {dataTeknik.map((item, index) => (
+                        {dataTeknik?.map((item, index) => (
                             <>
-                                <tr className='text-green text-center' key={item.id_teknik_detail}>
+                                <tr className='text-green text-center' key={item?.id_teknik_detail}>
                                     <td className='border-b-2 text-white py-3 border-gray'>{index + 1}</td>
-                                    <td className='border-b-2 text-white border-gray '>{item.teknik_siswa.name}</td>
-                                    <td className='border-b-2 text-white border-gray '>{item.penguji_teknik.name}</td>
+                                    <td className='border-b-2 text-white border-gray '>aa</td>
+                                    <td className='border-b-2 text-white border-gray '>{item?.penguji_teknik?.name}</td>
                                     <TdComponent items={(item.siswa_teknik_detail)} key={index + 1}/>
                                 </tr>
                             </>
