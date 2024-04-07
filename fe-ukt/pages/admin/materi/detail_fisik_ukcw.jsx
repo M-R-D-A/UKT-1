@@ -51,6 +51,12 @@ const detail_fisik_ukcw = () => {
     const [spir_dada_remaja_perempuan, set_spir_dada_remaja_perempuan] = useState ('')
     const [spir_dada_privat_laki_laki, set_spir_dada_privat_laki_laki] = useState ('')
     const [spir_dada_privat_perempuan, set_spir_dada_privat_perempuan] = useState ('')
+    
+    // state spir dada
+    const [spir_paha_remaja_laki_laki, set_spir_paha_remaja_laki_laki] = useState ('')
+    const [spir_paha_remaja_perempuan, set_spir_paha_remaja_perempuan] = useState ('')
+    const [spir_paha_privat_laki_laki, set_spir_paha_privat_laki_laki] = useState ('')
+    const [spir_paha_privat_perempuan, set_spir_paha_privat_perempuan] = useState ('')
 
     // state plank
     const [plank_remaja_laki_laki, set_plank_remaja_laki_laki] = useState ('')
@@ -106,6 +112,12 @@ const detail_fisik_ukcw = () => {
         set_spir_dada_remaja_perempuan (selectedItem.Remaja_prpn)
         set_spir_dada_privat_laki_laki (selectedItem.Privat_lk)
         set_spir_dada_privat_perempuan (selectedItem.Privat_prpn)
+
+        // set spir paha to modal
+        set_spir_paha_remaja_laki_laki (selectedItem.Remaja_lk)
+        set_spir_paha_remaja_perempuan (selectedItem.Remaja_prpn)
+        set_spir_paha_privat_laki_laki (selectedItem.Privat_lk)
+        set_spir_paha_privat_perempuan (selectedItem.Privat_prpn)
 
         // set plank to modal
         set_plank_remaja_laki_laki (selectedItem.Remaja_lk)
@@ -328,6 +340,33 @@ const detail_fisik_ukcw = () => {
                                 </button>
                             </div>
                         </div>
+                       
+                        {/* card kategori spir paha */}
+                        <div className="grid grid-cols-12 place-content-center text-white text-lg text-center gap-x-2 mb-2">
+                            <div className="col-span-3 bg-navy py-3 rounded-md">
+                                <h1>Spir Paha</h1>
+                            </div>
+                            <div className="col-span-2 bg-navy py-3 rounded-md">
+                                <h1>{dataStandartFisik.spir_paha?.Remaja_lk}</h1>
+                            </div>
+                            <div className="col-span-2 bg-navy py-3 rounded-md">
+                                <h1>{dataStandartFisik.spir_paha?.Remaja_prpn}</h1>
+                            </div>
+                            <div className="col-span-2 bg-navy py-3 rounded-md">
+                                <h1>{dataStandartFisik.spir_paha?.Privat_lk}</h1>
+                            </div>
+                            <div className="col-span-2 bg-navy py-3 rounded-md">
+                                <h1>{dataStandartFisik.spir_paha?.Privat_prpn}</h1>
+                            </div>
+                            <div className="bg-navy rounded-md flex justify-center items-center">
+                                <button onClick={() => editModal(dataStandartFisik.spir_paha)} className="bg-green hover:bg-white duration-300 rounded-md p-2 group"> 
+                                    <svg className='stroke-white group-hover:stroke-green duration-300' width="25" height="25" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M19 31.6667H33.25" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="M26.125 5.54166C26.7549 4.91177 27.6092 4.55791 28.5 4.55791C28.9411 4.55791 29.3778 4.64478 29.7853 4.81358C30.1928 4.98237 30.5631 5.22977 30.875 5.54166C31.1869 5.85355 31.4343 6.22382 31.6031 6.63132C31.7719 7.03883 31.8588 7.47559 31.8588 7.91666C31.8588 8.35774 31.7719 8.7945 31.6031 9.202C31.4343 9.60951 31.1869 9.97977 30.875 10.2917L11.0833 30.0833L4.75 31.6667L6.33333 25.3333L26.125 5.54166Z" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
                         {/* card kategori plank */}
                         <div className="grid grid-cols-12 place-content-center text-white text-lg text-center gap-x-2 mb-2">
@@ -384,6 +423,9 @@ const detail_fisik_ukcw = () => {
 
                 // spir dada
                 spir_dada_remaja_laki_laki, set_spir_dada_remaja_laki_laki, spir_dada_remaja_perempuan, set_spir_dada_remaja_perempuan, spir_dada_privat_laki_laki, set_spir_dada_privat_laki_laki, spir_dada_privat_perempuan, set_spir_dada_privat_perempuan,
+                
+                // spir paha
+                spir_paha_remaja_laki_laki, set_spir_paha_remaja_laki_laki, spir_paha_remaja_perempuan, set_spir_paha_remaja_perempuan, spir_paha_privat_laki_laki, set_spir_paha_privat_laki_laki, spir_paha_privat_perempuan, set_spir_paha_privat_perempuan,
 
                 // plank
                 plank_remaja_laki_laki, set_plank_remaja_laki_laki, plank_remaja_perempuan, set_plank_remaja_perempuan, plank_privat_laki_laki, set_plank_privat_laki_laki, plank_privat_perempuan, set_plank_privat_perempuan,

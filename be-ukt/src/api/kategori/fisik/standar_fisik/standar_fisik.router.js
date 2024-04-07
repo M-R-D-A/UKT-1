@@ -25,6 +25,7 @@ const {
     controllerEditSpirPerutAtas,
     controllerEditSpirPerutBawah,
     controllerEditSpirDada,
+    controllerEditSpirPaha,
     controllerEditPlank,
 } = require('./standar_fisik.controller');
 
@@ -47,6 +48,7 @@ router.put('/push_up/:id', Auth, verifyRoles("admin", "super admin", "admin rant
 router.put('/spir_perut_atas/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerEditSpirPerutAtas)
 router.put('/spir_perut_bawah/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerEditSpirPerutBawah)
 router.put('/spir_dada/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerEditSpirDada)
+router.put('/spir_Paha/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerEditSpirPaha)
 router.put('/plank/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerEditPlank)
 router.delete('/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerDelete)
 

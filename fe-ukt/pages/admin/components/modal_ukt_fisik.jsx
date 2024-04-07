@@ -97,6 +97,12 @@ const modal_ukt_fisik = () => {
             'spir_dada_remaja_perempuan': spir_dada_remaja_perempuan,
             'spir_dada_privat_laki': spir_dada_privat_laki_laki,
             'spir_dada_privat_perempuan': spir_dada_privat_perempuan,
+            
+            // spir dada
+            'spir_paha_remaja_laki': spir_paha_remaja_laki_laki,
+            'spir_paha_remaja_perempuan': spir_paha_remaja_perempuan,
+            'spir_paha_privat_laki': spir_paha_privat_laki_laki,
+            'spir_paha_privat_perempuan': spir_paha_privat_perempuan,
 
             // plank
             'plank_remaja_laki': plank_remaja_laki_laki,
