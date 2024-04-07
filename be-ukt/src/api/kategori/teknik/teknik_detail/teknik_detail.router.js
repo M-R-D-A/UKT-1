@@ -20,7 +20,7 @@ const {
 
 
 const verifyRoles = require("../../../../middleware/verifyRoles");
-const { controllerGetTotalPage } = require("../../fisik/fisik/fisik.controller");
+const { controllerGetTotalPage } = require("../../teknik/teknik_detail/teknik_detail.controller");
 
 router.get('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetAll)
 router.get('/search/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerSearch)

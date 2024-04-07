@@ -90,11 +90,11 @@ module.exports = {
     },
     controllerGetTotalPage: async (req, res) => {
         const limit = Number(req.params.limit);
-        fisik.findAll({
+        teknik_detail.findAll({
             where: {
                 id_event: req.params.id
             },
-            attributes: ['id_fisik']
+            attributes: ['id_teknik_detail']
         })
             .then(result => {
                 const totalPages = Math.ceil(result.length / limit);
