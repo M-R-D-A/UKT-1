@@ -125,6 +125,26 @@ const detail_event = () => {
         getDataSiswa()
     }, [active])
 
+    useEffect(() => {
+        let timeoutId;
+
+        const delayedSearch = () => {
+            timeoutId = setTimeout(() => {
+                if (!searchName) {
+                    getDataSiswa();
+                } else {
+                    searchSiswa();
+                }
+            }, 1000); // Adjust the interval time (in milliseconds) as per your requirement
+        };
+
+        delayedSearch();
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [searchName]);
+
     return (
         <>
             <div className="font-lato">
