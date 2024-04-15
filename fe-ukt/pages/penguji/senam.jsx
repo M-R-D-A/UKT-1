@@ -50,15 +50,24 @@ const senam = () => {
     // function set selected button
     function handleButtonClick(id_senam, selectedOption) {
         const index = updatedOptions.findIndex(
-            (option) => option.id_senam === id_senam
+            (option) => option.id_senam === id_senam && option.selectedOption === selectedOption
         );
-        if (index === -1) {
-            updatedOptions.push({ id_senam, selectedOption })
+
+        const idSenam = updatedOptions.findIndex(
+            (option) => option.id_senam === id_senam
+        )
+
+        if (index !== -1) {
+            updatedOptions[index].selectedOption = null;
         } else {
-            updatedOptions[index].selectedOption = selectedOption
+            updatedOptions[idSenam].selectedOption = selectedOption
         }
-        setSelectedButton(updatedOptions)
+
+        setSelectedButton(updatedOptions);
     }
+
+
+
 
     const handleAlertData = (data) => {
         console.log(data.data)
@@ -131,9 +140,6 @@ const senam = () => {
                     const nilaiUkt10 = ((nilai10.length / data.length) * 100).toFixed(2)
                     const nilaiUkt8 = ((nilai8.length / data.length) * 80).toFixed(2)
                     const nilaiUkt = (parseInt(nilaiUkt10) + parseInt(nilaiUkt8)).toFixed(2)
-                    console.log("nilai10: " + nilai10.length)
-                    console.log("nilai8: " + nilai8.length)
-                    console.log("nilai: " + nilaiUkt)
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
                         senam: nilaiUkt
                     }, { headers: { Authorization: `Bearer ${token}` } })
@@ -155,10 +161,6 @@ const senam = () => {
         getDataSiswa()
         getDataSenam()
     }, [])
-
-    useEffect(() => {
-        console.log(selectedButton)
-    }, [selectedButton])
 
 
     return (
@@ -187,8 +189,8 @@ const senam = () => {
                             {dataSenam.map((item, index) => (
                                 <div key={index + 1} className="grid grid-cols-2 items-center">
                                     <h1 className='text-white text-xl font-semibold uppercase'>{item.name}</h1>
-                                    <div className="flex gap-x-2">
-                                        <button className='w-full'>
+                                    <div className="gap-x-2 grid grid-flow-col grid-cols-10 text-sm mb:text-md">
+                                        <button className='col-span-4'>
                                             <div className="hover:scale-105 transition ease-in-out duration-500 
                                             hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
                                                 <button className={selectedButton.find(
@@ -197,30 +199,37 @@ const senam = () => {
                                                         option.selectedOption === 0
                                                 ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase"
                                                     : "font-semibold bg-navy border-2 border-red rounded-md text-white py-1.5 w-full uppercase"}
-                                                    onClick={() =>
-                                                        item.selectedOption === 0
-                                                            ? handleButtonClick(item.id_senam, null)
-                                                            : handleButtonClick(item.id_senam, item.selectedOption === 0 ? null : 0)
+                                                    onClick={() => handleButtonClick(item.id_senam, 0)
                                                     }
                                                 >SALAH</button>
                                             </div>
                                         </button>
 
-                                        <button className={selectedButton.find(
-                                            (option) =>
-                                                option.id_senam === item.id_senam &&
-                                                option.selectedOption >= 1
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase"
-                                            : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_senam, 1)}>BENAR</button>
+                                        <button className='col-span-4'>
+                                            <div className="hover:scale-105 transition ease-in-out duration-500 
+                                            hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
+                                                <button className={selectedButton.find(
+                                                    (option) =>
+                                                        option.id_senam === item.id_senam &&
+                                                        option.selectedOption >= 1
+                                                ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase"
+                                                    : "font-semibold bg-navy border-2 border-purple rounded-md text-white py-1.5 w-full uppercase"}
+                                                    onClick={() => handleButtonClick(item.id_senam, 1)}>BENAR</button>
+                                            </div>
+                                        </button>
 
-                                        <button className={selectedButton.find(
-                                            (option) =>
-                                                option.id_senam === item.id_senam &&
-                                                option.selectedOption === 2
-                                        ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase"
-                                            : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_senam, 2)}>+</button>
+                                        <button className='col-span-3'>
+                                            <div className="hover:scale-105 transition ease-in-out duration-500 
+                                            hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
+                                                <button className={selectedButton.find(
+                                                    (option) =>
+                                                        option.id_senam === item.id_senam &&
+                                                        option.selectedOption === 2
+                                                ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase"
+                                                    : "font-semibold bg-navy border-2 border-green rounded-md text-white py-1.5 w-full uppercase"}
+                                                    onClick={() => handleButtonClick(item.id_senam, 2)}>+</button>
+                                            </div>
+                                        </button>
                                     </div>
                                 </div>
                             ))}

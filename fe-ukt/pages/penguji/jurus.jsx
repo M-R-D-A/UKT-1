@@ -67,13 +67,17 @@ const jurus = () => {
     // function set selected button
     function handleButtonClick(id_jurus, selectedOption) {
         const index = updatedOptions.findIndex(
-            (option) => option.id_jurus === id_jurus
+            (option) => option.id_jurus === id_jurus && option.selectedOption === selectedOption
         );
-        if (index === -1) {
-            updatedOptions.push({ id_jurus, selectedOption });
+        const idJurus = updatedOptions.findIndex(
+            (option) => option.id_jurus === id_jurus
+        )
+        if (index !== -1) {
+            updatedOptions[index].selectedOption = null;
         } else {
-            updatedOptions[index].selectedOption = selectedOption;
+            updatedOptions[idJurus].selectedOption = selectedOption
         }
+
         setSelectedButton(updatedOptions);
     }
 
@@ -127,9 +131,6 @@ const jurus = () => {
                     const nilaiUkt10 = ((nilai10.length / data.length) * 100).toFixed(2)
                     const nilaiUkt8 = ((nilai8.length / data.length) * 80).toFixed(2)
                     const nilaiUkt = (parseInt(nilaiUkt10) + parseInt(nilaiUkt8)).toFixed(2)
-                    console.log("nilai10: " + nilai10.length)
-                    console.log("nilai8: " + nilai8.length)
-                    console.log("nilai: " + nilaiUkt)
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
                         jurus: nilaiUkt
                     }, { headers: { Authorization: `Bearer ${token}` } })
@@ -149,10 +150,6 @@ const jurus = () => {
         getDataSiswa()
         getDataJurus()
     }, [])
-
-    useEffect(() => {
-        console.log(selectedButton)
-    }, [selectedButton])
 
     return (
         <>
@@ -180,27 +177,47 @@ const jurus = () => {
                             {dataJurus.map((item, index) => (
                                 <div key={index + 1} className="grid grid-cols-2 items-center">
                                     <h1 className='text-white text-xl font-semibold'>{item.name}</h1>
-                                    <div className="flex gap-x-2">
-                                        <button className={selectedButton.find(
-                                            (option) =>
-                                                option.id_jurus === item.id_jurus &&
-                                                option.selectedOption === 0
-                                        ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase" : "font-semibold hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] bg-navy border-2 border-red rounded-md text-red py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 0)}>SALAH</button>
+                                    <div className="gap-x-2 grid grid-flow-col grid-cols-10 text-sm mb:text-md">
+                                        <button className='col-span-4'>
+                                            <div className="hover:scale-105 transition ease-in-out duration-500 
+                                            hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
+                                                <button className={selectedButton.find(
+                                                    (option) =>
+                                                        option.id_jurus === item.id_jurus &&
+                                                        option.selectedOption === 0
+                                                ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase"
+                                                    : "font-semibold bg-navy border-2 border-red rounded-md text-white py-1.5 w-full uppercase"}
+                                                    onClick={() => handleButtonClick(item.id_jurus, 0)
+                                                    }
+                                                >SALAH</button>
+                                            </div>
+                                        </button>
 
-                                        <button className={selectedButton.find(
-                                            (option) =>
-                                                option.id_jurus === item.id_jurus &&
-                                                option.selectedOption >= 8
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 8)}>BENAR</button>
+                                        <button className='col-span-4'>
+                                            <div className="hover:scale-105 transition ease-in-out duration-500 
+                                            hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
+                                                <button className={selectedButton.find(
+                                                    (option) =>
+                                                        option.id_jurus === item.id_jurus &&
+                                                        option.selectedOption >= 8
+                                                ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase"
+                                                    : "font-semibold bg-navy border-2 border-purple rounded-md text-white py-1.5 w-full uppercase"}
+                                                    onClick={() => handleButtonClick(item.id_jurus, 8)}>BENAR</button>
+                                            </div>
+                                        </button>
 
-                                        <button className={selectedButton.find(
-                                            (option) =>
-                                                option.id_jurus === item.id_jurus &&
-                                                option.selectedOption === 10
-                                        ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_jurus, 10)}>+</button>
+                                        <button className='col-span-3'>
+                                            <div className="hover:scale-105 transition ease-in-out duration-500 
+                                            hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
+                                                <button className={selectedButton.find(
+                                                    (option) =>
+                                                        option.id_jurus === item.id_jurus &&
+                                                        option.selectedOption === 10
+                                                ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase"
+                                                    : "font-semibold bg-navy border-2 border-green rounded-md text-white py-1.5 w-full uppercase"}
+                                                    onClick={() => handleButtonClick(item.id_jurus, 10)}>+</button>
+                                            </div>
+                                        </button>
 
 
                                     </div>
