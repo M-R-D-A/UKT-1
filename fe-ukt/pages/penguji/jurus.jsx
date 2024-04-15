@@ -185,7 +185,7 @@ const jurus = () => {
                                             (option) =>
                                                 option.id_jurus === item.id_jurus &&
                                                 option.selectedOption === 0
-                                        ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-red rounded-md text-red py-1.5 w-full uppercase"}
+                                        ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase" : "font-semibold hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] bg-navy border-2 border-red rounded-md text-red py-1.5 w-full uppercase"}
                                             onClick={() => handleButtonClick(item.id_jurus, 0)}>SALAH</button>
 
                                         <button className={selectedButton.find(

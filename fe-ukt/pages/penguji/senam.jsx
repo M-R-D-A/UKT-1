@@ -188,31 +188,45 @@ const senam = () => {
                                 <div key={index + 1} className="grid grid-cols-2 items-center">
                                     <h1 className='text-white text-xl font-semibold uppercase'>{item.name}</h1>
                                     <div className="flex gap-x-2">
-                                        <button className={selectedButton.find(
-                                            (option) =>
-                                                option.id_senam === item.id_senam &&
-                                                option.selectedOption === 0
-                                        ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-red rounded-md text-red py-1.5 w-full uppercase"}
-                                            onClick={() => handleButtonClick(item.id_senam, 0)}>SALAH</button>
+                                        <button className='w-full'>
+                                            <div className="hover:scale-105 transition ease-in-out duration-500 
+                                            hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
+                                                <button className={selectedButton.find(
+                                                    (option) =>
+                                                        option.id_senam === item.id_senam &&
+                                                        option.selectedOption === 0
+                                                ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase"
+                                                    : "font-semibold bg-navy border-2 border-red rounded-md text-white py-1.5 w-full uppercase"}
+                                                    onClick={() =>
+                                                        item.selectedOption === 0
+                                                            ? handleButtonClick(item.id_senam, null)
+                                                            : handleButtonClick(item.id_senam, item.selectedOption === 0 ? null : 0)
+                                                    }
+                                                >SALAH</button>
+                                            </div>
+                                        </button>
 
                                         <button className={selectedButton.find(
                                             (option) =>
                                                 option.id_senam === item.id_senam &&
                                                 option.selectedOption >= 1
-                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
+                                        ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase"
+                                            : "font-semibold bg-white border-2 border-purple rounded-md text-purple py-1.5 w-full uppercase"}
                                             onClick={() => handleButtonClick(item.id_senam, 1)}>BENAR</button>
 
                                         <button className={selectedButton.find(
                                             (option) =>
                                                 option.id_senam === item.id_senam &&
                                                 option.selectedOption === 2
-                                        ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase" : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
+                                        ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase"
+                                            : "font-semibold bg-white border-2 border-green rounded-md text-green py-1.5 w-full uppercase"}
                                             onClick={() => handleButtonClick(item.id_senam, 2)}>+</button>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <div className='bg-yellow hover:bg-white rounded-md p-3 text-center text-xl text-white hover:text-yellow font-semibold shadow shadow-slate-700 duration-300 uppercase' onClick={() => handleSave()}>Selesai</div>
+                        <div className='bg-yellow hover:bg-white rounded-md p-3 text-center text-xl text-white 
+                        hover:text-yellow font-semibold shadow shadow-slate-700 duration-300 uppercase' onClick={() => handleSave()}>Selesai</div>
                     </div>
                 </div>
             </div>
