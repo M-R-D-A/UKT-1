@@ -17,6 +17,7 @@ const {
     controllerGetByEventUkt,
     controllerGetByIdSiswa,
     controllerStatistics,
+    controllerStatisticsEvent,
     controllerStatisticsRanting,
     controllerStatisticsCabang,
     controllerGetTotalPage,
@@ -29,6 +30,7 @@ const verifyRoles = require("../../middleware/verifyRoles");
 router.get('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetAll )
 router.get('/pages/:id/:limit', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetTotalPage )
 router.get('/statistic', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerStatistics )
+router.get('/statistic/event/:id/:ranting', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerStatisticsEvent )
 router.get('/statistic/ranting/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerStatisticsRanting )
 router.get('/statistic/cabang/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerStatisticsCabang )
 router.post('/ukt/:event/:jenis/:updown', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEventFiltered )

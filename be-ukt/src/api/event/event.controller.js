@@ -35,6 +35,32 @@ module.exports = {
                 })
             })
     },
+    controllerGetByTipeUktSearch: async (req, res) => {
+        event.findAll({
+            where: {
+                tipe_ukt: req.params.id,
+                is_active: true
+            },
+            attribute: ['id_event','name', 'tipe_ukt']
+        })
+            .then(event => {
+                const transformedEvents = event.map(item => {
+                    return {
+                        value: item.id_event, // Assuming 'name' is the property you want as value
+                        label: item.name // Assuming 'label' is the property you want as label
+                    };
+                });      
+                res.json({
+                    count: transformedEvents.length,
+                    data: transformedEvents
+                });
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetByTipeUktPUBLIC: async (req, res) => {
         event.findAll({
             where: {

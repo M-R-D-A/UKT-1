@@ -4,6 +4,9 @@ import Header from './components/header'
 import Footer from './components/footer'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic';
+import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import makeAnimated from 'react-select/animated';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 import axios from 'axios'
@@ -18,17 +21,42 @@ const index = () => {
     const [dataRanting, setDataRanting] = useState([]);
     const [ranting, setRanting] = useState();
     const [cabang, setCabang] = useState();
+    const [event, setEvent] = useState();
+    const [tipeUkt, setTipeUkt] = useState(null);
+    const [dataEvent, setDataEvent] = useState();
+    const [search, setSearch] = useState();
 
     const [go, setGo] = useState(false);
     const [type, setType] = useState('cabang');
 
-    const handlerGetData = () => {
+    // const handlerGetData = () => {
+    //     const token = localStorage.getItem('token')
+    //     const admin = JSON.parse(localStorage.getItem('admin'))
+    //     admin.id_role === 'admin ranting'
+    //         ? axios.get(BASE_URL + 'ukt_siswa/statistic/ranting/' + admin.id_ranting, { headers: { Authorization: `Bearer ${token}` } })
+    //             .then(result => {
+    //                 setData(result.data.data.series)
+    //                 setDataTable(result.data.tables.series)
+    //             })
+    //             .catch(error => {
+    //                 console.log(error.message);
+    //             })
+    //         : axios.get(BASE_URL + 'ukt_siswa/statistic/cabang/jatim', { headers: { Authorization: `Bearer ${token}` } })
+    //             .then(result => {
+    //                 setData(result.data.data.series)
+    //                 setDataTable(result.data.tables.series)
+    //             })
+    //             .catch(error => {
+    //                 console.log(error.message);
+    //             })
+
+    // }
+    const handlerClick = () => {
         const token = localStorage.getItem('token')
-        const admin = JSON.parse(localStorage.getItem('admin'))
-        admin.id_role === 'admin ranting'
-            ? axios.get(BASE_URL + 'ukt_siswa/statistic/ranting/' + admin.id_ranting, { headers: { Authorization: `Bearer ${token}` } })
+        type
+            ? axios.get(BASE_URL + 'ukt_siswa/statistic/event/' + event + '/' + ranting, { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
-                    console.log(result.data.data.series)
+                    console.log(result.data.tables.series)
                     setData(result.data.data.series)
                     setDataTable(result.data.tables.series)
                 })
@@ -37,7 +65,6 @@ const index = () => {
                 })
             : axios.get(BASE_URL + 'ukt_siswa/statistic/cabang/jatim', { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
-                    console.log(result)
                     console.log(result.data.tables.series)
                     setData(result.data.data.series)
                     setDataTable(result.data.tables.series)
@@ -45,30 +72,24 @@ const index = () => {
                 .catch(error => {
                     console.log(error.message);
                 })
-
     }
-    const handlerClick = (param, type) => {
+    const handlerGetEvent = () => {
         const token = localStorage.getItem('token')
-        type === 'ranting'
-            ? axios.get(BASE_URL + 'ukt_siswa/statistic/ranting/' + param, { headers: { Authorization: `Bearer ${token}` } })
-                .then(result => {
-                    console.log(result.data.tables.series)
-                    setData(result.data.data.series)
-                    setDataTable(result.data.tables.series)
-                })
-                .catch(error => {
-                    console.log(error.message);
-                })
-            : axios.get(BASE_URL + 'ukt_siswa/statistic/cabang/' + param, { headers: { Authorization: `Bearer ${token}` } })
-                .then(result => {
-                    console.log(result.data.tables.series)
-                    setData(result.data.data.series)
-                    setDataTable(result.data.tables.series)
-                })
-                .catch(error => {
-                    console.log(error.message);
-                })
+        console.log(tipeUkt)
+
+        axios.get(BASE_URL + 'event/search/' + tipeUkt, { headers: { Authorization: `Bearer ${token}` } })
+            .then(result => {
+                console.log(result)
+                setDataEvent(result.data.data)
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
     }
+
+    useEffect(() => {
+        handlerGetEvent()
+    }, [tipeUkt])
 
     useEffect(() => {
         if (cabang && type === 'cabang') {
@@ -77,6 +98,7 @@ const index = () => {
             handlerClick(ranting, 'ranting');
         }
     }, [cabang])
+
 
     const handlerGetDataCabang = () => {
         const token = localStorage.getItem('token')
@@ -100,7 +122,7 @@ const index = () => {
             })
     }
     useEffect(() => {
-        handlerGetData();
+        // handlerGetData();
         handlerGetDataCabang();
         handlerGetDataRanting();
     }, [])
@@ -140,6 +162,15 @@ const index = () => {
         isLogged()
     }, [])
 
+    const handleChange = (option) => {
+        setSearch(option);
+        setEvent(option.value)
+        console.log(`Option selected:`, option);
+    };
+
+    useEffect(() => {
+        handlerClick();
+    }, [event, ranting])
 
     return (
         <div className="flex font-lato">
@@ -203,10 +234,52 @@ const index = () => {
                         </div>
                         {/* wrapper data set */}
                         <div className="inline-flex space-x-2">
+                            <h1 className='px-3 text-white text-lg font-semibold tracking-wider uppercase'>Event</h1>
+
+                            {tipeUkt && <button
+                                onClick={() => setTipeUkt(null)}
+                                className='bg-navy p-3 rounded-md'><div className='bg-red p-2 rounded-md'></div></button>}
+
+                            {tipeUkt
+                                ? <>
+                                    <div className='w-full '>
+                                        <Select
+                                            value={search}
+                                            onChange={handleChange}
+                                            options={dataEvent}
+                                        />
+                                    </div>
+                                </>
+                                : <div className=' flex gap-x-2'>
+                                    <button
+                                        onClick={() => setTipeUkt('UKT Jambon')}
+                                        className='flex items-center justify-center bg-navy rounded-md p-1 px-2 text-md text-white hover:scale-105'>
+                                        <div className='bg-purple p-1.5 px-3 rounded-md'></div>
+                                        <p>Jambon</p>
+                                    </button>
+                                    <button
+                                        onClick={() => setTipeUkt('UKT Hijau')}
+                                        className='flex items-center justify-center bg-navy rounded-md p-1 px-2 text-md text-white hover:scale-105'>
+                                        <div className='bg-green p-1.5 px-3 rounded-md'></div>
+                                        <p>Hijau</p>
+                                    </button>
+                                    <button
+                                        onClick={() => setTipeUkt('UKT Putih')}
+                                        className='flex items-center justify-center bg-navy rounded-md p-1 px-2 text-md text-white hover:scale-105'>
+                                        <div className='bg-white p-1.5 px-3 rounded-md'></div>
+                                        Putih</button>
+                                    <button
+                                        onClick={() => setTipeUkt('UKCW')}
+                                        className='flex items-center justify-center bg-navy rounded-md p-1 px-2 text-md text-white hover:scale-105'>
+                                        <div className='b border-white border-2 p-1.5 px-3 rounded-md'></div>
+                                        UKCW</button>
+                                </div>
+                            }
                             <h1 className='px-3 text-white text-lg font-semibold tracking-wider uppercase'>{go ? 'ranting ' : 'cabang '}</h1>
                             {/* download button */}
                             {/* data set dropdown */}
                             <div className="relative w-full">
+
 
                                 {go
                                     ? <div className='w-48 flex'>
