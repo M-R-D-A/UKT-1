@@ -36,9 +36,24 @@ module.exports = {
                 })
             })
     },
+    controllerGetRayon: async (req, res) => {
+        ukt_siswa.findAll({
+            attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('rayon')), 'rayon']]
+          })
+          .then(distinctRayons => {
+            res.json({
+                count: distinctRayons.length,
+                data: distinctRayons
+            });
+          })
+          .catch(err => {
+            console.error('Error fetching distinct rayons:', err);
+          });
+    },
     controllerGetByEventFiltered: async (req, res) => {
-        const { jenis, updown } = req.params;
+        const { jenis, updown, event } = req.body;
         const rantings = req.body.ranting || ['BENDUNGAN', 'DONGKO', 'DURENAN', 'GANDUSARI', 'KAMPAK', 'KARANGAN', 'MUNJUNGAN', 'PANGGUL', 'POGALAN', 'PULE', 'SURUH', 'TRENGGALEK', 'TUGU', 'WATULIMO']
+        const rayon = req.body.rayon
         let orderCriteria = [];
 
         switch (jenis) {
@@ -92,7 +107,8 @@ module.exports = {
                 }
             ],
             where: {
-                id_event: req.params.event,
+                id_event: event,
+                rayon: rayon
             },
             order: orderCriteria,
         })

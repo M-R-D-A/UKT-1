@@ -24,6 +24,7 @@ const rekap_nilai_ukt_ukcw = () => {
     // state modal
     const [dataEvent, setDataEvent] = useState([])
     const [dataRanting, setDataRanting] = useState([])
+    const [dataRayon, setDataRayon] = useState([])
     const [modalFilter, setModalFilter] = useState(false)
     const [name, setName] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -35,10 +36,14 @@ const rekap_nilai_ukt_ukcw = () => {
         const event = JSON.parse(localStorage.getItem('event'));
         const Ranting = JSON.parse(localStorage.getItem('filterRanting'))
         let form = {
-            ranting: Ranting
+            event: event.id_event,
+            rayon: dataRayon.rayon,
+            ranting: Ranting,
+            jenis: jenis,
+            updown: updown,
         }
         setLoading(true);
-        await axios.post(BASE_URL + `ukt_siswa/ukt/${event.id_event}/${jenis}/${updown}`, form, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(BASE_URL + `ukt_siswa/ukt`, form, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 console.log(res);
                 setDataUkt(res.data.data)
@@ -85,6 +90,27 @@ const rekap_nilai_ukt_ukcw = () => {
     }
     let timeoutId = null;
 
+    // get data rayo
+    const getDataRayon = async () => {
+        const token = localStorage.getItem('token')
+        await axios.get(BASE_URL + `ukt_siswa/rayon`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                console.log(res.data.data)
+                setDataRayon(res.data.data)
+            })
+            .catch(err => {
+                console.log(err.message);
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+
+    useEffect(() => {
+        getDataRayon();
+    }, [])
+
     useEffect(() => {
         console.log(name)
         if (name != null) {
@@ -100,8 +126,6 @@ const rekap_nilai_ukt_ukcw = () => {
         }
     }, [name]);
 
-
-
     useEffect(() => {
         const event = JSON.parse(localStorage.getItem('event'));
         setDataEvent(event)
@@ -110,23 +134,22 @@ const rekap_nilai_ukt_ukcw = () => {
     }, [])
 
     useEffect(() => {
-        // console.log(jenis)
-        console.log("updown" + updown)
         getDataUktFiltered()
     }, [`${dataRanting}`, jenis, updown])
 
-    useEffect(() => {
-        socket.on('refreshRekap', () => {
-            getDataUktFiltered()
-        })
-
-    }, [])
-
     // useEffect(() => {
-    //     setInterval(() => {
-    //         socket.emit('pushRekap')
-    //     }, 3000)
+    //     socket.on('refreshRekap', () => {
+    //         getDataUktFiltered()
+    //     })
+
     // }, [])
+
+
+    useEffect(() => {
+        setInterval(() => {
+            socket.emit('pushRekap')
+        }, 3000)
+    }, [])
     return (
         <>
             {loading
