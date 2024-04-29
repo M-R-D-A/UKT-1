@@ -40,10 +40,14 @@ module.exports = {
         ukt_siswa.findAll({
             attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('rayon')), 'rayon']]
           })
-          .then(distinctRayons => {
+          .then(data => {
+            const transformedData = data.map(item => ({
+                label: item.rayon,
+                value: item.rayon
+            }));
             res.json({
-                count: distinctRayons.length,
-                data: distinctRayons
+                count: transformedData.length,
+                data: transformedData
             });
           })
           .catch(err => {

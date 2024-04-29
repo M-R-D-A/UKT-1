@@ -3,18 +3,20 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { globalState } from '@/context/context'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Modal_event from '../components/modal_event'
-import Modal_delete from '../components/modal_delete'
+import Sidebar from '../../components/sidebar'
+import Header from '../../components/header'
+import Footer from '../../components/footer'
+import Modal_event from '../../components/modal_event'
+import Modal_delete from '../../components/modal_delete'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const ukcw = () => {
+const ukt_hijau = () => {
 
     // deklarasi router
     const router = useRouter ()
-    
+
+    const idRanting = router.query.ranting
+
     // state modal
     const [showModalEvent, setShowModalEvent] = useState (false)
     const [showModalDelete, setShowModalDelete] = useState (false)
@@ -25,14 +27,14 @@ const ukcw = () => {
     const [action, setAction] = useState ('')
     const [idEvent, setIdEvent] = useState ('')
     const [name, setName] = useState ('')
-    const [date, setDate] = useState ('')
+    const [date, setDate] = useState ()
     const [tipe, setTipe] = useState ('')
 
-    // funtion get data event
+    // function get data event
     const getDataEvent = () => {
         const token = localStorage.getItem ('token')
 
-        axios.get (BASE_URL + `event/ukt/UKCW`, { headers: { Authorization: `Bearer ${token}`}})
+        axios.get (BASE_URL + `event/ukt/UKT Hijau/` + idRanting, { headers: { Authorization: `Bearer ${token}`}})
         .then (res => {
             setDataEvent (res.data.data)
         })
@@ -47,18 +49,18 @@ const ukcw = () => {
         setAction ('insert')
         setName ('')
         setDate ('')
-        setTipe ('UKCW')
+        setTipe ('UKT Hijau')
         setIsActive(true)
     }
 
     // function modal edit
     const editModal = (selectedItem) => {
-        setShowModalEvent (true)
+        setShowModalEvent(true)
         setAction ('update')
         setIdEvent (selectedItem.id_event)
         setName (selectedItem.name)
-        setDate (selectedItem.date)
-        setTipe ('UKCW')
+        setDate (selectedItem.tanggal)
+        setTipe ('UKT Hijau')
         setIsActive (selectedItem.is_active)
     }
 
@@ -67,14 +69,14 @@ const ukcw = () => {
         setShowModalDelete (true)
         setAction ('deleteEvent')
         setIdEvent (selectedId)
-        setTipe ('UKCW')
+        setTipe ('UKT Hijau')
     }
 
     // function to rekap nilai
     const toRekapNilai = (item) => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
-            pathname: './ranting/rekap_nilai_ukt_ukcw',
+            pathname: './ranting/event/rekap_nilai_ukt_hijau',
             query: { eventId: 1, anjay:'anjay' } // Add your parameter here
         });
     }
@@ -83,7 +85,7 @@ const ukcw = () => {
     const toDetailNilai = (item) => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
-            pathname: './ranting/detail_nilai_ukt_ukcw',
+            pathname: './ranting/event/detail_nilai_ukt_hijau',
             query: { eventId: 1, anjay:'anjay' } // Add your parameter here
         });
     }
@@ -127,7 +129,7 @@ const ukcw = () => {
                         <div className="flex justify-between items-center text-white mb-7">
 
                             {/* page name */}
-                            <h1 className='text-2xl tracking-wider uppercase font-bold'>REKAP - UKCW</h1>
+                            <h1 className='text-2xl tracking-wider uppercase font-bold'>REKAP - UKT Hijau</h1>
 
                             {/* search and button add data */}
                             <div className="flex gap-x-3">
@@ -148,8 +150,8 @@ const ukcw = () => {
                         </div>
 
                         {/* wrapper card event */}
-                        <div className="grid grid-cols-2 gap-5">
-                            
+                        <div className="grid grid-cols-2 gap-x-5">
+
                             {/* card event */}
                             {dataEvent.map((item, index) => (
                                 <div key={index + 1} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
@@ -177,8 +179,8 @@ const ukcw = () => {
                                                 </button>
                                             </div>
                                         </div>
-        
-                                       {/* action button */}
+
+                                        {/* action button */}
                                        <div className=" space-x-2 w-full flex justify-center text-white text-center">
                                             <button onClick={() => toRekapNilai (item)} className='bg-purple hover:bg-white hover:text-purple duration-300 p-2 rounded-md w-full'>Lihat Nilai</button>
                                             <button onClick={() => toDetailNilai (item)} className='bg-purple hover:bg-white hover:text-purple duration-300 p-2 rounded-md w-full'>Detail Nilai</button>
@@ -210,4 +212,4 @@ const ukcw = () => {
     )
 }
 
-export default ukcw
+export default ukt_hijau

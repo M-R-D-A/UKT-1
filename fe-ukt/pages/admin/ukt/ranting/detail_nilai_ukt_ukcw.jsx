@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
+import Sidebar from '../../components/sidebar'
+import Header from '../../components/header'
+import Footer from '../../components/footer'
 
 // ---- content --- //
-import Senam from './content/senam'
-import Teknik from './content/teknik'
-import Jurus from './content/jurus'
-import Fisik from './content/fisik'
-import Sambung from './content/sambung'
-import Keshan from './content/keshan'
+import Senam from '../content/senam'
+import Teknik from '../content/teknik'
+import Jurus from '../content/jurus'
+import Fisik from '../content/fisik'
+import Sambung from '../content/sambung'
+import Keshan from '../content/keshan'
 import { useRouter } from 'next/router'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
