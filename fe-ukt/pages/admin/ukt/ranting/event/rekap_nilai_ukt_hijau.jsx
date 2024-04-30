@@ -10,24 +10,48 @@ import event from '@/pages/penguji/event'
 import Image from 'next/image';
 import SocketIo from 'socket.io-client'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic';
+
+
+
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
 const socket = SocketIo(SOCKET_URL)
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const Select = dynamic(() => import('react-select'));
+
+const customStyles = {
+    control: (provided) => ({
+        ...provided,
+        background: 'white',
+        colors: 'black',
+        // display: 'flex',
+        // flexWrap: 'nowrap',
+        // borderColor: 'hsl(0deg 78.56% 55.56%);',
+        // width: '7em'
+    }),
+    menu: (provided) => ({
+        ...provided,
+        background: 'white',
+        color: 'grey', // Set text color to black
+        width: '8rem'
+    }),
+};
 
 const rekap_nilai_ukt_ukt_hijau = () => {
 
     // deklarasi router
     const router = useRouter()
     // / Get the value of 'eventId' parameter
-    const eventId = router.query.eventId;
-
-    // Get the value of 'anjay' parameter
-    const anjay = router.query.anjay;
+    const {eventId, idRanting, nameEvent} = router.query
 
     const [dataUkt, setDataUkt] = useState([])
 
     // state modal
     const [dataEvent, setDataEvent] = useState([])
+    const [dataRayon, setDataRayon] = useState()
+    const [rayonSelect, setRayonSelect] = useState([])
+    const [rayon, setRayon] = useState()
     const [dataRanting, setDataRanting] = useState([])
     const [modalFilter, setModalFilter] = useState(false)
     const [name, setName] = useState(null);
@@ -37,15 +61,18 @@ const rekap_nilai_ukt_ukt_hijau = () => {
 
     const getDataUktFiltered = async () => {
         const token = localStorage.getItem('token')
-        const event = JSON.parse(localStorage.getItem('event'));
         const Ranting = JSON.parse(localStorage.getItem('filterRanting'))
         let form = {
-            ranting: Ranting
+            event: eventId,
+            ranting: [idRanting],
+            rayon: rayon,
+            jenis: jenis,
+            updown: updown
         }
         setLoading(true);
-        await axios.post(BASE_URL + `ukt_siswa/ukt/${event.id_event}/${jenis}/${updown}`, form, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(BASE_URL + `ukt_siswa/ukt/filter`, form, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                console.log(res);
+                console.log(res)
                 setDataUkt(res.data.data)
             })
             .catch(err => {
@@ -68,6 +95,37 @@ const rekap_nilai_ukt_ukt_hijau = () => {
             router.push('/admin/login')
         }
     }
+
+     // get data rayo
+     const getDataRayon = async () => {
+        const token = localStorage.getItem('token')
+        await axios.get(BASE_URL + `ukt_siswa/rayon/${eventId}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                console.log(res.data.data)
+                setDataRayon(res.data.data)
+            })
+            .catch(err => {
+                console.log(err.message);
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }
+    useEffect(() => {
+        getDataRayon();
+    }, [])
+
+    const handleChangeRayon = (option) => {
+        const data = option.map(item => item.value);
+
+        console.log(option)
+        console.log(data)
+
+
+        setRayonSelect(option)
+        setRayon(data)
+    };
 
     const getDataByName = () => {
         const token = localStorage.getItem('token')
@@ -105,8 +163,6 @@ const rekap_nilai_ukt_ukt_hijau = () => {
         }
     }, [name]);
 
-
-
     useEffect(() => {
         const event = JSON.parse(localStorage.getItem('event'));
         setDataEvent(event)
@@ -115,10 +171,9 @@ const rekap_nilai_ukt_ukt_hijau = () => {
     }, [])
 
     useEffect(() => {
-        // console.log(jenis)
-        // console.log("updown" + updown)
+        console.log(rayon)
         getDataUktFiltered()
-    }, [`${dataRanting}`, jenis, updown])
+    }, [`${dataRanting}`, jenis, updown, rayon])
 
     // useEffect(() => {
     //     socket.on('refreshRekap', () => {
@@ -177,11 +232,20 @@ const rekap_nilai_ukt_ukt_hijau = () => {
                                     </svg>
                                 </Link>
                                 {/* <h1 className='text-2xl tracking-wider uppercase font-bold'>Rekap Nilai - {dataEvent.tipe_ukt} - {dataEvent.name}</h1> */}
-                                <h1 className='text-2xl tracking-wider uppercase font-bold'>Rekap Nilai - {eventId} - {anjay}</h1>
+                                <h1 className='text-2xl tracking-wider uppercase font-bold'>Rekap Nilai - {nameEvent} - {idRanting}</h1>
                             </div>
 
                             {/* wrapper search and filter */}
                             <div className="flex gap-x-2">
+
+                                <Select
+                                    className='w-72'
+                                    onChange={handleChangeRayon}
+                                    options={dataRayon}
+                                    value={rayonSelect}
+                                    styles={customStyles}
+                                    isMulti
+                                />
 
                                 {/* search */}
                                 <div className="bg-purple rounded-md px-5 py-2 flex items-center gap-x-2 w-72">
@@ -193,14 +257,14 @@ const rekap_nilai_ukt_ukt_hijau = () => {
                                 </div>
 
                                 {/* filter */}
-                                <button onClick={() => setModalFilter(true)} className="bg-green hover:bg-[#0ea97f] transition-all duration-300 rounded-md px-5 py-2 flex items-center gap-x-2">
+                                {/* <button onClick={() => setModalFilter(true)} className="bg-green hover:bg-[#0ea97f] transition-all duration-300 rounded-md px-5 py-2 flex items-center gap-x-2">
 
                                     <svg width="21" height="21" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M16.5 2.25H1.5L7.5 9.345V14.25L10.5 15.75V9.345L16.5 2.25Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
 
                                     <h1 className='text-white'>Filter</h1>
-                                </button>
+                                </button> */}
 
                             </div>
                         </div>

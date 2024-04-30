@@ -77,7 +77,7 @@ const ukt_hijau = () => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
             pathname: './ranting/event/rekap_nilai_ukt_hijau',
-            query: { eventId: 1, anjay:'anjay' } // Add your parameter here
+            query: { eventId: item.id_event, idRanting: item.id_ranting, nameEvent:item.name } // Add your parameter here
         });
     }
 
@@ -86,7 +86,7 @@ const ukt_hijau = () => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
             pathname: './ranting/event/detail_nilai_ukt_hijau',
-            query: { eventId: 1, anjay:'anjay' } // Add your parameter here
+            query: { eventId: item.id_event, idRanting: item.id_ranting, nameEvent:item.name } // Add your parameter here
         });
     }
 
