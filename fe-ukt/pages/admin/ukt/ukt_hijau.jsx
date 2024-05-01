@@ -60,7 +60,7 @@ const ukt_hijau = () => {
         // localStorage.setItem('event', JSON.stringify(item))
         router.push({
             pathname: './ranting',
-            query: { ranting:item } // Add your parameter here
+            query: { ranting: item } // Add your parameter here
         });
     }
 
@@ -111,18 +111,23 @@ const ukt_hijau = () => {
 
                             {/* card ranting */}
                             {dataRanting?.map((item, index) => (
-                                <button onClick={() => goToEventRanting(item.id_ranting)} key={index + 1} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+                                <>
+                                    {dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length > 0 && <button 
+                                    onClick={() => goToEventRanting(item.id_ranting)} key={index + 1} 
+                                    className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
 
-                                    {/* inner bg */}
-                                    <div className="bg-navy p-5 rounded-md space-y-5">
+                                        {/* inner bg */}
+                                        <div className="bg-navy p-5 rounded-md space-y-5">
 
-                                        {/* ranting name */}
-                                        <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
+                                            {/* ranting name */}
+                                            <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
 
-                                        {/* ranting data count and add button */}
-                                        <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter (a => a.id_ranting === `${item.id_ranting}`).length}</h1>
-                                    </div>
-                                </button>
+                                            {/* ranting data count and add button */}
+                                            <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length}</h1>
+                                        </div>
+                                    </button>}
+
+                                </>
                             ))}
                         </div>
                     </div>

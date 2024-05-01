@@ -43,15 +43,15 @@ const rekap_nilai_ukt_ukt_hijau = () => {
     // deklarasi router
     const router = useRouter()
     // / Get the value of 'eventId' parameter
-    const {eventId, idRanting, nameEvent} = router.query
+    const { eventId, idRanting, nameEvent } = router.query
 
     const [dataUkt, setDataUkt] = useState([])
 
     // state modal
     const [dataEvent, setDataEvent] = useState([])
-    const [dataRayon, setDataRayon] = useState()
+    const [dataRayon, setDataRayon] = useState([])
     const [rayonSelect, setRayonSelect] = useState([])
-    const [rayon, setRayon] = useState()
+    const [rayon, setRayon] = useState([])
     const [dataRanting, setDataRanting] = useState([])
     const [modalFilter, setModalFilter] = useState(false)
     const [name, setName] = useState(null);
@@ -59,45 +59,8 @@ const rekap_nilai_ukt_ukt_hijau = () => {
     const [jenis, setJenis] = useState('all')
     const [updown, setUpDown] = useState('upToDown')
 
-    const getDataUktFiltered = async () => {
-        const token = localStorage.getItem('token')
-        const Ranting = JSON.parse(localStorage.getItem('filterRanting'))
-        let form = {
-            event: eventId,
-            ranting: [idRanting],
-            rayon: rayon,
-            jenis: jenis,
-            updown: updown
-        }
-        setLoading(true);
-        await axios.post(BASE_URL + `ukt_siswa/ukt/filter`, form, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                console.log(res)
-                setDataUkt(res.data.data)
-            })
-            .catch(err => {
-                console.log(err.message);
-                console.log(err.response.data);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }
-    function formatNumber(number) {
-        return (number % 1 === 0)
-            ? number
-            : number.toLocaleString('id', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    // function login checker
-    const isLogged = () => {
-        if (localStorage.getItem('token') === null || localStorage.getItem('admin') === null) {
-            router.push('/admin/login')
-        }
-    }
-
-     // get data rayo
-     const getDataRayon = async () => {
+    // get data rayo
+    const getDataRayon = async () => {
         const token = localStorage.getItem('token')
         await axios.get(BASE_URL + `ukt_siswa/rayon/${eventId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
@@ -115,6 +78,47 @@ const rekap_nilai_ukt_ukt_hijau = () => {
     useEffect(() => {
         getDataRayon();
     }, [])
+
+    const getDataUktFiltered = async () => {
+        const token = localStorage.getItem('token')
+        const rayonData = dataRayon.map(item => item.value);
+        console.log(rayonData)
+        const formRayon = rayon.length === 0 ? rayonData : rayon
+        let form = {
+            event: eventId,
+            ranting: [idRanting],
+            rayon: formRayon,
+            jenis: jenis,
+            updown: updown
+        }
+        setLoading(true);
+        dataRayon.length > 1 && await axios.post(BASE_URL + `ukt_siswa/ukt/filter`, form, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                console.log(res)
+                setDataUkt(res.data.data)
+            })
+            .catch(err => {
+                console.log(err.message);
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+
+    }
+    function formatNumber(number) {
+        return (number % 1 === 0)
+            ? number
+            : number.toLocaleString('id', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // function login checker
+    const isLogged = () => {
+        if (localStorage.getItem('token') === null || localStorage.getItem('admin') === null) {
+            router.push('/admin/login')
+        }
+    }
+
 
     const handleChangeRayon = (option) => {
         const data = option.map(item => item.value);
@@ -226,7 +230,7 @@ const rekap_nilai_ukt_ukt_hijau = () => {
 
                             {/* page name and button back */}
                             <div className="flex justify-center items-center gap-x-3">
-                                <Link href={'./ukt_hijau'} className="bg-purple hover:bg-white rounded-md w-9 h-9 flex justify-center items-center group duration-300">
+                                <Link href={'../?ranting=' + idRanting} className="bg-purple hover:bg-white rounded-md w-9 h-9 flex justify-center items-center group duration-300">
                                     <svg className='-translate-x-0.5 fill-white group-hover:fill-purple' width="13" height="22" viewBox="0 0 14 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.2258 26.4657L0.354838 14.4974C0.225806 14.3549 0.134623 14.2005 0.08129 14.0343C0.0270964 13.8681 0 13.69 0 13.5C0 13.31 0.0270964 13.1319 0.08129 12.9657C0.134623 12.7995 0.225806 12.6451 0.354838 12.5026L11.2258 0.498681C11.5269 0.166227 11.9032 0 12.3548 0C12.8065 0 13.1935 0.1781 13.5161 0.534301C13.8387 0.890501 14 1.30607 14 1.781C14 2.25594 13.8387 2.6715 13.5161 3.0277L4.03226 13.5L13.5161 23.9723C13.8172 24.3048 13.9677 24.7141 13.9677 25.2005C13.9677 25.6878 13.8065 26.1095 13.4839 26.4657C13.1613 26.8219 12.7849 27 12.3548 27C11.9247 27 11.5484 26.8219 11.2258 26.4657Z" />
                                     </svg>
