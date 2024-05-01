@@ -14,21 +14,29 @@ const modal_penguji_ranting = () => {
     const {ranting, setRanting} = useContext (globalState)
     const {username, setUsername} = useContext (globalState)
     const {password, setPassword} = useContext (globalState)
+    const {newWeb, setNewWeb} = useContext (globalState)
     const {noWa, setNoWa} = useContext (globalState)
     const {role, setRole} = useContext (globalState)
     const {foto, setFoto} = useContext (globalState)
 
     // function get data penguji ranting
-    const getDataPengujiRanting = () => {
-        const token = localStorage.getItem ('token')
-        axios.get (BASE_URL + `penguji`, { headers: { Authorization: `Bearer ${token}`}})
-        .then (res => {
-            setDataPengujiRanting (res.data.data)
-        })
-        .catch (err => {
-            console.log(err.message);
-        })
+    const getDataPengujiRanting  = async () => {
+        const token = localStorage.getItem('token')
+        // const web1 = web ? web : null
+        // setNewWeb(web1)
+        const form = {
+            id_ranting: newWeb,
+            id_role: 'penguji ranting'
+        }
+        axios.post(BASE_URL + `penguji/pengujiperranting`, form, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                setDataPengujiRanting(res.data.data)
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
     }
+
     
     // function handle file photo profile
     const handleFile = (e) => {

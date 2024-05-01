@@ -228,7 +228,7 @@ const sidebar = () => {
                                 </Link>
 
                                 {/* ---------- PENGUJI ---------- */}
-                                <Link href={'/admin/data/penguji'} className={splitLoc[1] === 'data/penguji' || splitLoc[1] === 'data/penguji_cabang' || splitLoc[1] === 'data/penguji_ranting' ?
+                                <Link href={'/admin/data/penguji/penguji'} className={splitLoc[1] === 'data/penguji' || splitLoc[1] === 'data/penguji_cabang' || splitLoc[1] === 'data/penguji_ranting' ?
 
                                     // clicked
                                     `${showSideBar ? 'px-5 py-2 gap-x-3' : 'justify-center p-2'} bg-white shadow-md shadow-purple rounded-lg flex items-center text-purple`
