@@ -111,8 +111,7 @@ const ukt_hijau = () => {
 
                             {/* card ranting */}
                             {dataRanting?.map((item, index) => (
-                                <>
-                                    {dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length > 0 && <button 
+                                <><button 
                                     onClick={() => goToEventRanting(item.id_ranting)} key={index + 1} 
                                     className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
 
@@ -125,8 +124,7 @@ const ukt_hijau = () => {
                                             {/* ranting data count and add button */}
                                             <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length}</h1>
                                         </div>
-                                    </button>}
-
+                                    </button>
                                 </>
                             ))}
                         </div>
