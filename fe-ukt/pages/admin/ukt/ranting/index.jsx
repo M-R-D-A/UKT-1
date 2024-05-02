@@ -16,6 +16,8 @@ const ukt_hijau = () => {
     const router = useRouter ()
 
     const idRanting = router.query.ranting
+    const idUkt = router.query.ukt
+    const idTipe = router.query.tipe
 
     // state modal
     const [showModalEvent, setShowModalEvent] = useState (false)
@@ -34,7 +36,7 @@ const ukt_hijau = () => {
     const getDataEvent = () => {
         const token = localStorage.getItem ('token')
 
-        axios.get (BASE_URL + `event/ukt/UKT Hijau/` + idRanting, { headers: { Authorization: `Bearer ${token}`}})
+        axios.get (BASE_URL + `event/ukt/${idUkt}/` + idRanting, { headers: { Authorization: `Bearer ${token}`}})
         .then (res => {
             setDataEvent (res.data.data)
         })
@@ -49,7 +51,7 @@ const ukt_hijau = () => {
         setAction ('insert')
         setName ('')
         setDate ('')
-        setTipe ('UKT Hijau')
+        setTipe (idUkt)
         setIsActive(true)
     }
 
@@ -60,7 +62,7 @@ const ukt_hijau = () => {
         setIdEvent (selectedItem.id_event)
         setName (selectedItem.name)
         setDate (selectedItem.tanggal)
-        setTipe ('UKT Hijau')
+        setTipe (idUkt)
         setIsActive (selectedItem.is_active)
     }
 
@@ -69,14 +71,14 @@ const ukt_hijau = () => {
         setShowModalDelete (true)
         setAction ('deleteEvent')
         setIdEvent (selectedId)
-        setTipe ('UKT Hijau')
+        setTipe (idUkt)
     }
 
     // function to rekap nilai
     const toRekapNilai = (item) => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
-            pathname: './ranting/event/rekap_nilai_ukt_hijau',
+            pathname: './ranting/event/rekap_nilai_' + idTipe,
             query: { eventId: item.id_event, idRanting: item.id_ranting, nameEvent:item.name } // Add your parameter here
         });
     }
@@ -85,7 +87,7 @@ const ukt_hijau = () => {
     const toDetailNilai = (item) => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
-            pathname: './ranting/event/detail_nilai_ukt_hijau',
+            pathname: './ranting/event/detail_nilai_' + idTipe,
             query: { eventId: item.id_event, idRanting: item.id_ranting, nameEvent:item.name } // Add your parameter here
         });
     }
@@ -129,7 +131,7 @@ const ukt_hijau = () => {
                         <div className="flex justify-between items-center text-white mb-7">
 
                             {/* page name */}
-                            <h1 className='text-2xl tracking-wider uppercase font-bold'>REKAP - UKT Hijau</h1>
+                            <h1 className='text-2xl tracking-wider uppercase font-bold'>REKAP - {idUkt}</h1>
 
                             {/* search and button add data */}
                             <div className="flex gap-x-3">
