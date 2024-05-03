@@ -75,7 +75,7 @@ const ukcw = () => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
             pathname: './ranting/rekap_nilai_ukt_ukcw',
-            query: { eventId: 1, anjay:'anjay' } // Add your parameter here
+            query: { eventId: item.id_event, idRanting:'TRENGGALEK' } // Add your parameter here
         });
     }
 
@@ -84,7 +84,7 @@ const ukcw = () => {
         localStorage.setItem ('event', JSON.stringify (item))
         router.push({
             pathname: './ranting/detail_nilai_ukt_ukcw',
-            query: { eventId: 1, anjay:'anjay' } // Add your parameter here
+            query: { eventId: item.id_event, idRanting:'TRENGGALEK' } // Add your parameter here
         });
     }
 

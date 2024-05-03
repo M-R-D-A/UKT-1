@@ -5,11 +5,12 @@ const salt = bcrypt.genSaltSync(10);
 
 const jwt = require("jsonwebtoken")
 
-const localStorage = process.env.LOCAL_STORAGE
+// const localStorage = process.env.LOCAL_STORAGE
 const imagePath = process.env.GET_IMAGE
+const localStorage = process.env.LOCAL_STORAGE + "/";
 
 const models = require('../../models/index');
-const { Op } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const penguji = models.penguji;
 const cabang = models.cabang;
 const ranting = models.ranting;
@@ -104,6 +105,48 @@ module.exports = {
                 res.json({
                     logged: false,
                     message: "NIW tidak cocok dengan akun penguji manapun",
+                });
+            }
+
+        } catch (e) {
+            res.status(404).json({ msg: e.message });
+        }
+    },
+    controllerGetCountPenguji: async (req, res) => {
+        penguji.findAll({
+            attributes: ['id_ranting',  [Sequelize.fn('COUNT', Sequelize.col('id_ranting')), 'count']],
+            group: ['id_ranting']
+        })
+            .then(result => {
+                res.json({
+                    count: result.length,
+                    data: result
+                });
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerGetByRanting: async (req, res) => {
+        try {
+            let result = await penguji.findAll({
+                where: {
+                    id_ranting: req.body.id_ranting,
+                    id_role: req.body.id_role
+                }
+            });
+            if (result) {
+                res.json({
+                    count: result.length,
+                    data: result
+                })
+            } else {
+                //tidak ditemukan
+                res.json({
+                    logged: false,
+                    message: "data ranting tidak ditemukan",
                 });
             }
 
@@ -217,6 +260,50 @@ module.exports = {
             });
         }
     },
+
+    controllerAddByCsv: async (req, res) => {
+        let results = []
+        fs.createReadStream(localStorage + req.file.filename)
+            .pipe(csv({ headers: false }))
+            .on('data', (data) => results.push(data))
+            .on('end', async () => {
+                const promises = [];
+
+                for (const data of results) {
+                    const hash = await bcrypt.hash(values[7], salt);
+                    const values = Object.values(data);
+                    const newData = {
+                        niw: values[0],
+                        name: values[1],
+                        id_role: values[2],
+                        id_ranting: values[3],
+                        id_cabang: values[5],
+                        foto: values[6],
+                        password: hash,
+                        no_wa: values[0],
+                    };
+                    // console.log(newData);
+                    promises.push(siswa.create(newData));
+                }
+
+                Promise.all(promises)
+                    .then(() => {
+                        const csvPath = localStorage + req.file.filename;
+                        fs.unlink(csvPath, (err) => {
+                            if (err) {
+                                console.error(err);
+                                return;
+                            }
+                            console.log('csv deleted successfully');
+                        })
+                        res.json({ message: 'Data has been inserted' })
+                    })
+                    .catch((error) => {
+                        res.json({ message: error.message })
+                    })
+            });
+    },
+
     controllerAuth: async (req, res) => {
         try {
             let result = await penguji.findAll({

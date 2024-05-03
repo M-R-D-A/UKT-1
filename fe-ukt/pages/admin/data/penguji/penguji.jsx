@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { globalState } from '@/context/context'
 import axios from 'axios'
 import Sidebar from '../../components/sidebar'
 import Header from   '../../components/header'
 import Footer from '../../components/footer'
+import Modal_CSV_Penguji from '../../components/modal_csv_penguji'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const penguji = () => {
@@ -15,6 +17,7 @@ const penguji = () => {
     // state
     const [role, setRole] = useState ('')
     const [dataPenguji, setDataPenguji] = useState ([])
+    const [showModalCSV, setShowModalCSV] = useState (false)
 
     // function get data penguji
     const getDataPenguji = () => {
@@ -32,6 +35,29 @@ const penguji = () => {
     const getRole = () => {
         const role = JSON.parse (localStorage.getItem ('admin'))
         setRole (role)
+    }
+
+    //function handlesave by csv
+    const handleSaveByCsv = (e) => {
+        e.preventDefault()
+
+        const token = localStorage.getItem('token')
+
+        let form = new FormData()
+        form.append ('csvFile', fileCSV)
+        // let form = {
+        //     csvFile: fileCSV,
+        //     id_event: event.id,
+        //     tipe_ukt: event.tipe_ukt
+        // }
+
+        axios.post(BASE_URL + `/csv/penguji`, form, { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
     }
 
     // function login checker
@@ -77,12 +103,10 @@ const penguji = () => {
                         <h1 className='text-2xl tracking-wider uppercase font-bold'>Penguji</h1>
 
                         {/* search */}
-                        <div className="bg-purple rounded-md px-5 py-2 flex items-center gap-x-2 w-72">
-                            <svg className='z-50' width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.625 16.625C13.491 16.625 16.625 13.491 16.625 9.625C16.625 5.75901 13.491 2.625 9.625 2.625C5.75901 2.625 2.625 5.75901 2.625 9.625C2.625 13.491 5.75901 16.625 9.625 16.625Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M18.3746 18.3751L14.5684 14.5688" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <input className='bg-transparent placeholder:text-white placeholder:tracking-wider placeholder:text-sm w-full focus:outline-none' placeholder='Search' type="text" />
+                        <div 
+                        onClick={() => setShowModalCSV(true)}
+                        className="bg-purple rounded-md px-5 py-2 flex items-center gap-x-2 w-72">
+                            <div>ADD VIA CSV</div>
                         </div>
                     </div>
 
@@ -165,6 +189,9 @@ const penguji = () => {
             </div>
             {/* akhir wrapper konten utama */}
         </div>  
+        <globalState.Provider value={{ showModalCSV, setShowModalCSV }}>
+                <Modal_CSV_Penguji />
+            </globalState.Provider>
     </>
 
     )

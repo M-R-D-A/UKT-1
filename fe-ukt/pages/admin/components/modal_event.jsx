@@ -13,6 +13,7 @@ const modal_event = () => {
     const { name, setName } = useContext(globalState)
     const { date, setDate } = useContext(globalState)
     const { tipe, setTipe } = useContext(globalState)
+    const { ranting, setRanting } = useContext(globalState)
     const { isActive, setIsActive } = useContext(globalState)
 
     // function get data event
@@ -36,6 +37,7 @@ const modal_event = () => {
         let form = {
             name: name,
             tanggal: date,
+            id_ranting: ranting,
             tipe_ukt: tipe,
             is_active: isActive
         }

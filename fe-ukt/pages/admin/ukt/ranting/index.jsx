@@ -26,6 +26,7 @@ const ukt_hijau = () => {
     // state
     const [dataEvent, setDataEvent] = useState ([])
     const [isActive, setIsActive] = useState(false)
+    const [ranting, setRanting] = useState()
     const [action, setAction] = useState ('')
     const [idEvent, setIdEvent] = useState ('')
     const [name, setName] = useState ('')
@@ -52,6 +53,7 @@ const ukt_hijau = () => {
         setName ('')
         setDate ('')
         setTipe (idUkt)
+        setRanting(idRanting)
         setIsActive(true)
     }
 
@@ -63,6 +65,7 @@ const ukt_hijau = () => {
         setName (selectedItem.name)
         setDate (selectedItem.tanggal)
         setTipe (idUkt)
+        setRanting (idRanting)
         setIsActive (selectedItem.is_active)
     }
 
@@ -203,7 +206,7 @@ const ukt_hijau = () => {
             </div>
 
             {/* memanggil modal */}
-            <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe, isActive, setIsActive }}>
+            <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe, isActive, setIsActive, ranting, setRanting }}>
                 <Modal_event />
             </globalState.Provider>
 
