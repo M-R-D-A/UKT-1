@@ -20,6 +20,7 @@ const ukcw = () => {
     const [showModalDelete, setShowModalDelete] = useState (false)
 
     // state
+    const [ranting, setRanting] = useState ()
     const [dataEvent, setDataEvent] = useState ([])
     const [isActive, setIsActive] = useState(false)
     const [action, setAction] = useState ('')
@@ -199,7 +200,7 @@ const ukcw = () => {
             </div>
 
             {/* memanggil modal */}
-            <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe, isActive, setIsActive }}>
+            <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe, isActive, setIsActive, ranting, setRanting }}>
                 <Modal_event />
             </globalState.Provider>
 

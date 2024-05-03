@@ -1,7 +1,30 @@
 import { globalState } from '@/context/context'
 import axios from 'axios'
-import React, { useContext, } from 'react'
+import React, { useContext, useState, } from 'react'
+import dynamic from 'next/dynamic';
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+const Select = dynamic(() => import('react-select'));
+
+
+const customStyles = {
+    control: (provided) => ({
+        ...provided,
+        background: 'white',
+        colors: 'black',
+        // display: 'flex',
+        // flexWrap: 'nowrap',
+        // borderColor: 'hsl(0deg 78.56% 55.56%);',
+        // width: '7em'
+    }),
+    menu: (provided) => ({
+        ...provided,
+        background: 'white',
+        color: 'grey', // Set text color to black
+        width: '8rem'
+    }),
+};
 
 const modal_event = () => {
 
@@ -9,12 +32,38 @@ const modal_event = () => {
     const { showModalEvent, setShowModalEvent } = useContext(globalState)
 
     // state
+    const [rantingOption, setRantingOption] = useState()
+
     const { setDataEvent, action, idEvent } = useContext(globalState)
     const { name, setName } = useContext(globalState)
     const { date, setDate } = useContext(globalState)
     const { tipe, setTipe } = useContext(globalState)
     const { ranting, setRanting } = useContext(globalState)
     const { isActive, setIsActive } = useContext(globalState)
+
+    //ranting
+    const dataRanting = [
+        { label: 'BENDUNGAN', value: 'BENDUNGAN' },
+        { label: 'DONGKO', value: 'DONGKO' },
+        { label: 'DURENAN', value: 'DURENAN' },
+        { label: 'GANDUSARI', value: 'GANDUSARI' },
+        { label: 'KAMPAK', value: 'KAMPAK' },
+        { label: 'KARANGAN', value: 'KARANGAN' },
+        { label: 'MUNJUNGAN', value: 'MUNJUNGAN' },
+        { label: 'PANGGUL', value: 'PANGGUL' },
+        { label: 'POGALAN', value: 'POGALAN' },
+        { label: 'PULE', value: 'PULE' },
+        { label: 'SURUH', value: 'SURUH' },
+        { label: 'TRENGGALEK', value: 'TRENGGALEK' },
+        { label: 'TUGU', value: 'TUGU' },
+        { label: 'WATULIMO', value: 'WATULIMO' }
+    ]
+
+    const handleChangeRanting = (option) => {
+
+        setRantingOption(option)
+        setRanting(option.value)
+    };
 
     // function get data event
     const getDataEvent = () => {
@@ -123,7 +172,7 @@ const modal_event = () => {
                                             </div>
                                         </div>
 
-                                        {/* Input nama */}
+                                        {/* Input tanggal */}
                                         <div className="flex flex-row space-x-3 w-full">
                                             <div className="w-2/6 flex justify-between">
                                                 <span>Tanggal</span>
@@ -139,6 +188,24 @@ const modal_event = () => {
                                                 </input>
                                             </div>
                                         </div>
+
+                                        {/* Select */}
+                                        {tipe === 'UKCW' && <div className="flex flex-row space-x-3 w-full">
+                                            <div className="w-2/6 flex justify-between">
+                                                <span>Ranting</span>
+                                                <span>:</span>
+                                            </div>
+                                            <div className="w-4/6">
+                                                <Select
+                                                    className='w-72'
+                                                    onChange={handleChangeRanting}
+                                                    options={dataRanting}
+                                                    value={rantingOption}
+                                                    styles={customStyles}
+                                                />
+                                            </div>
+                                        </div>}
+
 
                                         {/* Input Status */}
                                         <div className="flex flex-row space-x-3 w-full">
