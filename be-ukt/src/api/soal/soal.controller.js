@@ -111,6 +111,63 @@ module.exports = {
                 })
             })
     },
+    controllerGetByTipeandPaket: async (req, res, next) => {
+        let lembarSoal = await lembar_soal.findOne({
+            where: { tipe_ukt: req.params.tipe_ukt }
+        })
+
+        let id_lembar_soal
+        if (!lembarSoal) {
+            const id = randomUUID();
+            let data = {
+                id_lembar_soal: id,
+                id_ranting: req.body.id_ranting,
+                tipe_ukt: req.params.tipe_ukt,
+                waktu_pengerjaan: req.body.waktu_pengerjaan
+            }
+            await lembar_soal.create(data)
+                .then(res => {
+                    id_lembar_soal = res.id_lembar_soal
+                })
+                .catch(error => {
+                    return res.json({
+                        message: error.message
+                    })
+                })
+        } else {
+            id_lembar_soal = lembarSoal?.id_lembar_soal
+        }
+
+
+        soal.findAll({
+            where: {
+                id_lembar_soal: id_lembar_soal,
+                paket: req.params.paket
+            },
+            include: [
+                {
+                    model: kunciSoal,
+                    as: "kunci_soal",
+                    attributes: ['id_soal', 'opsi'],
+                    required: true,
+                }
+            ],
+            order: [
+                ["createdAt", "ASC"]
+            ]
+        })
+            .then(soal => {
+                res.json({
+                    count: soal.length,
+                    data: soal
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetEmptySoal: async (req, res) => {
         soal.findAll({
             include: [
@@ -211,10 +268,13 @@ module.exports = {
             opsi3: req.body.opsi3,
             opsi4: req.body.opsi4,
         }
+        if (req.body.paket) {
+            data.paket = req.body.paket
+        }
         soal.create(data)
             .then(result => {
                 const id_kunci = randomUUID();
-                console.log(result.dataValues.id_soal);
+                // console.log(result.dataValues.id_soal);
                 kunciSoal.create({
                     id_kunci_soal: id_kunci,
                     id_soal: result.dataValues.id_soal,
