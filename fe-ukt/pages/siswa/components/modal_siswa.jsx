@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const modal = (props) => {
 
     const showModalSiswa = props.show
-
+    const nilai = props.nilai
+    
     return (
         <>
         {showModalSiswa ? (
@@ -35,12 +36,10 @@ const modal = (props) => {
                             {/* Modal body */}
                             <div className="py-2 space-y-3">
 
-                                {/* Input nama */}
                                 <div className="w-full">
                                     <h1 className='text-center font-lato font-bold text-3xl'>{props.nama}</h1>
                                 </div>
 
-                                {/* Input nama */}
                                 <div className="w-full">
                                     <h1 className='text-center font-lato font-bold text-xl'>{props.ranting}</h1>
                                 </div>
@@ -49,7 +48,7 @@ const modal = (props) => {
 
                             {/* Modal footer */}
                             <div className="flex items-center py-2 pb-6">
-                                <button className="font-lato text-white bg-purple rounded-lg font-lg px-5 py-3 w-full" onClick={props.mulai}>MULAI UJI KESHAN</button>
+                                <button className={`font-lato text-white rounded-lg font-lg px-5 py-3 w-full ${nilai > 0 ? 'bg-gray':'bg-purple'}`} onClick={props.mulai} disabled={nilai>0}>MULAI UJI KESHAN</button>
                             </div>
                         </div>
                     </div>

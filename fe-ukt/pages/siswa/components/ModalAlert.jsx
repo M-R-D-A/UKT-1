@@ -3,7 +3,39 @@ import React from 'react'
 const ModalSelesai = (props) => {
     const showModalSiswa = props.show
     const isLoading = props.loading
+    const success = props.success
 
+    const Components = () => {
+        if (success){
+            return(
+                <div className="relative bg-navy text-white rounded-lg shadow px-10">
+                    {/* Modal body */}
+                        <div className="flex justify-center py-10">
+                        <h1 className="text-3xl font-semibold text-green tracking-wide text-center uppercase">
+                            Jawaban Berhasil Disimpan
+                        </h1>
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div className="relative bg-navy text-white rounded-lg shadow px-10">
+                    {/* Modal body */}
+                        <div className="flex justify-center py-10">
+                        <h1 className="text-3xl font-semibold text-green tracking-wide text-center uppercase">
+                            apa anda yakin <br></br> menyimpan jawaban?
+                        </h1>
+                    </div>
+
+                    {/* Modal footer */}
+                    <div className="flex items-center py-2 pb-6 gap-x-3">
+                        <button className="font-lato text-white bg-red rounded-lg font-lg px-5 py-2 w-full font-bold uppercase" onClick={props.batal}>Batal</button>
+                        <button className="font-lato text-white bg-green rounded-lg font-lg px-5 py-2 w-full font-bold uppercase" onClick={props.simpan}>Simpan</button>
+                    </div>
+                </div>
+            )
+        }
+    }
     return (
         <>
         {showModalSiswa ? (
@@ -28,20 +60,7 @@ const ModalSelesai = (props) => {
                         )
                         :
                         (
-                            <div className="relative bg-navy text-white rounded-lg shadow px-10">
-                                {/* Modal body */}
-                                    <div className="flex justify-center py-10">
-                                    <h1 className="text-3xl font-semibold text-green tracking-wide text-center uppercase">
-                                        apa anda yakin <br></br> menyimpan jawaban?
-                                    </h1>
-                                </div>
-
-                                {/* Modal footer */}
-                                <div className="flex items-center py-2 pb-6 gap-x-3">
-                                    <button className="font-lato text-white bg-red rounded-lg font-lg px-5 py-2 w-full font-bold uppercase" onClick={props.batal}>Batal</button>
-                                    <button className="font-lato text-white bg-green rounded-lg font-lg px-5 py-2 w-full font-bold uppercase" onClick={props.simpan}>Simpan</button>
-                                </div>
-                            </div>
+                            <Components/>
                         )}
 
                     </div>

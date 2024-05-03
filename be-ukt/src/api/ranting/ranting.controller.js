@@ -16,6 +16,24 @@ module.exports = {
                 })
             })
     },
+    controllerGetAllPublic: async (req, res) => {
+        ranting.findAll(
+            {
+                attributes: ['name']
+            }
+        )
+            .then(ranting => {
+                res.json({
+                    count: ranting.length,
+                    data: ranting
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetById: async (req, res) => {
         ranting.findAll({ where: { id_ranting: req.params.id } })
             .then(ranting => {

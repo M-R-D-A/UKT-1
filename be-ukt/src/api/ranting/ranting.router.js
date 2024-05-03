@@ -13,10 +13,14 @@ const {
     controllerEdit,
     controllerDelete,
     controllerGetById,
+    controllerGetAllPublic,
 } = require('./ranting.controller');
 
 
 const verifyRoles = require("../../middleware/verifyRoles")
+
+//public routes
+router.get('/public', controllerGetAllPublic)
 
 router.get('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetAll )
 router.get('/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetById )

@@ -14,19 +14,22 @@ const index = () => {
 
     //state
     const [events,setEvents] = useState([])
+    const [dataRanting, setDataRanting] = useState([])
+    const [errMsg, setErrMsg] = useState("")
 
-    // config header auth
-    const headerConfig = () =>{
-        const token = localStorage.getItem("token")
-        let header = {
-            headers: {Authorization: `Bearer ${token}`}
-        }
-        return header
+    const getDataRanting = () => {
+        axios.get(BASE_URL + `ranting/public`)
+            .then(res => {
+                setDataRanting(res.data.data)
+            })
+            .catch((err) => {
+                setErrMsg(err.message)
+                console.log(err.message);
+            })
     }
-    
 
     const getEvents = async () => {
-        await axios.get(BASE_URL + `event/siswa/ukt/${router.query.tipe}`, headerConfig())
+        await axios.get(BASE_URL + `event/siswa/ukt/${router.query.tipe}`)
         .then(res => {
             setEvents(res.data.data)
         })
@@ -44,7 +47,11 @@ const index = () => {
         if(!tipe){
             return;
         }
-        getEvents()
+        if (router.query.tipe == 'ukcw') {
+            getEvents()
+        } else {
+            getDataRanting()
+        }
     }, [tipe])
     
 
@@ -62,17 +69,47 @@ const index = () => {
             </div>
 
             {/* konten utama */}
-            <div className='h-auto overflow-y-auto px-5 py-7 grid grid-flow-row auto-rows-max gap-y-6'>
-                {events.map((item, index) => (
-                    <button 
-                        key={index+1} 
-                        className='w-full bg-[#1B2537] py-5'
-                        onClick={() => router.push(`/siswa/${router.query.tipe}/${encryptId(item.id_event)}`)}
-                    >
-                        <h1 className='text-[#42C6A3] text-3xl font-[600] tracking-wide text-center'>{item.name}</h1>
-                    </button>
-                ))}
-            </div>
+            {
+                router.query.tipe === "ukcw" ? (
+                    <div className='h-auto overflow-y-auto px-5 py-7 grid grid-flow-row auto-rows-max gap-y-6'>
+                    {events.map((item, index) => (
+                        <button 
+                            key={index+1} 
+                            className='w-full bg-[#1B2537] py-5'
+                            onClick={() => router.push(`/siswa/dev/ukcw/${router.query.tipe}/${encryptId(item.id_event)}`)}
+                        >
+                            <h1 className='text-[#42C6A3] text-3xl font-[600] tracking-wide text-center'>{item.name}</h1>
+                        </button>
+                    ))}
+                </div>       
+                )
+                :
+                (  
+                    <div className="flex flex-wrap justify-center gap-5 my-5">
+                        {/* card ranting */}
+                        {!errMsg && dataRanting ? (
+                            dataRanting.map((item, index) => (
+                            <button key={index + 1} onClick={() => router.push({pathname:`/siswa/dev/${router.query.tipe}/${(item.name).toLowerCase()}`})} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md w-1/6">
+
+                                {/* inner bg */}
+                                <div className="bg-navy p-5 rounded-md">
+
+                                    {/* ranting name */}
+                                    <h1 className='text-green text-center text-lg'>Ranting</h1>
+                                    <h1 className='text-green text-center text-2xl '>{item.name}</h1>
+
+                                </div>
+                            </button>
+                            ))
+                        )
+                        :
+                        (
+                            <h1 className='text-2xl text-white'>{errMsg}</h1>
+                        )
+                        }
+                    </div>
+                )
+            }
 
         </div>
     )

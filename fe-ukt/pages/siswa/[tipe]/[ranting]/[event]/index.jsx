@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { globalState } from '@/context/context'
 import React, { useEffect, useState } from 'react'
-import Modal_siswa from '../../components/modal_siswa'
+import Modal_siswa from '../../../components/modal_siswa'
 import AES from 'crypto-js/aes';
 import { enc } from 'crypto-js';
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -14,8 +14,7 @@ const loginPage = () => {
     const router = useRouter()
 
     // param value
-    const {tipe} = router.query
-    const {event} = router.query
+    const {tipe, event, ranting} = router.query
 
     const decryptId = (str) => {
         const decodedStr = decodeURIComponent(str);
@@ -26,7 +25,7 @@ const loginPage = () => {
       if(!event && !tipe){
         return;
       }
-    }, [event])
+    }, [event,tipe])
     
 
     // const [nis, setNis] = useState();
@@ -112,6 +111,20 @@ const loginPage = () => {
                 console.log(err.message);
             })
     }
+
+    const TitleLogin = () => {
+        if(!tipe){
+            return;
+        }
+        // console.log(router.query.tipe);
+        if (router.query.tipe == 'ukt jambon') {
+            return (
+                <h1 className='text-xl font-semibold mb-12 uppercase'>Uji Kenaikan Tingkat polos ke jambon <br></br> {router.query.events} - ranting {router.query.ranting} <br/> PERSAUDARAAN SETIA HATI <br/> Cabang Trenggalek</h1>
+            )
+        }
+    }
+
+
     return (
         <>
             <div className="font-lato">
@@ -127,7 +140,8 @@ const loginPage = () => {
                             <img className='w-32 mb-4' src="/images/psht-icon.png" alt="" />
 
                             {/* title */}
-                            <h1 className='text-xl font-semibold mb-12 uppercase'>Uji Kelayakan Calon Warga <br></br> Cabang Trenggalek 2023</h1>
+                            <TitleLogin/>
+                            {/* <h1 className='text-xl font-semibold mb-12 uppercase'>Uji Kelayakan Calon Warga <br></br> Cabang Trenggalek 2023</h1> */}
 
                             <h1 className='text-lg tracking-wide text-green mb-5'>Masukan Nomor Urut</h1>
 
