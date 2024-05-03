@@ -444,7 +444,7 @@ module.exports = {
             .then(async (result) => {
                 if (result) {
                     //set payload from data
-                    console.log(result)
+                    // console.log(result)
                     const data = result
                     if (result.id_role === "siswa") {
                         const idUser = result.id_user;

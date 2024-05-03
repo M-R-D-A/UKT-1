@@ -18,6 +18,10 @@ const {
     controllerStart,
     controllerFinish,
     controllerGetTotalPage,
+    controllerCekKeSHan,
+    controllerCekUjain,
+    controllerGetSoal,
+    controllerKoreksi
 } = require('./session.controller');
 
 
@@ -26,6 +30,10 @@ const verifyRoles = require("../../middleware/verifyRoles")
 router.get('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetAll )
 router.get('/pages/:id/:limit', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetTotalPage )
 router.get('/ukt/:id/:page/:limit', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEvent )
+router.post('/cek_ukt/:id', controllerCekKeSHan)
+router.post('/getdata', controllerCekUjain)
+router.post('/getsoal/:page', controllerGetSoal)
+router.post('/koreksi', controllerKoreksi)
 router.post('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting", "siswa"), controllerAdd )
 router.post('/getid', Auth, verifyRoles("siswa"), controllerGetById )
 router.post('/timer', Auth, verifyRoles("siswa"), controllerTimer )
