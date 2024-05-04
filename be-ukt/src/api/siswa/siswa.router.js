@@ -31,6 +31,7 @@ const {
     controllerEdit,
     controllerDelete,
     controllerGetByEvent,
+    controllerGetByEventNew,
     controllerGetByEventFiltered,
     controllerGetByRantingEventFiltered,
     controllerGetByRanting,
@@ -53,6 +54,7 @@ router.get('/ranting/:idEvent/:id/:action', Auth, verifyRoles("admin", "super ad
 router.get('/search', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetSearch)
 router.get('/search/:idEvent/:name/:action', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetSearchFiltered)
 router.post('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerAdd)
+router.post('/event', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEventNew)
 router.post('/auth', controllerAuth)
 router.post('/csv', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), upload2.single("csvFile"), controllerAddByCsv)
 router.put('/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "	penguji cabang", "penguji ranting"), controllerEdit)

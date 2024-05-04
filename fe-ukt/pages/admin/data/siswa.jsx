@@ -18,13 +18,39 @@ const siswa = () => {
     const [dataRanting, setDataRanting] = useState([])
     const [showModalCSV, setShowModalCSV] = useState(false);
 
+    const [tipe, setTipe] = useState('')
+
     // function get data ranting
-    const getDataRanting = () => {
+    // const getDataRanting = () => {
+    //     const admin = JSON.parse(localStorage.getItem('admin'))
+    //     const token = localStorage.getItem('token')
+
+    //     if (admin.id_role == 'admin cabang' || admin.id_role == 'super admin') {
+    //         axios.get(BASE_URL + `siswa/count`, { headers: { Authorization: `Bearer ${token}` } })
+    //             .then(res => {
+    //                 setDataRanting(res.data.data)
+    //                 setRanting(res.data.data.id_ranting)
+    //             })
+    //             .catch(err => {
+    //                 console.log(err.message);
+    //             })
+    //     } else {
+    //         axios.get(BASE_URL + `ranting/${admin.id_ranting}`, { headers: { Authorization: `Bearer ${token}` } })
+    //             .then(res => {
+    //                 setDataRanting(res.data.data)
+    //                 setRanting(res.data.data.name)
+    //             })
+    //             .catch(err => {
+    //                 console.log(err.message);
+    //             })
+    //     }
+    // }
+
+    const getDataEventByTipe = () => {
         const admin = JSON.parse(localStorage.getItem('admin'))
         const token = localStorage.getItem('token')
 
-        if (admin.id_role == 'admin cabang' || admin.id_role == 'super admin') {
-            axios.get(BASE_URL + `siswa/count`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(BASE_URL + `event/${tipe}`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res => {
                     setDataRanting(res.data.data)
                     setRanting(res.data.data.id_ranting)
@@ -32,16 +58,6 @@ const siswa = () => {
                 .catch(err => {
                     console.log(err.message);
                 })
-        } else {
-            axios.get(BASE_URL + `ranting/${admin.id_ranting}`, { headers: { Authorization: `Bearer ${token}` } })
-                .then(res => {
-                    setDataRanting(res.data.data)
-                    setRanting(res.data.data.name)
-                })
-                .catch(err => {
-                    console.log(err.message);
-                })
-        }
     }
 
     // function go to detail siswa

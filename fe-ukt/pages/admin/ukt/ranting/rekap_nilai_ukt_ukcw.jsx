@@ -10,51 +10,20 @@ import event from '@/pages/penguji/event'
 import Image from 'next/image';
 import SocketIo from 'socket.io-client'
 import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic';
-// import { colors } from 'react-select/dist/declarations/src/theme'
-// import chroma from 'chroma-js'
-
-const Select = dynamic(() => import('react-select'));
-
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
 const socket = SocketIo(SOCKET_URL)
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-
-const customStyles = {
-    control: (provided) => ({
-        ...provided,
-        background: 'white',
-        colors:'black',
-        // display: 'flex',
-        // flexWrap: 'nowrap',
-        // borderColor: 'hsl(0deg 78.56% 55.56%);',
-        // width: '7em'
-    }),
-    menu: (provided) => ({
-        ...provided,
-        background: 'white',
-        color: 'grey', // Set text color to black
-        width: '8rem'
-    }),
-};
 
 const rekap_nilai_ukt_ukcw = () => {
 
     // deklarasi router
     const router = useRouter()
 
-    const { eventId, idRanting} = router.query
-
     const [dataUkt, setDataUkt] = useState([])
 
     // state modal
     const [dataEvent, setDataEvent] = useState([])
-    const [dataRanting, setDataRanting] = useState([])
-    
-    const [dataRayon, setDataRayon] = useState([])
-    const [rayonSelect, setRayonSelect] = useState([])
-    const [rayon, setRayon] = useState([])
-
+    const [dataRanting, setDataRanting] = useState(null)
     const [modalFilter, setModalFilter] = useState(false)
     const [name, setName] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -65,21 +34,16 @@ const rekap_nilai_ukt_ukcw = () => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'));
         const Ranting = JSON.parse(localStorage.getItem('filterRanting'))
-        const rayonData = dataRayon.map(item => item.value);
-        console.log(rayonData)
-        const rantings = ['BENDUNGAN', 'DONGKO', 'DURENAN', 'GANDUSARI', 'KAMPAK', 'KARANGAN', 'MUNJUNGAN', 'PANGGUL', 'POGALAN', 'PULE', 'SURUH', 'TRENGGALEK', 'TUGU', 'WATULIMO']
-        const formRayon = rayon.length === 0 ? rayonData : rayon
         let form = {
             event: event.id_event,
-            rayon: formRayon,
-            ranting: rantings,
             jenis: jenis,
             updown: updown,
+            ranting: dataRanting
         }
         setLoading(true);
-        await axios.post(BASE_URL + `ukt_siswa/ukt/filter`, form, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(BASE_URL + `ukt_siswa/ukt/ranting`, form, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                console.log(res);
+                console.log(res)
                 setDataUkt(res.data.data)
             })
             .catch(err => {
@@ -124,37 +88,6 @@ const rekap_nilai_ukt_ukcw = () => {
     }
     let timeoutId = null;
 
-    // get data rayo
-    const getDataRayon = async () => {
-        const token = localStorage.getItem('token')
-        await axios.get(BASE_URL + `ukt_siswa/rayon/${eventId}`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                console.log(res.data.data)
-                setDataRayon(res.data.data)
-            })
-            .catch(err => {
-                console.log(err.message);
-                console.log(err.response.data);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }
-    useEffect(() => {
-        getDataRayon();
-    }, [])
-
-    const handleChangeRayon = (option) => {
-        const data = option.map(item => item.value);
-
-        console.log(option)
-        console.log(data)
-
-
-        setRayonSelect(option)
-        setRayon(data)
-    };
-
     useEffect(() => {
         console.log(name)
         if (name != null) {
@@ -170,6 +103,8 @@ const rekap_nilai_ukt_ukcw = () => {
         }
     }, [name]);
 
+
+
     useEffect(() => {
         const event = JSON.parse(localStorage.getItem('event'));
         setDataEvent(event)
@@ -178,22 +113,23 @@ const rekap_nilai_ukt_ukcw = () => {
     }, [])
 
     useEffect(() => {
+        // console.log(jenis)
+        console.log("updown" + updown)
         getDataUktFiltered()
-    }, [`${dataRanting}`, jenis, rayon, updown])
-
-    // useEffect(() => {
-    //     socket.on('refreshRekap', () => {
-    //         getDataUktFiltered()
-    //     })
-
-    // }, [])
-
+    }, [`${dataRanting}`, jenis, updown])
 
     useEffect(() => {
-        setInterval(() => {
-            socket.emit('pushRekap')
-        }, 3000)
+        socket.on('refreshRekap', () => {
+            getDataUktFiltered()
+        })
+
     }, [])
+
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         socket.emit('pushRekap')
+    //     }, 3000)
+    // }, [])
     return (
         <>
             {loading
@@ -243,14 +179,6 @@ const rekap_nilai_ukt_ukcw = () => {
 
                             {/* wrapper search and filter */}
                             <div className="flex gap-x-2">
-
-                                    <Select
-                                    onChange={handleChangeRayon}
-                                    className='w-72'
-                                        options={dataRayon}
-                                        styles={customStyles}
-                                        isMulti
-                                    />
 
                                 {/* search */}
                                 <div className="bg-purple rounded-md px-5 py-2 flex items-center gap-x-2 w-72">

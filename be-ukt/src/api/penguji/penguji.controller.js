@@ -280,7 +280,7 @@ module.exports = {
                         id_cabang: values[5],
                         foto: values[6],
                         password: hash,
-                        no_wa: values[0],
+                        no_wa: values[7],
                     };
                     // console.log(newData);
                     promises.push(siswa.create(newData));

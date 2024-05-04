@@ -1,8 +1,9 @@
 const fs = require("fs");
 const csv = require('csv-parser');
 const { Sequelize, Op } = require("sequelize");
-const jwt = require("jsonwebtoken");
 const localStorage = process.env.LOCAL_STORAGE + "/";
+
+const jwt = require("jsonwebtoken");
 
 const models = require('../../models/index');
 const siswa = models.siswa;
@@ -155,6 +156,38 @@ module.exports = {
             where: whereClause,
             order: [
                 ['nomor_urut', 'ASC']
+            ]
+        })
+            .then(siswa => {
+                res.json({
+                    count: siswa.length,
+                    data: siswa
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    
+    controllerGetByEventNew: async (req, res) => {
+        let idEvent = req.body.id
+        let tipe = req.body.tipe
+        let order = req.body.order
+        let name = req.body.name
+        let withname = {
+            id_event: idEvent,
+            name: name
+        }
+        let noName = {
+            id_event: idEvent
+        }
+        let whereClause = name !== '' ? withname : noName
+        siswa.findAll({
+            where: whereClause,
+            order: [
+                [tipe, order]
             ]
         })
             .then(siswa => {
@@ -438,13 +471,14 @@ module.exports = {
     controllerAuth: async (req, res) => {
         siswa.findOne({
             where: {
-                nomor_urut: req.body.nomor_urut
+                nomor_urut: req.body.nomor_urut,
+                id_event: req.body.id_event
             },
         })
             .then(async (result) => {
                 if (result) {
                     //set payload from data
-                    console.log(result)
+                    // console.log(result)
                     const data = result
                     if (result.id_role === "siswa") {
                         const idUser = result.id_user;

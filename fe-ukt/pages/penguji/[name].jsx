@@ -5,6 +5,7 @@ import axios from 'axios'
 import { globalState } from '@/context/context'
 import Header from './components/header'
 import Modal_Filter from './components/modal_filter'
+import MainNavigation from './components/Navbar'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const detail_event = () => {
@@ -167,6 +168,8 @@ const detail_event = () => {
                             <button onClick={() => onActive('teknik')} className={active === 'teknik' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>TEKNIK</button>
                             <button onClick={() => router.push('./sambung')} className={active === 'sambung' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>SAMBUNG</button>
                         </div>
+
+                        
                         {/* search */}
                         <div className="bg-white py-1.5 px-4 rounded-md gap-x-2 flex items-center mb-5 ">
                             {/* button search */}
@@ -228,6 +231,9 @@ const detail_event = () => {
                         })()}
                     </div>
                 </div>
+                       <div className="fixed bottom-0 z-50 bg-white block md:hidden w-full">
+                        <MainNavigation props={active}/>
+                        </div>
             </div>
             
             <globalState.Provider value={{ modalFilter, setModalFilter}}>
