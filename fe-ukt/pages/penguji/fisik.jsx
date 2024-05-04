@@ -365,40 +365,7 @@ const fisik = () => {
                                 </button>
                             </div>
                         </div>
-                        {/* wrapper spir_paha */}
-                        <div className="bg-navy rounded-md p-2 text-center text-white space-y-3 mb-3">
-                            <h1 className='text-xl font-semibold tracking-wider uppercase'>Spir Paha</h1>
-
-                            {/* fisik list */}
-                            <div className="grid grid-cols-3 gap-x-3 items-center">
-
-                                {/* button minus */}
-                                <button className='bg-red rounded-md text-center text-2xl font-bold'
-                                    onClick={() => setSpirPaha(spirPaha - 1)}
-                                >
-                                    -
-                                </button>
-
-                                {/* score indicator */}
-                                <h1 className='outline outline-purple rounded-md h-full flex items-center justify-center text-xl font-semibold'>
-                                    <input
-                                        type="number"
-                                        value={spirPaha}
-                                        onChange={(e) => setSpirPaha(e.target.value)}
-                                        step="0.1"
-                                        min="0"
-                                        max="100"
-                                        className='w-full text-center bg-transparent outline-none'
-                                    />
-                                </h1>
-
-                                {/* button plus */}
-                                <button className='bg-purple rounded-md text-center text-2xl font-bold'
-                                    onClick={() => setSpirPaha(spirPaha + 1)}>
-                                    +
-                                </button>
-                            </div>
-                        </div>
+                        
 
                         {/* wrapper Plank */}
                         <div className="bg-navy rounded-md p-2 text-center text-white space-y-3 mb-3">
@@ -433,6 +400,41 @@ const fisik = () => {
                                 </button>
                             </div>
 
+                        </div>
+
+                        {/* wrapper spir_paha */}
+                        <div className="bg-navy rounded-md p-2 text-center text-white space-y-3 mb-3">
+                            <h1 className='text-xl font-semibold tracking-wider uppercase'>Spir Paha</h1>
+
+                            {/* fisik list */}
+                            <div className="grid grid-cols-3 gap-x-3 items-center">
+
+                                {/* button minus */}
+                                <button className='bg-red rounded-md text-center text-2xl font-bold'
+                                    onClick={() => setSpirPaha(spirPaha - 1)}
+                                >
+                                    -
+                                </button>
+
+                                {/* score indicator */}
+                                <h1 className='outline outline-purple rounded-md h-full flex items-center justify-center text-xl font-semibold'>
+                                    <input
+                                        type="number"
+                                        value={spirPaha}
+                                        onChange={(e) => setSpirPaha(e.target.value)}
+                                        step="0.1"
+                                        min="0"
+                                        max="100"
+                                        className='w-full text-center bg-transparent outline-none'
+                                    />
+                                </h1>
+
+                                {/* button plus */}
+                                <button className='bg-purple rounded-md text-center text-2xl font-bold'
+                                    onClick={() => setSpirPaha(spirPaha + 1)}>
+                                    +
+                                </button>
+                            </div>
                         </div>
 
                         {/* submit button */}
