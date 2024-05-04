@@ -44,7 +44,9 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false
     },
+    id_ranting: DataTypes.STRING,
     name: DataTypes.STRING,
+    is_active: DataTypes.BOOLEAN,
     tanggal: DataTypes.DATE,
     tipe_ukt: DataTypes.ENUM('UKT Jambon','UKT Hijau','UKT Putih','UKCW'),
   }, {

@@ -16,6 +16,26 @@ module.exports = {
                 })
             })
     },
+    controllerGetByTipeUktRanting: async (req, res) => {
+        event.findAll({
+            where: {
+                tipe_ukt: req.params.id,
+                id_ranting: req.params.ranting,
+                is_active: true
+            }
+        })
+            .then(event => {
+                res.json({
+                    count: event.length,
+                    data: event
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetByTipeUkt: async (req, res) => {
         event.findAll({
             where: {
