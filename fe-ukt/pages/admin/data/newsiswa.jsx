@@ -19,7 +19,6 @@ const siswa = () => {
     const [showModalCSV, setShowModalCSV] = useState(false);
 
     const [tipe, setTipe] = useState('')
-    const [dataEvent, setDataEvent] = useState([])
 
     // function get data ranting
     // const getDataRanting = () => {
@@ -47,37 +46,24 @@ const siswa = () => {
     //     }
     // }
 
-    const dataTipe = [
-        { name: 'UKT Jambon' },
-        { name: 'UKT Hijau' },
-        { name: 'UKT Putih' },
-        { name: 'UKCW' },
-    ]
-
     const getDataEventByTipe = () => {
         const admin = JSON.parse(localStorage.getItem('admin'))
         const token = localStorage.getItem('token')
 
-        axios.get(BASE_URL + `event/ukt/${tipe}`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(res => {
-                setDataEvent(res.data.data)
-            })
-            .catch(err => {
-                console.log(err.message);
-            })
+        axios.get(BASE_URL + `event/${tipe}`, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res => {
+                    setDataRanting(res.data.data)
+                    setRanting(res.data.data.id_ranting)
+                })
+                .catch(err => {
+                    console.log(err.message);
+                })
     }
-
-    useEffect(() => {
-        getDataEventByTipe()
-    }, [tipe])
 
     // function go to detail siswa
     const goToDetailSiswa = (item) => {
-        localStorage.setItem ('event', JSON.stringify (item))
-        router.push({
-            pathname: './detail_siswa',
-            query: { eventId: item.id_event, name: item.name } // Add your parameter here
-        });
+        router.push('./' + item.id_ranting)
+        localStorage.setItem('ranting', JSON.stringify(item))
     }
 
     // function login checker
@@ -118,13 +104,7 @@ const siswa = () => {
                         <div className="flex justify-between items-center text-white mb-7">
 
                             {/* page name */}
-                            <div className='flex justify-center items-center gap-x-3'>
-                                <h1 className='text-2xl tracking-wider uppercase font-bold'>Data Siswa</h1>
-                                {tipe && <button
-                                    onClick={() => setTipe(null)}
-                                    className='p-2 bg-red rounded-md'>Back</button>
-                                }
-                            </div>
+                            <h1 className='text-2xl tracking-wider uppercase font-bold'>Data Siswa</h1>
 
                             {/* upload data siswa via CSV */}
                             <button
@@ -137,39 +117,25 @@ const siswa = () => {
                                 </svg> */}
                             </button>
                         </div>
-                        {/* PILIH TIPE UKT $$$ */}
-                        {!tipe ? <div className="grid grid-cols-4 gap-x-5 gap-y-3">
+                        {/* ranting data count wrapper */}
+                        <div className="grid grid-cols-4 gap-x-5 gap-y-3">
 
                             {/* card ranting */}
-                            {dataTipe.map((item, index) => (
-                                <button onClick={() => setTipe(item.name)} key={index + 1} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+                            {dataRanting.map((item, index) => (
+                                <button onClick={() => goToDetailSiswa(item)} key={index + 1} className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
 
                                     {/* inner bg */}
                                     <div className="bg-navy p-5 rounded-md space-y-5">
 
                                         {/* ranting name */}
-                                        <h1 className='text-green text-lg'>{item.name}</h1>
+                                        <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
+
+                                        {/* ranting data count and add button */}
+                                        <h1 className='text-white text-3xl font-semibold tracking-wider'>{item.count}</h1>
                                     </div>
                                 </button>
                             ))}
                         </div>
-                            : <div className="grid grid-cols-4 gap-x-5 gap-y-3">
-
-                                {/* card ranting */}
-                                {dataEvent.map((item, index) => (
-                                    <button onClick={() => goToDetailSiswa(item)}
-                                    key={index + 1} 
-                                    className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
-
-                                        {/* inner bg */}
-                                        <div className="bg-navy p-5 rounded-md space-y-5">
-
-                                            {/* ranting name */}
-                                            <h1 className='text-green text-lg'>{item.name}</h1>
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>}
                     </div>
                     {/* akhir konten utama */}
 

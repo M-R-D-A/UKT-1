@@ -6,6 +6,7 @@ import Modal_Sambung from './components/modal_sambung';
 import Modal_Alert from './components/modal_alert';
 import { useRouter } from 'next/router';
 import SocketIo from 'socket.io-client'
+import MainNavigation from './components/Navbar';
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
 const socket = SocketIo(SOCKET_URL)
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -28,6 +29,7 @@ const sambung = () => {
     const [nilai2, setNilai2] = useState(50)
     const [arraySiswa1, setArraySiswa1] = useState([])
     const [arraySiswa2, setArraySiswa2] = useState([])
+    const [event, setEvent] = useState()
 
     const { active, setActive } = useContext(globalState)
 
@@ -289,6 +291,8 @@ const sambung = () => {
     }
 
     useEffect(() => {
+        const event = JSON.parse(localStorage.getItem('event'));
+        setEvent(event)
         getData()
     }, [])
 
@@ -300,7 +304,19 @@ const sambung = () => {
                 <div className="w-full h-screen">
 
                     {/* header */}
-                    <Header />
+                    <div className="sticky bottom-0 z-10 header border-b bg-navy shadow shadow-black w-full px-2 py-3 font-lato">
+                            <button onClick={() => router.push('../penguji/' + event.name)} className="text-slate-600 text-2xl w-10 h-10 absolute top-0 translate-y-1 px-2 group">
+                                <svg className='stroke-white group-hover:stroke-purple duration-300' width="25" height="20" viewBox="0 0 25 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M23 10H2" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M10 18L2 10L10 2" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                        <div className="flex justify-center items-center px-4">
+
+                            {/* Title */}
+                            <h1 className='text-xl font-semibold text-green tracking-wide'>SAMBUNG</h1>
+                        </div>
+                    </div>
                     {/* akhir header */}
 
                     {/* konten utama */}
