@@ -21,6 +21,8 @@ const penguji_ranting = () => {
     // state modal
     const [showModalPengujiRanting, setShowModalPengujiRanting] = useState(false)
     const [showModalDelete, setShowModalDelete] = useState(false)
+    const [newWeb, setNewWeb] = useState('')
+
 
     // state
     const [dataPengujiRanting, setDataPengujiRanting] = useState([])
@@ -89,11 +91,11 @@ const penguji_ranting = () => {
         setAction('insert')
         setNiw('')
         setName('')
-        setRanting('')
+        setRanting(web)
         setUsername('')
         setPassword('')
         setNoWa('')
-        setRole('penguji Cabang')
+        setRole('penguji cabang')
         setFoto()
     }
 
@@ -252,7 +254,7 @@ const penguji_ranting = () => {
             </div>
 
             {/*memanggil modal  */}
-            <globalState.Provider value={{ showModalPengujiRanting, setShowModalPengujiRanting, dataPengujiRanting, setDataPengujiRanting, action, setAction, idPengujiRanting, setIdPengujiRanting, niw, setNiw, name, setName, ranting, setRanting, username, setUsername, password, setPassword, noWa, setNoWa, role, setRole, foto, setFoto }}>
+            <globalState.Provider value={{ showModalPengujiRanting, setShowModalPengujiRanting, dataPengujiRanting, setDataPengujiRanting, action, setAction, idPengujiRanting, setIdPengujiRanting, niw, setNiw, name, newWeb, setNewWeb, setName, ranting, setRanting, username, setUsername, password, setPassword, noWa, setNoWa, role, setRole, foto, setFoto }}>
                 <Modal_penguji_ranting />
             </globalState.Provider>
 

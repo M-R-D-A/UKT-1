@@ -20,7 +20,7 @@ const index = () => {
 
                             {/* title */}
                             <h1 className='text-xl font-semibold mb-12 tracking-wider'>
-                                UJI KELAYAKAN CALON WARGA<br/>
+                                UJI KENAIKAN TINGKAT<br/>
                                 PERSAUDARAAN SETIA HATI TERATE<br/>
                                 CABANG TRENGGALEK<br/>
                             </h1>

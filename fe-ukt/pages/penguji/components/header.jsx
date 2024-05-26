@@ -25,7 +25,7 @@ const header = () => {
     
     return (
         <>
-            <div className="sticky bottom-0 z-10 header border-b bg-navy shadow shadow-black w-full px-2 py-3 font-lato">
+            <div className="sticky top-0 z-10 header border-b bg-navy shadow shadow-black w-full px-2 py-3 font-lato">
                 {splitLoc == '' ?
                 <Link href={'/penguji/edit_profile'} className="absolute px-2 translate-y-1">
                     <svg className='stroke-white hover:stroke-purple duration-300' width="25" height="25" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">

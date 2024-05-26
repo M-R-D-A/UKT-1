@@ -89,6 +89,38 @@ module.exports = {
                 })
             })
     },
+    controllerGetByEventNew: async (req, res) => {
+        siswa.findAll({
+            where: {
+                id_event: req.params.id
+            },
+            include: [
+                {
+                    model: ranting,
+                    as: "siswa_ranting",
+                    attributes: ['name'],
+                    required: false,
+                },
+                {
+                    model: event,
+                    as: "siswa_event",
+                    attributes: ['name'],
+                    required: false
+                },
+            ]
+        })
+            .then(siswa => {
+                res.json({
+                    count: siswa.length,
+                    data: siswa
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
     controllerGetByEventFiltered: async (req, res) => {
         let idEvent = req.params.id
         let action = req.params.action
@@ -156,38 +188,6 @@ module.exports = {
             where: whereClause,
             order: [
                 ['nomor_urut', 'ASC']
-            ]
-        })
-            .then(siswa => {
-                res.json({
-                    count: siswa.length,
-                    data: siswa
-                })
-            })
-            .catch(error => {
-                res.json({
-                    message: error.message
-                })
-            })
-    },
-    
-    controllerGetByEventNew: async (req, res) => {
-        let idEvent = req.body.id
-        let tipe = req.body.tipe
-        let order = req.body.order
-        let name = req.body.name
-        let withname = {
-            id_event: idEvent,
-            name: name
-        }
-        let noName = {
-            id_event: idEvent
-        }
-        let whereClause = name !== '' ? withname : noName
-        siswa.findAll({
-            where: whereClause,
-            order: [
-                [tipe, order]
             ]
         })
             .then(siswa => {
@@ -469,11 +469,16 @@ module.exports = {
             })
     },
     controllerAuth: async (req, res) => {
+        let param = {
+            nomor_urut: req.body.nomor_urut,
+            id_event: req.body.id_event
+        }
+
+        if (req.body.id_ranting) {
+            param.id_ranting = req.body.id_ranting
+        }
         siswa.findOne({
-            where: {
-                nomor_urut: req.body.nomor_urut,
-                id_event: req.body.id_event
-            },
+            where: param
         })
             .then(async (result) => {
                 if (result) {

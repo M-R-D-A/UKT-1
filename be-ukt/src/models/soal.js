@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     id_lembar_soal: DataTypes.STRING,
+    paket: DataTypes.INTEGER,
     pertanyaan: DataTypes.STRING,
     opsi1: DataTypes.STRING,
     opsi2: DataTypes.STRING,

@@ -11,15 +11,15 @@ const path = require('path');
 const multer = require("multer");
 const localStorage = process.env.LOCAL_STORAGE
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        // set file storage
-        cb(null, localStorage);
-    },
-    filename: (req, file, cb) => {
-        // generate file name
-        cb(null, "csv" + Date.now() + path.extname(file.originalname));
-    },
-})
+  destination: (req, file, cb) => {
+    // set file storage
+    cb(null, localStorage);
+},
+filename: (req, file, cb) => {
+    // generate file name
+    cb(null, "foto-" + Date.now() + path.extname(file.originalname));
+},
+});
 
 let upload2 = multer({ storage: storage });
 
@@ -48,6 +48,7 @@ const verifyRoles = require("../../middleware/verifyRoles")
 router.get('/', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetAll)
 router.get('/count', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetCount)
 router.get('/event/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEvent)
+router.get('/event/new/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEvent)
 router.get('/event/:id/:action', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByEventFiltered)
 router.get('/ranting/:id', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByRanting)
 router.get('/ranting/:idEvent/:id/:action', Auth, verifyRoles("admin", "super admin", "admin ranting", "admin cabang", "pengurus cabang", "pengurus ranting", "penguji cabang", "penguji ranting"), controllerGetByRantingEventFiltered)

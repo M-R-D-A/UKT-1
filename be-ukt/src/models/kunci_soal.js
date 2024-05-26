@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.soal, {
         foreignKey: "id_soal",
-        as: "kunci_soal"
+        as: "soal"
       })
     }
   }

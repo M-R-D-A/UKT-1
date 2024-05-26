@@ -141,6 +141,11 @@ const sambung = (props) => {
                         <div className={checkBG(item.detail_gerak[0].gerak_detail[13].green)}></div>
                         <div className={checkBG(item.detail_gerak[1].gerak_detail[13].green)}></div>
                     </td>
+                    <td className='h-full flex-col'>
+                        <div className='h-5  bg-transparent'></div>
+                        <div className={checkBG(item.detail_gerak[0]?.gerak_detail[14]?.green)}></div>
+                        <div className={checkBG(item.detail_gerak[1]?.gerak_detail[14]?.green)}></div>
+                    </td>
                     {/* {item.detail_gerak.map((item, index) => (
                         //2
                         <>
@@ -184,6 +189,7 @@ const sambung = (props) => {
                                 <th className='border border-white w-16'>KAIT/PENGKOL</th>
                                 <th className='border border-white w-16'>GUNTINGAN</th>
                                 <th className='border border-white w-16'>BANTINGAN SAUTAN</th>
+                                <th className='border border-white w-16'>K.0.</th>
                             </tr>
                         </thead>
                         <tbody>

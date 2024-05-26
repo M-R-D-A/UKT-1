@@ -49,7 +49,7 @@ const Modal_Filter = (props) => {
                                 {/* Modal header */}
                                 <div className="flex justify-center p-4">
                                     <div className="bg-navy rounded-md p-3 text-white mb-3 shadow shadow-slate-700 hover:shadow-purple hover:scale-105 transition ease-in-out duration-300">
-                                        <h1 className='text-2xl font-semibold'>
+                                        <h1 className='text-2xl font-semibold font-bold'>
                                             F I L T E R
                                         </h1>
                                     </div>

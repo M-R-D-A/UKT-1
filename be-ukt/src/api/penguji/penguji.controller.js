@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require("fs");
+const csv = require('csv-parser');
 const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(10);
 
@@ -261,29 +262,29 @@ module.exports = {
         }
     },
 
-    controllerAddByCsv: async (req, res) => {
+    controllerCsv: async (req, res) => {
         let results = []
         fs.createReadStream(localStorage + req.file.filename)
             .pipe(csv({ headers: false }))
             .on('data', (data) => results.push(data))
             .on('end', async () => {
                 const promises = [];
-
+                
                 for (const data of results) {
-                    const hash = await bcrypt.hash(values[7], salt);
                     const values = Object.values(data);
+                    const hash = await bcrypt.hash(values[7], salt);
                     const newData = {
-                        niw: values[0],
+                        NIW: values[0],
                         name: values[1],
                         id_role: values[2],
                         id_ranting: values[3],
-                        id_cabang: values[5],
-                        foto: values[6],
-                        password: hash,
-                        no_wa: values[7],
+                        id_cabang: 'jatim',
+                        username: values[5],
+                        foto: "default.png",
+                        password:  hash,
+                        no_wa: values[8],
                     };
-                    // console.log(newData);
-                    promises.push(siswa.create(newData));
+                    promises.push(penguji.create(newData));
                 }
 
                 Promise.all(promises)

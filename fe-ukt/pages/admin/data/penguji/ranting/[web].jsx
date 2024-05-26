@@ -68,7 +68,7 @@ const penguji_ranting = () => {
         setAction('insert')
         setNiw('')
         setName('')
-        setRanting('')
+        setRanting(web)
         setUsername('')
         setPassword('')
         setNoWa('')

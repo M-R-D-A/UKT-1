@@ -42,6 +42,13 @@ const senam = (props) => {
                         salah
                     </div>
                 )}
+                {item.predikat === 2 && (
+                    <div className="border-gray rounded-md p-0.5 col-span-4">
+                        <div className="font-semibold bg-green rounded-md text-white py-1 px-10 uppercase">
+                            +
+                        </div>
+                    </div>
+                )}
                 {item.predikat === null && (
                     <div className="bg-purple rounded-md p-0.5 col-span-4">
                         <div className="font-semibold bg-navy rounded-md text-white py-1 px-10 uppercase">

@@ -104,6 +104,7 @@ module.exports = {
         let data = {
             name: req.body.name,
             tanggal: req.body.tanggal,
+            id_ranting: req.body.id_ranting,
             tipe_ukt: req.body.tipe_ukt,
             is_active: req.body.is_active
         }
@@ -126,6 +127,7 @@ module.exports = {
         let data = {
             name: req.body.name,
             tanggal: req.body.tanggal,
+            id_ranting: req.body.id_ranting,
             tipe_ukt: req.body.tipe_ukt,
             is_active: req.body.is_active
         }

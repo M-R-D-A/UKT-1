@@ -53,7 +53,7 @@ const index = () => {
     // }
     const handlerClick = () => {
         const token = localStorage.getItem('token')
-        type
+        type !== 'cabang'
             ? axios.get(BASE_URL + 'ukt_siswa/statistic/event/' + event + '/' + ranting, { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
                     console.log(result.data.tables.series)
@@ -63,7 +63,7 @@ const index = () => {
                 .catch(error => {
                     console.log(error.message);
                 })
-            : axios.get(BASE_URL + 'ukt_siswa/statistic/cabang/jatim', { headers: { Authorization: `Bearer ${token}` } })
+            : axios.get(BASE_URL + 'ukt_siswa/statistic/event/' + event, { headers: { Authorization: `Bearer ${token}` } })
                 .then(result => {
                     console.log(result.data.tables.series)
                     setData(result.data.data.series)
@@ -122,7 +122,6 @@ const index = () => {
             })
     }
     useEffect(() => {
-        // handlerGetData();
         handlerGetDataCabang();
         handlerGetDataRanting();
     }, [])

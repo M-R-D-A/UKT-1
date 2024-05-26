@@ -60,6 +60,8 @@ const ujian = () => {
                     setTime(res.data.data.waktu_pengerjaan * 60 * 100)
                     soal = (res.data.data.lembar_soal_ujian);
                     id_lembar_soal = res.data.data.id_lembar_soal
+                    console.log('res.data.data.waktu_pengerjaan')
+                    console.log(res.data.data.waktu_pengerjaan * 60 * 100)
 
                     createSession()
                     .then(async () =>{
@@ -273,7 +275,7 @@ const ujian = () => {
     }
 
     // timer
-    const [ minutes, setMinutes ] = useState(99);
+    const [ minutes, setMinutes ] = useState(900);
     const [seconds, setSeconds ] =  useState(0);
     useEffect(()=>{
         let myInterval = setInterval(() => {

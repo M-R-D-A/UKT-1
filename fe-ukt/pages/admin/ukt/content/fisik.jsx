@@ -102,6 +102,7 @@ const fisik = (props) => {
                                         <th>SPIR PERUT ATAS</th>
                                         <th>SPIR PERUT BAWAH</th>
                                         <th>SPIR DADA</th>
+                                        <th>SPIR PAHA</th>
                                         <th>PLANK</th>
                                     </tr>
                                 </>
@@ -119,6 +120,7 @@ const fisik = (props) => {
                                             <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_perut_atas}</td>
                                             <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_perut_bawah}</td>
                                             <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_dada}</td>
+                                            <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.spir_paha}</td>
                                             <td className='border-b-2 text-white border-gray text-lg font-bold'>{item.plank}</td>
                                         </tr>
                                     </>

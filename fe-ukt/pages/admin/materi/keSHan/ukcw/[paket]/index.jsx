@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { globalState } from '@/context/context'
-import Sidebar from '../../components/sidebar'
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import Modal_soal_keSHan from '../../components/modal_soal_keSHan'
-import Modal_soal_delete from '../../components/modal_soal_delete'
-import KeSHanList from '../../components/KeSHanList'
+import Sidebar from '../../../../components/sidebar'
+import Header from '../../../../components/header'
+import Footer from '../../../../components/footer'
+import Modal_soal_keSHan from '../../../../components/modal_soal_keSHan'
+import Modal_soal_delete from '../../../../components/modal_soal_delete'
+import KeSHanList from '../../../../components/KeSHanList'
 import axios from 'axios'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -17,6 +17,8 @@ const ukcw = () => {
     // state modal
     const [showModalSoalKeSHan, setShowModalSoalKeSHan] = useState(false)
     const [showModalDelete, setShowModalDelete] = useState(false)
+
+    const {paket} = router.query
 
     //state soal
     const [active, setActive] = useState([])
@@ -91,6 +93,7 @@ const ukcw = () => {
 
         let data = {
             id_lembar_soal: idLembar,
+            paket: paket,
             pertanyaan: pertanyaan,
             opsi1: opsi1,
             opsi2: opsi2,
@@ -131,7 +134,6 @@ const ukcw = () => {
         //get id soal
         await axios.post(BASE_URL + 'lembar_soal/ukt/UKCW', { data: '' }, headerConfig())
             .then(res => {
-                console.log(res)
                 setIdLembar(res.data.data?.id_lembar_soal)
                 id_lembar = res.data.data?.id_lembar_soal
             })
@@ -139,7 +141,7 @@ const ukcw = () => {
                 console.log(err.message);
             })
 
-        await axios.get(BASE_URL + 'soal/tipe/' + tipe_ukt, headerConfig())
+        await axios.get(BASE_URL + `soal/paket/${tipe_ukt}/${paket}`, headerConfig())
             .then(res => {
                 setJumlah(res.data.count)
                 setSoal(res.data.data)
@@ -163,9 +165,12 @@ const ukcw = () => {
     }
 
     useEffect(() => {
+        if(!paket){
+            return;
+        }
         getSoal()
         getKunciSoal()
-    }, [])
+    }, [paket])
 
 
     return (
@@ -202,7 +207,7 @@ const ukcw = () => {
                                         <path d="M11.2258 26.4657L0.354838 14.4974C0.225806 14.3549 0.134623 14.2005 0.08129 14.0343C0.0270964 13.8681 0 13.69 0 13.5C0 13.31 0.0270964 13.1319 0.08129 12.9657C0.134623 12.7995 0.225806 12.6451 0.354838 12.5026L11.2258 0.498681C11.5269 0.166227 11.9032 0 12.3548 0C12.8065 0 13.1935 0.1781 13.5161 0.534301C13.8387 0.890501 14 1.30607 14 1.781C14 2.25594 13.8387 2.6715 13.5161 3.0277L4.03226 13.5L13.5161 23.9723C13.8172 24.3048 13.9677 24.7141 13.9677 25.2005C13.9677 25.6878 13.8065 26.1095 13.4839 26.4657C13.1613 26.8219 12.7849 27 12.3548 27C11.9247 27 11.5484 26.8219 11.2258 26.4657Z" />
                                     </svg>
                                 </button>
-                                <h1 className='text-2xl tracking-wider'>KESHAN - UKCW</h1>
+                                <h1 className='text-2xl tracking-wider'>KESHAN - UKCW - PAKET {paket}</h1>
                             </div>
 
                             {/* search and button add data */}

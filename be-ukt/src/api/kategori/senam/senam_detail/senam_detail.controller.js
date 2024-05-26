@@ -16,34 +16,6 @@ module.exports = {
                 })
             })
     },
-    controllerSearch: async (req, res) => {
-        senam_detail.findAll({
-            include: [
-                {
-                    model: models.siswa,
-                    as: "senam_siswa",
-                    attributes: ['nomor_urut', 'name'],
-                    where: {
-                        [Op.or]: [
-                            { name: { [Op.like]: `%${req.params.id}%` } },
-                            { nomor_urut: { [Op.like]: `%${req.params.id}%` } }
-                        ]
-                    }
-                },
-            ]
-        })
-            .then(result => {
-                res.json({
-                    count: result.length,
-                    data: result
-                })
-            })
-            .catch(error => {
-                res.json({
-                    message: error.message
-                })
-            })
-    },
     controllerGetByTipeUkt: async (req, res) => {
         senam_detail.findAll({
             where: {
@@ -87,36 +59,11 @@ module.exports = {
                 })
             })
     },
-    controllerGetTotalPage: async (req, res) => {
-        const limit = Number(req.params.limit);
-        senam_detail.findAll({
-            where: {
-                id_event: req.params.id
-            },
-            attributes: ['id_senam_detail']
-        })
-            .then(result => {
-                const totalPages = Math.ceil(result.length / limit);
-                res.json({ totalPages });
-            })
-            .catch(error => {
-                res.json({
-                    message: error.message
-                })
-            })
-    },
     controllerGetByUktEvent: async (req, res) => {
-        const { id, page, limit } = req.params;
-        const pageNumber = Number(page);
-        const itemsPerPage = Number(limit);
-
-        const offset = (pageNumber - 1) * itemsPerPage;
-
-        console.log(pageNumber)
-        console.log(itemsPerPage);
         senam_detail.findAll({
             where: {
-                id_event: id
+                tipe_ukt: req.params.id,
+                id_event: req.params.event
             },
             attributes: ['id_senam_detail', 'id_penguji', 'id_event', 'id_siswa', 'tipe_ukt'],
             include: [
@@ -143,12 +90,7 @@ module.exports = {
                         }
                     ]
                 }
-            ],
-            where: {
-                id_event: id
-            },
-            limit: itemsPerPage,
-            offset: offset
+            ]
         })
             .then(senam => {
                 res.json({

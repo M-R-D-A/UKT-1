@@ -123,6 +123,11 @@ const detail_event = () => {
     }
 
     useEffect(() => {
+       if (active === 'sambung'){
+        setActive('senam');
+        router.push('./sambung')
+       } 
+        setSearchName([])
         getDataSiswa()
     }, [active])
 
@@ -158,38 +163,8 @@ const detail_event = () => {
                     {/* akhir header */}
 
                     {/* konten utama */}
-                    <div className="min-h-full bg-darkBlue px-5 py-8">
-
-                        {/* wrapper category */}
-                        <div className="flex bg-navy gap-x-2 overflow-x-scroll text-purple mb-3 scrollbar-hide">
-                            <button onClick={() => onActive('senam')} className={active === 'senam' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>SENAM</button>
-                            <button onClick={() => onActive('jurus')} className={active === 'jurus' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>JURUS</button>
-                            <button onClick={() => onActive('fisik')} className={active === 'fisik' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>FISIK</button>
-                            <button onClick={() => onActive('teknik')} className={active === 'teknik' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>TEKNIK</button>
-                            <button onClick={() => router.push('./sambung')} className={active === 'sambung' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>SAMBUNG</button>
-                        </div>
-
+                    <div className="min-h-full bg-darkBlue px-5 py-8">                  
                         
-                        {/* search */}
-                        <div className="bg-white py-1.5 px-4 rounded-md gap-x-2 flex items-center mb-5 ">
-                            {/* button search */}
-                            <button onClick={() => searchSiswa()}>
-                            <svg width="25" height="25" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.625 16.625C13.491 16.625 16.625 13.491 16.625 9.625C16.625 5.75901 13.491 2.625 9.625 2.625C5.75901 2.625 2.625 5.75901 2.625 9.625C2.625 13.491 5.75901 16.625 9.625 16.625Z" stroke="#6464F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M18.3746 18.3751L14.5684 14.5688" stroke="#6464F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            </button>
-
-                            {/* input search */}
-                            <input className='w-full p-1.5 focus:outline-none' placeholder='Search' type="text" onChange={(e) => setSearchName(e.target.value)} />
-
-                            {/* filter button */}
-                            <button onClick={() => setModalFilter(true)}>
-                                <svg width="25" height="25" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M25.6667 3.5H2.33337L11.6667 14.5367V22.1667L16.3334 24.5V14.5367L25.6667 3.5Z" stroke="#6464F6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </button>
-                        </div>
 
                         {/* card siswa information */}
                         {(() => {
@@ -231,8 +206,28 @@ const detail_event = () => {
                         })()}
                     </div>
                 </div>
-                       <div className="fixed bottom-0 z-50 bg-white block md:hidden w-full">
-                        <MainNavigation props={active}/>
+                       <div className="fixed bottom-0 z-50 block w-full">
+                        {/* search */}
+                        <div className="bg-navy py-1.5 px-4 rounded-md gap-x-2 flex items-center ">
+                            {/* button search */}
+                            <button onClick={() => searchSiswa()}>
+                            <svg width="25" height="25" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.625 16.625C13.491 16.625 16.625 13.491 16.625 9.625C16.625 5.75901 13.491 2.625 9.625 2.625C5.75901 2.625 2.625 5.75901 2.625 9.625C2.625 13.491 5.75901 16.625 9.625 16.625Z" stroke="#6464F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M18.3746 18.3751L14.5684 14.5688" stroke="#6464F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            </button>
+
+                            {/* input search */}
+                            <input className='w-full p-1.5 focus:outline-none' placeholder='Search' type="text" onChange={(e) => setSearchName(e.target.value)} />
+
+                            {/* filter button */}
+                            <button onClick={() => setModalFilter(true)}>
+                                <svg width="25" height="25" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M25.6667 3.5H2.33337L11.6667 14.5367V22.1667L16.3334 24.5V14.5367L25.6667 3.5Z" stroke="#6464F6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                        <MainNavigation active={active} setActive={setActive}/>
                         </div>
             </div>
             

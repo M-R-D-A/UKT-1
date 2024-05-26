@@ -219,6 +219,7 @@ module.exports = {
             spir_perut_atas: req.body.spir_perut_atas,
             spir_perut_bawah: req.body.spir_perut_bawah,
             spir_dada: req.body.spir_dada,
+            spir_paha: req.body.spir_paha,
             plank: req.body.plank,
         }
         fisik.update(data, { where: param })

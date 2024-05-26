@@ -36,7 +36,7 @@ const ModalSelesai = (props) => {
 
                             {/* Modal footer */}
                             <div className="flex items-center py-2 pb-6">
-                                <button className="font-lato text-white bg-purple rounded-lg font-lato text-2xl font-bold px-5 py-2 w-full uppercase" onClick={props.logout}>Selesai</button>
+                                <button className="font-lato text-white bg-purple rounded-lg text-2xl font-bold px-5 py-2 w-full uppercase" onClick={props.logout}>Selesai</button>
                             </div>
                         </div>
                     </div>

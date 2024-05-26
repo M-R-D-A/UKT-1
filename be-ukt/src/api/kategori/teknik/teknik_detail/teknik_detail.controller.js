@@ -90,11 +90,11 @@ module.exports = {
     },
     controllerGetTotalPage: async (req, res) => {
         const limit = Number(req.params.limit);
-        teknik_detail.findAll({
+        fisik.findAll({
             where: {
                 id_event: req.params.id
             },
-            attributes: ['id_teknik_detail']
+            attributes: ['id_fisik']
         })
             .then(result => {
                 const totalPages = Math.ceil(result.length / limit);
@@ -145,6 +145,52 @@ module.exports = {
             ],
             limit: itemsPerPage,
             offset: offset
+        })
+            .then(teknik => {
+                res.json({
+                    count: teknik.length,
+                    data: teknik
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerGetByEvent: async (req, res) => {
+        const { id } = req.params;
+        teknik_detail.findAll({
+            where: {
+                id_event: id
+            },
+            attributes: ['id_teknik_detail', 'id_penguji', 'id_event', 'id_siswa', 'tipe_ukt'],
+            include: [
+                {
+                    model: models.siswa,
+                    attributes: ['name', 'nomor_urut'],
+                    as: "teknik_siswa",
+                    require: true
+                },
+                {
+                    model: models.penguji,
+                    attributes: ['name'],
+                    as: "penguji_teknik"
+                },
+                {
+                    model: models.teknik_siswa,
+                    attributes: ['id_teknik', 'predikat'],
+                    as: "siswa_teknik_detail",
+                    include: [
+                        {
+                            model: models.teknik,
+                            attributes: ['id_teknik', 'name'],
+                            as: "siswa_teknik",
+                        }
+                    ],
+                    order: [['id_teknik', 'DESC']]
+                }
+            ],
         })
             .then(teknik => {
                 res.json({

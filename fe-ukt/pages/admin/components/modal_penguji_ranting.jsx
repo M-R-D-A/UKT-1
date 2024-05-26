@@ -22,11 +22,11 @@ const modal_penguji_ranting = () => {
     // function get data penguji ranting
     const getDataPengujiRanting  = async () => {
         const token = localStorage.getItem('token')
-        // const web1 = web ? web : null
-        // setNewWeb(web1)
+        console.log('modal penguji')
+        console.log(newWeb)
         const form = {
-            id_ranting: newWeb,
-            id_role: 'penguji ranting'
+            id_ranting: ranting,
+            id_role: role
         }
         axios.post(BASE_URL + `penguji/pengujiperranting`, form, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
@@ -163,16 +163,17 @@ const modal_penguji_ranting = () => {
                                         <div className="w-2/6 flex justify-between">
                                             <span>Ranting</span>
                                             <span>:</span>
+                                            <span>{ranting}</span>
                                         </div>
-                                        <div className="w-4/6">
+                                        {/* <div className="w-4/6">
                                             <input className='w-full bg-darkBlue rounded-md focus:outline-none px-2'
                                             type="text"
-                                            value={ranting}
-                                            onChange={(e) => setRanting(e.target.value)}
+                                            value={newWeb}
+                                            // onChange={(e) => setRanting(e.target.value)}
                                             required
                                             >        
                                             </input>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     
                                     {/* Input no wa */}

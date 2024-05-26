@@ -103,6 +103,13 @@ module.exports = {
                     Privat_lk: standar_fisik[2].spir_paha,
                     Privat_prpn: standar_fisik[3].spir_paha,
                 }
+                let spirPahaBawah = {
+                    jenis: "spir_paha_bawah",
+                    Remaja_lk: standar_fisik[0].spir_paha_bawah,
+                    Remaja_prpn: standar_fisik[1].spir_paha_bawah,
+                    Privat_lk: standar_fisik[2].spir_paha_bawah,
+                    Privat_prpn: standar_fisik[3].spir_paha_bawah,
+                }
                 let plank = {
                     jenis: "plank",
                     Remaja_lk: standar_fisik[0].plank,
@@ -117,6 +124,7 @@ module.exports = {
                     spir_perut_bawah: spirPerutBawah,
                     spir_dada: spirDada,
                     spir_paha: spirPaha,
+                    spir_paha_bawah: spirPahaBawah,
                     plank: plank,
                 }
 

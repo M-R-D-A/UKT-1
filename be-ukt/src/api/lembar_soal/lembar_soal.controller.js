@@ -30,42 +30,15 @@ module.exports = {
                 })
             })
     },
-    controllerGetByTipeUkt: async (req, res) => {
-        lembar_soal.findAll({
-            include: [
-                {
-                    model: models.soal,
-                    as: "lembar_soal_ujian",
-                    include: [
-                        {
-                            model: models.kunci_soal,
-                            as: "kunci_soal"
-                        }
-                    ]
-                }
-            ]
-        })
-            .then(lembar_soal => {
-                res.json({
-                    count: lembar_soal.length,
-                    data: lembar_soal
-                })
-            })
-            .catch(error => {
-                res.json({
-                    message: error.message
-                })
-            })
-    },
     controllerExam: async (req, res) => {
         let param = {
             tipe_ukt: req.params.ukt,
         }
-
-        if (req.body.id_ranting) {
-            param.id_ranting = req.body.id_ranting
+    
+        if(req.body.id_ranting){
+            param.id_ranting= req.body.id_ranting
         }
-
+    
         lembar_soal.findOne({
             where: param,
             include: [
@@ -85,16 +58,16 @@ module.exports = {
                 }
             ]
         })
-            .then(lembar_soal => {
-                res.json({
-                    data: lembar_soal
-                })
+        .then(lembar_soal => {
+            res.json({
+                data: lembar_soal
             })
-            .catch(error => {
-                res.json({
-                    message: error.message
-                })
+        })
+        .catch(error => {
+            res.json({
+                message: error.message
             })
+        })    
     },
     controllerAdd: async (req, res) => {
         const id = randomUUID();

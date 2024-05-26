@@ -14,8 +14,9 @@ const loginPage = () => {
     const router = useRouter()
 
     // param value
-    const {tipe} = router.query
-    const {event} = router.query
+    const {tipe, event} = router.query
+
+    const [dataEvent,setDataEvent] = useState([])
 
     const decryptId = (str) => {
         const decodedStr = decodeURIComponent(str);
@@ -26,92 +27,69 @@ const loginPage = () => {
       if(!event && !tipe){
         return;
       }
-    }, [event])
+      setDataEvent(JSON.parse(JSON.parse(decryptId(event))));
+    }, [event,tipe])
     
+    const headerConfig = () =>{
+        const token = localStorage.getItem("tokenSiswa")
+        let header = {
+            headers: {Authorization: `Bearer ${token}`}
+        }
+        return header
+    }
 
     // const [nis, setNis] = useState();
     const [nomorUrut, setNomorUrut] = useState(0);
     const [dataSiswa, setDataSiswa] = useState()
+    const [dataUktSiswa, setDataUktSiswa] = useState([])
     const [showModalSiswa, setShowModalSiswa] = useState (false)
 
     const Auth = async (e) => {
         e.preventDefault()
         let form = {
             nomor_urut: nomorUrut,
-            id_event: decryptId(event)
+            id_event: dataEvent.id
         }
+        console.log(form)
         await axios.post(BASE_URL + `siswa/auth`, form)
-            .then(async res => {
-                if (res.data.logged) {
-                    let dataSiswa = res.data.data
-                    let token = res.data.token
-                    setDataSiswa(res.data.data)
-                    console.log(res.data.data);
-
-                    // const uktSiswa = localStorage.getItem('dataUktSiswa')
-                    
-                    const data = {
-                        tipe_ukt: dataSiswa.tipe_ukt,
-                        id_siswa: dataSiswa.id_siswa,
-                        id_event: dataSiswa.id_event,
-                        rayon: dataSiswa.rayon
-                    }
-
-                    let uktSiswa = []
-                    await axios.get(BASE_URL + `ukt_siswa/siswa/${data.id_siswa}`, { headers: { Authorization: `Bearer ${token}` } })
-                    .then(res => {
-                        uktSiswa = res.data.data
-                    })
-                    .catch(err => {
-                        console.log(err.message);
-                    })
-
-                    if (!uktSiswa) {
-                        // console.log("belum uktsiswa");
-                        axios.post(BASE_URL + `ukt_siswa`, data, { headers: { Authorization: `Bearer ${token}` } })
-                            .then(res => {
-                                console.log(res.data);
-                                localStorage.setItem('dataUktSiswa', JSON.stringify(res.data.data))
-                            })
-                            .catch(err => {
-                                console.log(err.message);
-                            })
-                    } else if (uktSiswa) {
-                        if (data.id_siswa == uktSiswa.id_siswa) {
-                            axios.get(BASE_URL + `ukt_siswa/siswa/${data.id_siswa}`, { headers: { Authorization: `Bearer ${token}` } })
-                                .then(res => {
-                                    // console.log("ngecek apakah item id siswa punya sudah ukt siswa")
-                                    if (res.data.data != null) {
-                                        // console.log("ternyata udah punya")
-                                        // console.log(res.data.data);
-                                        localStorage.setItem('dataUktSiswa', JSON.stringify(res.data.data))
-                                    } else {
-                                        // console.log("ternyata belum punya")
-                                        axios.post(BASE_URL + `ukt_siswa`, data, { headers: { Authorization: `Bearer ${token}` } })
-                                            .then(res => {
-                                                localStorage.setItem('dataUktSiswa', JSON.stringify(res.data.data))
-                                            })
-                                    }
-                                })
-                                .catch(err => {
-                                    console.log(err.message);
-                                })
-
-                        }
-                    }
-
-                    localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa))
-                    localStorage.setItem('tokenSiswa', (token))
-                    setShowModalSiswa(true)
-                    // router.push('./ujian')
-                } else {
-                    window.alert(res.data.message)
+        .then(async res => {
+            if (res.data.logged) {
+                let dataSiswa = res.data.data
+                let token = res.data.token
+                setDataSiswa(res.data.data)
+                
+                const data = {
+                    tipe_ukt: dataSiswa.tipe_ukt,
+                    id_siswa: dataSiswa.id_siswa,
+                    id_event: dataSiswa.id_event,
+                    rayon: dataSiswa.rayon
                 }
-            })
-            .catch(err => {
-                console.log(err.message);
-            })
+
+                // let uktSiswa = []
+                await axios.post(BASE_URL + 'session/cek_ukt/'+ dataSiswa.id_siswa, data, headerConfig())
+                .then(async res =>{
+                    // console.log(res.data.data);
+                    localStorage.setItem('dataUktSiswa', JSON.stringify(res.data.data))
+                    setDataUktSiswa(res.data.data)
+                })
+                .catch(err => {
+                    console.log(err.message);
+                })
+
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa))
+                localStorage.setItem('tokenSiswa', (token))
+                setShowModalSiswa(true)
+                // console.log(router.asPath);
+                // router.push('./ujian')
+            } else {
+                window.alert(res.data.message)
+            }
+        })
+        .catch(err => {
+            console.log(err.message);
+        })
     }
+
     return (
         <>
             <div className="font-lato">
@@ -127,9 +105,9 @@ const loginPage = () => {
                             <img className='w-32 mb-4' src="/images/psht-icon.png" alt="" />
 
                             {/* title */}
-                            <h1 className='text-xl font-semibold mb-12 uppercase'>Uji Kelayakan Calon Warga <br></br> Cabang Trenggalek 2023</h1>
+                            <h1 className='text-xl font-semibold mb-3 uppercase'>Uji Kelayakan calon warga <br></br>{dataEvent.name}<br/> PERSAUDARAAN SETIA HATI TERATE<br/> Cabang Trenggalek</h1>
 
-                            <h1 className='text-lg tracking-wide text-green mb-5'>Masukan Nomor Urut</h1>
+                            <h1 className='text-lg tracking-wide text-green mb-3'>Masukan Nomor Urut</h1>
 
                             {/* wrapper nomor urut */}
                             <form onSubmit={Auth}>
@@ -158,10 +136,11 @@ const loginPage = () => {
             {/* <globalState.Provider value={{ showModalSiswa, setShowModalSiswa}}> */}
                 <Modal_siswa 
                     show={showModalSiswa}
-                    mulai={() => router.push(`/siswa/${tipe}/${event}/ujian`)}
+                    mulai={() => router.push(router.asPath+`/ujian`)}
                     nama={dataSiswa?.name}
                     ranting={dataSiswa?.id_ranting}
                     close={() => setShowModalSiswa(false)}
+                    nilai={dataUktSiswa.keshan}
                 />
              {/* </globalState.Provider> */}
         </>

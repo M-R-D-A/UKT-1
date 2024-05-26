@@ -81,8 +81,7 @@ const rekap_nilai_ukt_ukt_hijau = () => {
 
     const getDataUktFiltered = async () => {
         const token = localStorage.getItem('token')
-        const rayonData = dataRayon.map(item => item.value);
-        console.log(rayonData)
+        const rayonData = dataRayon.map(item => item.value); 
         const formRayon = rayon.length === 0 ? rayonData : rayon
         let form = {
             event: eventId,
@@ -92,7 +91,7 @@ const rekap_nilai_ukt_ukt_hijau = () => {
             updown: updown
         }
         setLoading(true);
-        dataRayon.length > 1 && await axios.post(BASE_URL + `ukt_siswa/ukt/filter`, form, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.post(BASE_URL + `ukt_siswa/ukt/filter`, form, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 console.log(res)
                 setDataUkt(res.data.data)
@@ -122,10 +121,6 @@ const rekap_nilai_ukt_ukt_hijau = () => {
 
     const handleChangeRayon = (option) => {
         const data = option.map(item => item.value);
-
-        console.log(option)
-        console.log(data)
-
 
         setRayonSelect(option)
         setRayon(data)
