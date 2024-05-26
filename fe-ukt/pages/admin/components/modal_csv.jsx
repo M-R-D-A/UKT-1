@@ -22,11 +22,12 @@ const Modal_CSV = () => {
         const dataUser = JSON.parse(user)
         axios.get(BASE_URL + `event`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
+                console.log(dataUser)
                 const data = res.data.data
-                if(dataUser.id_role === 'admin_ranting'){
-                    setDataEvent(data.filter(item => item.tipe_ukt === 'ukcw'))
+                if(dataUser.id_role == 'admin ranting'){
+                    setDataEvent(data.filter(item => item.tipe_ukt !== 'UKCW' && item.is_active === true))
                 } else {
-                    setDataEvent(data)
+                    setDataEvent(data.filter(item => item.is_active === true))
                 }
             })
             .catch(err => {
