@@ -20,6 +20,7 @@ const ukt_jambon = () => {
     const [showModalDelete, setShowModalDelete] = useState(false)
 
     // state
+    const [dataUser, setDataUser] = useState({})
     const [dataEvent, setDataEvent] = useState([])
     const [dataRanting, setDataRanting] = useState([])
     const [isActive, setIsActive] = useState(false)
@@ -32,7 +33,9 @@ const ukt_jambon = () => {
     // function get data ranting
     const getDataRanting = () => {
         const token = localStorage.getItem('token')
-
+        const user = localStorage.getItem('admin')
+        const dataUser = JSON.parse(user)
+        setDataUser(dataUser)
         axios.get(BASE_URL + `ranting`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 setDataRanting(res.data.data)
@@ -110,23 +113,40 @@ const ukt_jambon = () => {
                         <div className="grid grid-cols-4 gap-x-5 gap-y-3">
 
                             {/* card ranting */}
-                            {dataRanting?.map((item, index) => (
-                                <><button 
-                                    onClick={() => goToEventRanting(item.id_ranting)} key={index + 1} 
-                                    className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
-
-                                        {/* inner bg */}
-                                        <div className="bg-navy p-5 rounded-md space-y-5">
-
-                                            {/* ranting name */}
-                                            <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
-
-                                            {/* ranting data count and add button */}
-                                            <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length}</h1>
-                                        </div>
-                                    </button>
-                                </>
-                            ))}
+                            {dataUser.id_role === 'admin ranting'
+                                ? <><button 
+                                        onClick={() => goToEventRanting(dataUser.id_ranting)} key={1} 
+                                        className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+    
+                                            {/* inner bg */}
+                                            <div className="bg-navy p-5 rounded-md space-y-5">
+    
+                                                {/* ranting name */}
+                                                <h1 className='text-green text-lg'>Ranting {dataUser.id_ranting}</h1>
+    
+                                                {/* ranting data count and add button */}
+                                                <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${dataUser.id_ranting}`).length}</h1>
+                                            </div>
+                                        </button>
+                                    </>
+                                : dataRanting?.map((item, index) => (
+                                    <><button 
+                                        onClick={() => goToEventRanting(item.id_ranting)} key={index + 1} 
+                                        className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+    
+                                            {/* inner bg */}
+                                            <div className="bg-navy p-5 rounded-md space-y-5">
+    
+                                                {/* ranting name */}
+                                                <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
+    
+                                                {/* ranting data count and add button */}
+                                                <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length}</h1>
+                                            </div>
+                                        </button>
+                                    </>
+                                ))
+                            }
                         </div>
                     </div>
                     {/* akhir konten utama */}
