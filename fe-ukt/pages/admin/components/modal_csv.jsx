@@ -20,8 +20,6 @@ const Modal_CSV = () => {
         const token = localStorage.getItem('token')
         const user = localStorage.getItem('admin')
         const dataUser = JSON.parse(user)
-        console.log('dataUser')
-        console.log(dataUser)
         axios.get(BASE_URL + `event`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 const data = res.data.data
@@ -70,12 +68,6 @@ const Modal_CSV = () => {
                 console.log(err.message);
             })
     }
-
-    useEffect(() => {
-        console.log(event);
-        console.log('--csv--');
-        console.log(fileCSV);
-    }, [event, name, fileCSV])
 
     return (
         <>
