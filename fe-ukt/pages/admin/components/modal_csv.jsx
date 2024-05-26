@@ -18,9 +18,18 @@ const Modal_CSV = () => {
     // function get data CSV
     const getDataCSV = () => {
         const token = localStorage.getItem('token')
+        const user = localStorage.getItem('admin')
+        const dataUser = JSON.parse(user)
+        console.log('dataUser')
+        console.log(dataUser)
         axios.get(BASE_URL + `event`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                setDataEvent(res.data.data)
+                const data = res.data.data
+                if(user.id_role === 'admin_ranting'){
+                    setDataEvent(data.filter(item => item.tipe_ukt === 'ukcw'))
+                } else {
+                    setDataEvent(data)
+                }
             })
             .catch(err => {
                 console.log(err.message);
