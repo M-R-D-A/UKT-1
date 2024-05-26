@@ -23,7 +23,7 @@ const Modal_CSV = () => {
         axios.get(BASE_URL + `event`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 const data = res.data.data
-                if(user.id_role === 'admin_ranting'){
+                if(dataUser.id_role === 'admin_ranting'){
                     setDataEvent(data.filter(item => item.tipe_ukt === 'ukcw'))
                 } else {
                     setDataEvent(data)
