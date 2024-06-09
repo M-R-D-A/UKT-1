@@ -1,15 +1,4 @@
-import React, { useEffect, useContext } from 'react'
-
-//icon
-
-import { BsPlusCircle } from "react-icons/bs";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-
-import { IoBodyOutline } from "react-icons/io5";
-import { IoBodySharp } from "react-icons/io5";
-// import { RiGroup2Fill } from "react-icons/ri";
-import { RiTableLine } from "react-icons/ri";
-import { RiTableFill } from "react-icons/ri";
+import React from 'react'
 
 // import jurusSvg from '../components/jurus.svg';
 
