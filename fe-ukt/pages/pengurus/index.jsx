@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Sidebar from './components/sidebar'
+import { useRouter } from 'next/router'
 import Header from './components/header'
 import Footer from './components/footer'
-import Link from 'next/link'
+const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL
 
 const index = () => {
+    // deklarasi router
+    const router = useRouter()
+
     const [dataPengurus, setDataPengurus] = useState([])
 
     const getDataPengurus = () => {
@@ -18,7 +21,7 @@ const index = () => {
 
     const toUkt = (item) => {
         router.push({
-            pathname: './ukt',
+            pathname: 'pengurus/ukt',
             query: { tipe: item } // Add your parameter here
         });
     }
@@ -26,11 +29,11 @@ const index = () => {
     return (
         <div className="font-lato">
 
-        {/* awal wrapper konten utama */}
-        <div className="w-full h-screen">
+            {/* awal wrapper konten utama */}
+            <div className="w-full h-screen">
 
-            {/* header */}
-            <Header />
+                {/* header */}
+                <Header />
                 {/* akhir header */}
 
                 {/* konten utama */}
@@ -41,48 +44,54 @@ const index = () => {
 
                         {/* photo profile */}
                         <div className="bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] p-0.5 rounded-full mb-3">
-                            {/* <img className='rounded-full object-cover w-28 h-28' src={IMAGE_URL + dataPengurus?.foto} alt="" /> */}
+                            <img className='rounded-full object-cover w-28 h-28' src={IMAGE_URL + dataPengurus?.foto} alt="" />
                         </div>
+
+                        {/* username */}
+                        <h1 className='text-2xl font-semibold text-white'>{dataPengurus.username}</h1>
+
+                        {/* name */}
+                        <h1 className='text-green'>{dataPengurus.name}</h1>
                     </div>
 
                     {/* wrapper ukt card */}
                     <div className="border-t-2 border-white px-3">
 
                         {/* card ukt jambon */}
-                        <Link onClick={() => toUkt('ukt jambon')}>
+                        <button className='w-full' onClick={() => toUkt('UKT Jambon')}>
                             <div className="hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5  mt-4">
                                 <div className="bg-navy shadow drop-shadow-lg rounded-md p-5 text-center">
                                     <h1 className='text-xl font-semibold text-green tracking-wide'>UKT Jambon</h1>
                                 </div>
                             </div>
-                        </Link>
+                        </button>
 
                         {/* card ukt Hijau */}
-                        <Link href={'/pengurus/event_hijau'}>
+                        <button className='w-full' onClick={() => toUkt('UKT Jambon')}>
                             <div className="hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5  mt-4">
                                 <div className="bg-navy shadow drop-shadow-lg rounded-md p-5 text-center">
                                     <h1 className='text-xl font-semibold text-green tracking-wide'>UKT Hijau</h1>
                                 </div>
                             </div>
-                        </Link>
+                        </button>
 
                         {/* card ukt Putih */}
-                        <Link href={'/pengurus/event_putih'}>
+                        <button className='w-full' onClick={() => toUkt('UKT Jambon')}>
                             <div className="hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5  mt-4">
                                 <div className="bg-navy shadow drop-shadow-lg rounded-md p-5 text-center">
                                     <h1 className='text-xl font-semibold text-green tracking-wide'>UKT Putih</h1>
                                 </div>
                             </div>
-                        </Link>
+                        </button>
 
                         {/* card ukcw */}
-                        <Link href={'/pengurus/event_ukcw'}>
+                        <button className='w-full' onClick={() => toUkt('UKCW')}>
                             <div className="hover:scale-105 transition ease-in-out duration-500 hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5  mt-4">
                                 <div className="bg-navy shadow drop-shadow-lg rounded-md p-5 text-center">
                                     <h1 className='text-xl font-semibold text-green tracking-wide'>UKCW</h1>
                                 </div>
                             </div>
-                        </Link>
+                        </button>
 
                     </div>
                 </div>
