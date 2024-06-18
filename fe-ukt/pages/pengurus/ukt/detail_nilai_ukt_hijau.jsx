@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
-
+import Sidebar from '../../../components/sidebar'
+import Header from '../../../components/header'
+import Footer from '../../../components/footer'
 
 // ---- content --- //
-import Senam from './content/senam'
-import Teknik from './content/teknik'
-import Jurus from './content/jurus'
-import Fisik from './content/fisik'
-import Sambung from './content/sambung'
+import Senam from '../../content/senam'
+import Teknik from '../../content/teknik'
+import Jurus from '../../content/jurus'
+import Fisik from '../../content/fisik'
+import Sambung from '../../content/sambung'
+import Keshan from '../../content/keshan'
+import { useRouter } from 'next/router'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const detail_nilai_ukt_hijau = () => {
+    
+    // deklarasi router
+    const router = useRouter ()
 
     // state set jenis
     const [active, setActive] = useState('senam')
@@ -36,8 +40,17 @@ const detail_nilai_ukt_hijau = () => {
     } else if (active === 'sambung'){
         activeComponent = <Sambung data={data}/>;
     }
-    
 
+    // function login checker
+    const isLogged = () => {
+        if (localStorage.getItem ('token') === null || localStorage.getItem ('admin') === null) {
+            router.push ('/admin/login')
+        }
+    }
+
+    useEffect (() => {
+        isLogged ()
+    }, [])
 
     return (
         <>
@@ -70,7 +83,7 @@ const detail_nilai_ukt_hijau = () => {
                             <button onClick={() => onActive('teknik')} className={active === 'teknik' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>Teknik</button>
                             <button onClick={() => onActive('sambung')} className={active === 'sambung' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>Sambung</button>
                         </div>
-                    { activeComponent }
+                        { activeComponent }
                     </div>
                     {/* akhir konten utama */}
 
