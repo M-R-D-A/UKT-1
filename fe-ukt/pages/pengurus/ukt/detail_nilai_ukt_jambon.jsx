@@ -43,10 +43,6 @@ const detail_nilai_ukt_jambon = () => {
         <>
             <div className="flex font-lato">
 
-                {/* sidebar */}
-                <Sidebar />
-                {/* akhir sidebar */}
-
                 {/* awal wrapper konten utama */}
                 {/* supaya konten header dapat di scroll dan tidak mempengaruhi sidebar */}
                 <div className="w-full overflow-y-auto h-screen">
