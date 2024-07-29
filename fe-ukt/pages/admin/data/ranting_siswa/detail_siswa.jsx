@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { globalState } from '@/context/context'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Modal_siswa from '../components/modal_siswa'
-import Modal_delete from '../components/modal_delete'
+import Sidebar from '../../components/sidebar'
+import Header from '../../components/header'
+import Footer from '../../components/footer'
+import Modal_siswa from '../../components/modal_siswa'
+import Modal_delete from '../../components/modal_delete'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const detail_siswa = () => {

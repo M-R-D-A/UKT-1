@@ -3,10 +3,10 @@ import Link from 'next/link'
 import axios from 'axios'
 import { globalState } from '@/context/context'
 import { useRouter } from 'next/router'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Modal_CSV from '../components/modal_csv'
+import Sidebar from '../../components/sidebar'
+import Header from '../../components/header'
+import Footer from '../../components/footer'
+import Modal_CSV from '../../components/modal_csv'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const siswa = () => {
@@ -92,7 +92,7 @@ const siswa = () => {
 
                             {/* page name */}
                             <div className='flex justify-center items-center gap-x-3'>
-                                <h1 className='text-2xl tracking-wider uppercase font-bold'>Data Siswa</h1>
+                                <h1 className='text-2xl tracking-wider uppercase font-bold'>Ranting Siswa</h1>
                                 {tipe && <button
                                     onClick={() => setTipe(null)}
                                     className='p-2 bg-red rounded-md'>Back</button>

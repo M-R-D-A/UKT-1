@@ -37,9 +37,9 @@ const detail_siswa = () => {
     const getDataSiswa = () => {
         const token = localStorage.getItem ('token')
         const ranting = JSON.parse (localStorage.getItem ('ranting'))
-        setRanting (ranting.id_ranting)
+        setRanting (ranting?.id_ranting)
 
-        axios.get(BASE_URL + `siswa/ranting/${ranting.id_ranting}` , { headers: { Authorization: `Bearer ${token}`}})
+        axios.get(BASE_URL + `siswa/ranting/${ranting?.id_ranting}` , { headers: { Authorization: `Bearer ${token}`}})
         .then (res => {
             setDataSiswa (res.data.data)
         })
