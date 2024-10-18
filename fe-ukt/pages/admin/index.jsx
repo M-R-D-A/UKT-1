@@ -5,8 +5,6 @@ import Footer from './components/footer'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic';
 import Select from 'react-select';
-import AsyncSelect from 'react-select/async';
-import makeAnimated from 'react-select/animated';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 import axios from 'axios'
