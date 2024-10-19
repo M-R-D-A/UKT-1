@@ -8,6 +8,7 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import Modal_event from '../components/modal_event'
 import Modal_delete from '../components/modal_delete'
+import BasicLayout from '../components/basic_layout'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const ukt_hijau = () => {
@@ -76,7 +77,7 @@ const ukt_hijau = () => {
     }
 
     useEffect(() => {
-        
+
         getDataEvent()
         getDataRanting()
         isLogged()
@@ -84,83 +85,53 @@ const ukt_hijau = () => {
 
     return (
         <>
-            <div className="flex font-lato">
+            <BasicLayout>
+                {/* wrapper page name and search */}
+                <div className="flex justify-between items-center text-white mb-7">
 
-                {/* sidebar */}
-                <Sidebar />
-                {/* akhir sidebar */}
-
-                {/* awal wrapper konten utama */}
-                {/* supaya konten header dapat di scroll dan tidak mempengaruhi sidebar */}
-                <div className="w-full overflow-y-auto h-screen">
-
-                    {/* overlap untuk device sm */}
-                    {/* <div className="absolute hidden lg:hidden inset-0 bg-slate-400 opacity-50 z-10">
-    </div> */}
-
-                    {/* header */}
-                    <Header />
-                    {/* akhir header */}
-
-                    {/* konten utama */}
-                    <div className="min-h-full bg-darkBlue p-6">
-
-                        {/* wrapper page name and search */}
-                        <div className="flex justify-between items-center text-white mb-7">
-
-                            {/* page name */}
-                            <h1 className='text-2xl tracking-wider uppercase font-bold'>Data Ukt Hijau</h1>
-                        </div>
-                        {/* ranting data count wrapper */}
-                        <div className="grid grid-cols-4 gap-x-5 gap-y-3">
-
-                            {/* card ranting */}
-                            {dataUser.id_role === 'admin ranting'
-                                ? <><button 
-                                        onClick={() => goToEventRanting(dataUser.id_ranting)} key={1} 
-                                        className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
-    
-                                            {/* inner bg */}
-                                            <div className="bg-navy p-5 rounded-md space-y-5">
-    
-                                                {/* ranting name */}
-                                                <h1 className='text-green text-lg'>Ranting {dataUser.id_ranting}</h1>
-    
-                                                {/* ranting data count and add button */}
-                                                <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${dataUser.id_ranting}`).length}</h1>
-                                            </div>
-                                        </button>
-                                    </>
-                                : dataRanting?.map((item, index) => (
-                                    <><button 
-                                        onClick={() => goToEventRanting(item.id_ranting)} key={index + 1} 
-                                        className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
-    
-                                            {/* inner bg */}
-                                            <div className="bg-navy p-5 rounded-md space-y-5">
-    
-                                                {/* ranting name */}
-                                                <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
-    
-                                                {/* ranting data count and add button */}
-                                                <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length}</h1>
-                                            </div>
-                                        </button>
-                                    </>
-                                ))
-                            }
-                        </div>
-                    </div>
-                    {/* akhir konten utama */}
-
-                    {/* footer */}
-                    <Footer />
-                    {/* akhir footer */}
-
+                    {/* page name */}
+                    <h1 className='text-2xl tracking-wider uppercase font-bold'>Data Ukt Hijau</h1>
                 </div>
-                {/* akhir wrapper konten utama */}
-            </div>
+                {/* ranting data count wrapper */}
+                <div className="grid grid-cols-4 gap-x-5 gap-y-3">
 
+                    {/* card ranting */}
+                    {dataUser.id_role === 'admin ranting'
+                        ? <><button
+                            onClick={() => goToEventRanting(dataUser.id_ranting)} key={1}
+                            className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+
+                            {/* inner bg */}
+                            <div className="bg-navy p-5 rounded-md space-y-5">
+
+                                {/* ranting name */}
+                                <h1 className='text-green text-lg'>Ranting {dataUser.id_ranting}</h1>
+
+                                {/* ranting data count and add button */}
+                                <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${dataUser.id_ranting}`).length}</h1>
+                            </div>
+                        </button>
+                        </>
+                        : dataRanting?.map((item, index) => (
+                            <><button
+                                onClick={() => goToEventRanting(item.id_ranting)} key={index + 1}
+                                className="bg-navy hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5">
+
+                                {/* inner bg */}
+                                <div className="bg-navy p-5 rounded-md space-y-5">
+
+                                    {/* ranting name */}
+                                    <h1 className='text-green text-lg'>Ranting {item.id_ranting}</h1>
+
+                                    {/* ranting data count and add button */}
+                                    <h1 className='text-white text-3xl font-semibold tracking-wider'>{dataEvent.filter(a => a.id_ranting === `${item.id_ranting}`).length}</h1>
+                                </div>
+                            </button>
+                            </>
+                        ))
+                    }
+                </div>
+            </BasicLayout>
             {/* memanggil modal */}
             <globalState.Provider value={{ showModalEvent, setShowModalEvent, setDataEvent, action, idEvent, name, setName, date, setDate, tipe, setTipe, isActive, setIsActive }}>
                 <Modal_event />

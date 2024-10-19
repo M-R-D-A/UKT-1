@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const IMAGE_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 
-const sidebar = () => {
+const sidebar = ({location}) => {
 
     // state role
     const [role, setRole] = useState([])
@@ -20,12 +20,7 @@ const sidebar = () => {
 
     // deklarasi router
     const router = useRouter()
-
-    // state router
-    const location = useRouter()
-    const { pathname } = location
-    const splitLoc = pathname.split('/admin/')
-
+    const splitLoc = location
     // state sidebar
     const { showSideBar, setShowSideBar } = useContext(globalState)
     const { closeSideBar, setCloseSideBar } = useContext(globalState)
