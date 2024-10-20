@@ -118,12 +118,12 @@ const rekap_nilai_ukt_ukcw = () => {
         getDataUktFiltered()
     }, [`${dataRanting}`, jenis, updown])
 
-    useEffect(() => {
-        socket.on('refreshRekap', () => {
-            getDataUktFiltered()
-        })
+    // useEffect(() => {
+    //     socket.on('refreshRekap', () => {
+    //         getDataUktFiltered()
+    //     })
 
-    }, [])
+    // }, [])
 
     // useEffect(() => {
     //     setInterval(() => {
