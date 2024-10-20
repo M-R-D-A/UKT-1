@@ -8,6 +8,7 @@ import Header from '../../components/header'
 import Footer from '../../components/footer'
 import Modal_event from '../../components/modal_event'
 import Modal_delete from '../../components/modal_delete'
+import { GoBackPreviousPageButton } from '@/main/hook/goBack'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const ukt_hijau = () => {
@@ -15,10 +16,14 @@ const ukt_hijau = () => {
     // deklarasi router
     const router = useRouter ()
 
-    const idRanting = router.query.ranting
-    const idUkt = router.query.ukt
-    const idTipe = router.query.tipe
+    const idRantingRouter = router.query.ranting
+    const idUktRouter = router.query.ukt
+    const idTipeRouter = router.query.tipe
 
+    //state router
+    const [idUkt, setIdUkt] = useState('')
+    const [idRanting, setIdRanting] = useState('')
+    const [idTipe, setIdTipe] = useState('')
     // state modal
     const [showModalEvent, setShowModalEvent] = useState (false)
     const [showModalDelete, setShowModalDelete] = useState (false)
@@ -36,8 +41,9 @@ const ukt_hijau = () => {
     // function get data event
     const getDataEvent = () => {
         const token = localStorage.getItem ('token')
-
-        axios.get (BASE_URL + `event/ukt/${idUkt}/` + idRanting, { headers: { Authorization: `Bearer ${token}`}})
+        const dataRanting = JSON.parse(localStorage.getItem('ranting'))
+        const dataTipe = JSON.parse(localStorage.getItem('tipe'))
+        axios.get (BASE_URL + `event/ukt/${dataTipe}/` + dataRanting, { headers: { Authorization: `Bearer ${token}`}})
         .then (res => {
             setDataEvent (res.data.data)
         })
@@ -45,6 +51,7 @@ const ukt_hijau = () => {
             console.log(err.message);
         })
     }
+
 
     // function modal add
     const addModal = () => {
@@ -103,9 +110,16 @@ const ukt_hijau = () => {
     }
 
     useEffect (() => {
-        getDataEvent ()
+        if(router.isReady){
+            setIdRanting(idRantingRouter)
+            setIdUkt(idUktRouter)
+            setIdTipe(idTipeRouter)
+        }
+        if(idRanting === idRantingRouter && idUkt === idUktRouter){
+            getDataEvent ()
+        }
         isLogged ()
-    }, [])
+    }, [router.isReady, idRanting, idUkt, idTipe])
 
     return (
         <>
@@ -132,7 +146,8 @@ const ukt_hijau = () => {
 
                         {/* wrapper page name and search */}
                         <div className="flex justify-between items-center text-white mb-7">
-
+                            {/* go back button  */}
+                            <GoBackPreviousPageButton/>
                             {/* page name */}
                             <h1 className='text-2xl tracking-wider uppercase font-bold'>REKAP - {idUkt}</h1>
 

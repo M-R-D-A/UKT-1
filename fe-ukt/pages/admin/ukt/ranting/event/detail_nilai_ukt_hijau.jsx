@@ -12,12 +12,13 @@ import Jurus from '../../content/jurus'
 import Fisik from '../../content/fisik'
 import Sambung from '../../content/sambung'
 import { useRouter } from 'next/router'
+import { GoBackPreviousPageButton } from '@/main/hook/goBack'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const detail_nilai_ukt_hijau = () => {
-    
+
     // deklarasi router
-    const router = useRouter ()
+    const router = useRouter()
 
     // state set jenis
     const [active, setActive] = useState('senam')
@@ -27,28 +28,28 @@ const detail_nilai_ukt_hijau = () => {
     }
 
     let activeComponent;
-    const data = {tipe_ukt: 'UKT Hijau'}
+    const data = { tipe_ukt: 'UKT Hijau' }
     if (active === 'senam') {
-        activeComponent = <Senam data={data}/>;
-    } else if (active === 'jurus'){
-        activeComponent = <Jurus data={data}/>;
-    } else if (active === 'fisik'){
-        activeComponent = <Fisik data={data}/>;
-    } else if (active === 'teknik'){
-        activeComponent = <Teknik data={data}/>;
-    } else if (active === 'sambung'){
-        activeComponent = <Sambung data={data}/>;
+        activeComponent = <Senam data={data} />;
+    } else if (active === 'jurus') {
+        activeComponent = <Jurus data={data} />;
+    } else if (active === 'fisik') {
+        activeComponent = <Fisik data={data} />;
+    } else if (active === 'teknik') {
+        activeComponent = <Teknik data={data} />;
+    } else if (active === 'sambung') {
+        activeComponent = <Sambung data={data} />;
     }
 
     // function login checker
     const isLogged = () => {
-        if (localStorage.getItem ('token') === null || localStorage.getItem ('admin') === null) {
-            router.push ('/admin/login')
+        if (localStorage.getItem('token') === null || localStorage.getItem('admin') === null) {
+            router.push('/admin/login')
         }
     }
 
-    useEffect (() => {
-        isLogged ()
+    useEffect(() => {
+        isLogged()
     }, [])
 
     return (
@@ -74,6 +75,11 @@ const detail_nilai_ukt_hijau = () => {
                     {/* konten utama */}
                     <div className="min-h-full bg-darkBlue px-10 py-8">
 
+                        <div className="flex justify-start items-center gap-x-3 pb-5">
+                            <GoBackPreviousPageButton />
+                            <h1 className='text-2xl tracking-wider text-white font-lato font-bold uppercase'>Detail Nilai</h1>
+                        </div>
+
                         {/* wrapper category */}
                         <div className="flex bg-navy gap-x-2 overflow-x-scroll text-purple mb-3 scrollbar-hide">
                             <button onClick={() => onActive('senam')} className={active === 'senam' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>Senam</button>
@@ -82,7 +88,7 @@ const detail_nilai_ukt_hijau = () => {
                             <button onClick={() => onActive('teknik')} className={active === 'teknik' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>Teknik</button>
                             <button onClick={() => onActive('sambung')} className={active === 'sambung' ? "bg-purple text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md" : "bg-white hover:bg-purple hover:text-white transition ease-in-out duration-300 py-1.5 px-4 rounded-md"}>Sambung</button>
                         </div>
-                        { activeComponent }
+                        {activeComponent}
                     </div>
                     {/* akhir konten utama */}
 

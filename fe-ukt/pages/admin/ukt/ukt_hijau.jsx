@@ -61,7 +61,8 @@ const ukt_hijau = () => {
 
     // function to detail nilai
     const goToEventRanting = (item) => {
-        // localStorage.setItem('event', JSON.stringify(item))
+        localStorage.setItem('ranting', JSON.stringify(item))
+        localStorage.setItem('tipe', JSON.stringify('UKT HIJAU'))
         router.push({
             pathname: './ranting',
             query: { ranting: item, ukt: 'UKT Hijau', tipe: 'ukt_hijau' } // Add your parameter here
@@ -76,7 +77,6 @@ const ukt_hijau = () => {
     }
 
     useEffect(() => {
-        
         getDataEvent()
         getDataRanting()
         isLogged()

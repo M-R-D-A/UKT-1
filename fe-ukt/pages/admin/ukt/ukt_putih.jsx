@@ -60,7 +60,8 @@ const ukt_putih = () => {
 
     // function to detail nilai
     const goToEventRanting = (item) => {
-        // localStorage.setItem('event', JSON.stringify(item))
+        localStorage.setItem('ranting', JSON.stringify(item))
+        localStorage.setItem('tipe', JSON.stringify('UKT PUTIH'))
         router.push({
             pathname: './ranting',
             query: { ranting: item, ukt: 'UKT Putih', tipe: 'ukt_putih' } // Add your parameter here
