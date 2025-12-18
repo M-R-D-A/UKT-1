@@ -70,12 +70,10 @@ const rekap_nilai_ukt_ukcw = () => {
     const getDataByName = () => {
         const token = localStorage.getItem('token')
         const event = JSON.parse(localStorage.getItem('event'));
-        console.log("getdatabyname")
 
         setLoading(true);
         axios.get(BASE_URL + `ukt_siswa/name/${name}/${event.id_event}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                console.log(res);
                 setDataUkt(res.data.data)
             })
             .catch(err => {
@@ -89,7 +87,6 @@ const rekap_nilai_ukt_ukcw = () => {
     let timeoutId = null;
 
     useEffect(() => {
-        console.log(name)
         if (name != null) {
             const delay = 500; // Adjust the delay time (in milliseconds) as per your requirement
 
@@ -118,18 +115,18 @@ const rekap_nilai_ukt_ukcw = () => {
         getDataUktFiltered()
     }, [`${dataRanting}`, jenis, updown])
 
-    // useEffect(() => {
-    //     socket.on('refreshRekap', () => {
-    //         getDataUktFiltered()
-    //     })
+    useEffect(() => {
+        socket.on('refreshRekap', () => {
+            getDataUktFiltered()
+        })
 
-    // }, [])
+    }, [])
 
-    // useEffect(() => {
-    //     setInterval(() => {
-    //         socket.emit('pushRekap')
-    //     }, 3000)
-    // }, [])
+    useEffect(() => {
+        setInterval(() => {
+            socket.emit('pushRekap')
+        }, 3000)
+    }, [])
     return (
         <>
             {loading
@@ -233,7 +230,29 @@ const rekap_nilai_ukt_ukcw = () => {
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>
+                                            <th className='text-base border font-oswald'>Senam Toya {jenis == 'senam' && updown == 'upToDown'
+                                                ? <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('senam');
+                                                    setUpDown('downToUp');
+
+                                                }}>⌄</button>
+                                                : <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('senam');
+                                                    setUpDown('upToDown');
+
+                                                }}>⌃</button>}</th>
                                             <th className='text-base border font-oswald'>Jurus {jenis == 'jurus' && updown == 'upToDown'
+                                                ? <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('jurus');
+                                                    setUpDown('downToUp');
+
+                                                }}>⌄</button>
+                                                : <button className='rounded-md bg-gray text-lg' onClick={() => {
+                                                    setJenis('jurus');
+                                                    setUpDown('upToDown');
+
+                                                }}>⌃</button>}</th>
+                                            <th className='text-base border font-oswald'>Jurus Toya{jenis == 'jurus' && updown == 'upToDown'
                                                 ? <button className='rounded-md bg-gray text-lg' onClick={() => {
                                                     setJenis('jurus');
                                                     setUpDown('downToUp');
@@ -299,7 +318,9 @@ const rekap_nilai_ukt_ukcw = () => {
                                                     <td className='border-b-2 border-gray border text-xs'>{item?.siswa_ukt_siswa?.siswa_ranting.name}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.keshan < 50 && 'text-[#ca3030]'} ${item.keshan > 89.99 && 'text-[#7dff5d]'}`}>{(item.keshan)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.senam < 50 && 'text-[#ca3030]'} ${item.senam > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.senam)}</td>
+                                                    <td className={`border-b-2 border-gray border text-lg ${item?.senam < 50 && 'text-[#ca3030]'} ${item.senam > 89.99 && 'text-[#7dff5d]'}`}>0</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.jurus < 50 && 'text-[#ca3030]'} ${item.jurus > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.jurus)}</td>
+                                                    <td className={`border-b-2 border-gray border text-lg ${item?.jurus < 50 && 'text-[#ca3030]'} ${item.jurus > 89.99 && 'text-[#7dff5d]'}`}>0</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.teknik < 50 && 'text-[#ca3030]'} ${item.teknik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.teknik)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.fisik < 50 && 'text-[#ca3030]'} ${item.fisik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.fisik)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.sambung < 50 && 'text-[#ca3030]'} ${item.sambung > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.sambung)}</td>
