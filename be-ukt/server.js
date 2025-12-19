@@ -13,6 +13,7 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(express.static(__dirname))
+console.log("THIS FILE IS RUNNING");
 
 //web socket
 io.on('connection', (socket) => {
@@ -147,6 +148,6 @@ const nilaiSambung = require('./src/api/nilai_sambung/nilai_sambung.router');
 app.use("/ukt/nilai_sambung", nilaiSambung)
 
 //run server
-server.listen(8080, () => {
+server.listen(8800, () => {
     console.log('server run on port 8080')
 })
