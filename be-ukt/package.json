@@ -1,7 +1,6 @@
 {
   "name": "be-ukt",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,5 +23,12 @@
     "sequelize": "^6.29.1",
     "socket.io": "^4.6.1",
     "uuid": "^9.0.0"
-  }
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
