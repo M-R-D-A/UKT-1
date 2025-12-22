@@ -32,7 +32,7 @@ const belati = () => {
         const token = localStorage.getItem('tokenPenguji')
         const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
 
-        axios.get(BASE_URL + `belati/ukt/${dataSiswa.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(BASE_URL + `belati/ukt/${dataSiswa?.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 console.log('res dari belati penguji')
                 console.log(res)
@@ -53,11 +53,11 @@ const belati = () => {
     // function set selected button
     function handleButtonClick(id_belati, selectedOption) {
         const index = updatedOptions.findIndex(
-            (option) => option.id_belati === id_belati && option.selectedOption === selectedOption
+            (option) => option.id === id_belati && option.selectedOption === selectedOption
         );
 
         const idbelati = updatedOptions.findIndex(
-            (option) => option.id_belati === id_belati
+            (option) => option.id === id_belati
         )
 
         if (index !== -1) {
@@ -167,13 +167,13 @@ const belati = () => {
 
     useEffect(() => {
         const data = [
-            { id: 1, name: "Tusukan Depan" },
-            { id: 2, name: "Tusukan Belakang" },
-            { id: 3, name: "Tusukan Dari Atas" },
-            { id: 4, name: "Tusukan Dari Bawah" },
-            { id: 5, name: "Tusukan Dari Samping" },
+            { id: 1, name: "Tusukan Depan", selectedOption: null },
+            { id: 2, name: "Tusukan Belakang", selectedOption: null  },
+            { id: 3, name: "Tusukan Dari Atas", selectedOption: null  },
+            { id: 4, name: "Tusukan Dari Bawah", selectedOption: null  },
+            { id: 5, name: "Tusukan Dari Samping", selectedOption: null  },
         ]
-        setdata(data)
+        setSelectedButton(data)
     }, [])
     return (
         <>
@@ -198,7 +198,7 @@ const belati = () => {
 
                         {/* belati list */}
                         <div className="space-y-3 mb-10">
-                            {datalistbelati?.map((item, index) => (
+                            {selectedButton?.map((item, index) => (
                                 <div key={index + 1} className="grid grid-cols-2 items-center">
                                     <h1 className='text-white text-xl font-semibold uppercase'>{item.name}</h1>
                                     <div className="gap-x-2 grid grid-flow-col grid-cols-10 text-sm mb:text-md">
@@ -208,7 +208,7 @@ const belati = () => {
                                                 <button className={selectedButton.find(
                                                     (option) =>
                                                         option.id === item.id &&
-                                                        option.selectedOption >= 1
+                                                        option.selectedOption == 0
                                                 ) ? "font-semibold bg-red rounded-md text-white py-1.5 w-full uppercase"
                                                     : "font-semibold bg-navy border-2 border-red rounded-md text-white py-1.5 w-full uppercase"}
                                                     onClick={() => handleButtonClick(item.id, 0)
@@ -223,10 +223,10 @@ const belati = () => {
                                                 <button className={selectedButton.find(
                                                     (option) =>
                                                         option.id === item.id &&
-                                                        option.selectedOption >= 1
+                                                        option.selectedOption == 1
                                                 ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase"
                                                     : "font-semibold bg-navy border-2 border-purple rounded-md text-white py-1.5 w-full uppercase"}
-                                                    onClick={() => handleButtonClick(item.id, 1)}>BENAR</button>
+                                                    onClick={() => handleButtonClick(item.id, 1)}>BENAR {item.id}</button>
                                             </div>
                                         </button>
 

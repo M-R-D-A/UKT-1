@@ -26,8 +26,7 @@ const navLinks = [
       { label: "jurus",  icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
       { label: "fisik", icon: <img src={fisikLine}></img>, icon2: <img src={fisikFill}></img> },
       { label: "teknik", icon: <img src={teknikLine}></img>, icon2: <img src={teknikFill}></img> },
-      // { label: "belati", icon: <img src={belatiLine}></img>, icon2: <img src={belatiFill}></img> },
-      { label: "belati", icon: <img src={belatiLine}></img>, icon2: <img src={belatiFill}></img> },
+      { label: "belati", icon: <img src={kniveLine}></img>, icon2: <img src={kniveFill}></img> },
       { label: "sambung", icon: <img src={srcSambungline}></img>, icon2: <img src={srcSambungfill}></img> },
     ]
   }
@@ -44,7 +43,7 @@ function MainNavigation(props) {
           <nav>
             <ul className="flex gap-6">
               {navItem.links.map((link, index) => (
-                <li  onClick={() => setActive(link.label)} >
+                <li key={index+1} onClick={() => setActive(link.label)} >
                   <div className='flex-col px-1 pt-4 py-2 w-12 items-center justify-center'>
                     <div
                     style = {

@@ -47,7 +47,7 @@ const jurus = () => {
         const token = localStorage.getItem('tokenPenguji')
         const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
 
-        axios.get(BASE_URL + `jurus/ukt/${dataSiswa.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(BASE_URL + `jurus/ukt/${dataSiswa?.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 setDataJurus(res.data.data)
                 const data = res.data.data

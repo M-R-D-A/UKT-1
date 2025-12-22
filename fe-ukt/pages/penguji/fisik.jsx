@@ -57,9 +57,9 @@ const fisik = () => {
     const getDataStandartFisik = () => {
         const token = localStorage.getItem('tokenPenguji')
         const dataSiswa1 = JSON.parse(localStorage.getItem('dataSiswa'));
-        const tipe_ukt = dataSiswa1.tipe_ukt;
+        const tipe_ukt = dataSiswa1?.tipe_ukt;
         console.log(dataSiswa1);
-        const peserta = dataSiswa1.peserta;
+        const peserta = dataSiswa1?.peserta;
         axios.post(BASE_URL + `standar_fisik/peserta`, {
             tipe_ukt: tipe_ukt,
             peserta: peserta

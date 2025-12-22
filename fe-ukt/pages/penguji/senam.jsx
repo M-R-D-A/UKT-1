@@ -29,7 +29,7 @@ const senam = () => {
         const token = localStorage.getItem('tokenPenguji')
         const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
 
-        axios.get(BASE_URL + `senam/ukt/${dataSiswa.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(BASE_URL + `senam/ukt/${dataSiswa?.tipe_ukt}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 console.log('res dari senam penguji')
                 console.log(res)
