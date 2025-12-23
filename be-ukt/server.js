@@ -147,6 +147,14 @@ app.use("/ukt/sambung", sambung)
 const nilaiSambung = require('./src/api/nilai_sambung/nilai_sambung.router');
 app.use("/ukt/nilai_sambung", nilaiSambung)
 
+//endpoint Belati
+const belati = require('./src/api/kategori/belati/belati/belati.router');
+app.use("/ukt/belati", belati)
+
+//endpoint Belati Detail
+const belatiDetail = require('./src/api/kategori/belati/belati_detail/belati_detail.router');
+app.use("/ukt/belati_detail", belatiDetail)
+
 //run server
 server.listen(8800, () => {
     console.log('server run on port 8080')

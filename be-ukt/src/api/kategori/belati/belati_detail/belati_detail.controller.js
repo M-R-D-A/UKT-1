@@ -1,5 +1,6 @@
 const models = require('../../../../models/index');
 const belati_detail = models.belati_detail;
+const belati_siswa = models.belati_siswa
 
 module.exports = {
     controllerGetAll: async (req, res) => {
@@ -159,6 +160,41 @@ module.exports = {
                     message: error.message
                 })
             })
+    },
+    controllerAddExam: async (req, res) => {
+        try {
+            const {
+                id_penguji,
+                id_event,
+                id_siswa,
+                tipe_ukt,
+                ujian
+            } = req.body;
+            const detail = {
+                id_penguji,id_siswa,id_event,tipe_ukt
+            }
+            const processDetail = await belati_detail.create(detail)
+            // mapping array ujian jadi banyak row
+            const data = ujian.map(item => ({
+                id_belati_detail: processDetail.id_belati_detail,
+                id_siswa,
+                id_belati: item.id_belati,
+                predikat: item.predikat
+            }));
+
+
+            const result = await belati_siswa.bulkCreate(data);
+
+            res.json({
+                message: "All exams inserted successfully",
+                data: result
+            });
+
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     },
     controllerEdit: async (req, res) => {
         let param = {

@@ -95,59 +95,34 @@ const belati = () => {
         const uktSiswa = JSON.parse(localStorage.getItem('dataUktSiswa'))
         const token = localStorage.getItem('tokenPenguji')
         const dataPenguji = JSON.parse(localStorage.getItem('penguji'))
+        const data = selectedButton.map((option) => {
+            return {
+                id_belati: option.id,
+                predikat: option.selectedOption,
+            }
+        })
         const dataDetail = {
             id_penguji: dataPenguji.id_penguji,
             id_siswa: dataSiswa.id_siswa,
             id_event: dataSiswa.id_event,
-            tipe_ukt: dataSiswa.tipe_ukt
+            tipe_ukt: dataSiswa.tipe_ukt,
+            ujian: data
         }
+        console.log(dataDetail)
         if (alert == true) {
-            axios.post(BASE_URL + `belati_detail`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
+            axios.post(BASE_URL + `belati_detail/exam`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
                 .then(async res => {
                     console.log(res)
 
-                    const data = selectedButton.map((option) => {
-                        return {
-                            id_belati: option.id_belati,
-                            predikat: option.selectedOption,
-                        }
-                    })
-
-                    const id_belati_detail = res.data.data.id_belati_detail
-
-                    let nilai8 = [];
-                    let nilai10 = [];
-
-                    // -- belati siswa -- //
-                    for (let i = 0; i < data.length; i++) {
-                        if (data[i].predikat === 1) {
-                            nilai8.push('1')
-                        } else if (data[i].predikat === 2) {
-                            nilai10.push('1')
-                        }
-                        axios.post(BASE_URL + `belati_siswa`, {
-                            id_belati_detail: id_belati_detail,
-                            id_belati: data[i].id_belati,
-                            predikat: data[i].predikat,
-                        }, { headers: { Authorization: `Bearer ${token}` } })
-                            .then(res => {
-                                console.log(res.data.message);
-
-                            })
-                            .catch(err => {
-                                console.log(err.message);
-                            })
-                    }
+                    const dataDetailBelati = res.data.data
+                    const nilai = dataDetailBelati.nilai
 
                     // -- ukt siswa  -- //
-                    const nilaiUkt10 = ((nilai10.length / data.length) * 100).toFixed(2)
-                    const nilaiUkt8 = ((nilai8.length / data.length) * 80).toFixed(2)
-                    const nilaiUkt = (parseInt(nilaiUkt10) + parseInt(nilaiUkt8)).toFixed(2)
+                    const nilaiUkt = nilai
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
                         belati: nilaiUkt
                     }, { headers: { Authorization: `Bearer ${token}` } })
                         .then(res => {
-                            console.log(res)
                             socket.emit('pushRekap')
                             router.back()
                         })
@@ -168,10 +143,10 @@ const belati = () => {
     useEffect(() => {
         const data = [
             { id: 1, name: "Tusukan Depan", selectedOption: null },
-            { id: 2, name: "Tusukan Belakang", selectedOption: null  },
-            { id: 3, name: "Tusukan Dari Atas", selectedOption: null  },
-            { id: 4, name: "Tusukan Dari Bawah", selectedOption: null  },
-            { id: 5, name: "Tusukan Dari Samping", selectedOption: null  },
+            { id: 2, name: "Tusukan Belakang", selectedOption: null },
+            { id: 3, name: "Tusukan Dari Atas", selectedOption: null },
+            { id: 4, name: "Tusukan Dari Bawah", selectedOption: null },
+            { id: 5, name: "Tusukan Dari Samping", selectedOption: null },
         ]
         setSelectedButton(data)
     }, [])
