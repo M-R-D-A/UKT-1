@@ -186,25 +186,25 @@ const kripen = () => {
                                                 <button className={selectedButton.find(
                                                     (option) =>
                                                         option.id === item.id &&
-                                                        option.selectedOption == 1
+                                                        option.selectedOption >= 1
                                                 ) ? "font-semibold bg-purple rounded-md text-white py-1.5 w-full uppercase"
                                                     : "font-semibold bg-navy border-2 border-purple rounded-md text-white py-1.5 w-full uppercase"}
                                                     onClick={() => handleButtonClick(item.id, 1)}>BENAR {item.id}</button>
                                             </div>
                                         </button>
 
-                                        {/* <button className='col-span-3'>
+                                        <button className='col-span-3'>
                                             <div className="hover:scale-105 transition ease-in-out duration-500 
                                             hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
                                                 <button className={selectedButton.find(
                                                     (option) =>
-                                                        option.id_kripen === item.id &&
+                                                        option.id === item.id &&
                                                         option.selectedOption === 2
                                                 ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase"
                                                     : "font-semibold bg-navy border-2 border-green rounded-md text-white py-1.5 w-full uppercase"}
                                                     onClick={() => handleButtonClick(item.id, 2)}>+</button>
                                             </div>
-                                        </button> */}
+                                        </button>
                                     </div>
                                 </div>
                             ))}
