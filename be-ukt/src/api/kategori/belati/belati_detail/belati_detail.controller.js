@@ -186,7 +186,6 @@ module.exports = {
             const result = await belati_siswa.bulkCreate(data);
             const right = data.filter(item => item.predikat === 1).length;
             const examResult = (right*(100/data.length))
-            console.log(examResult) 
 
             const uktSiswa = await ukt_siswa.update(
             {

@@ -186,7 +186,6 @@ module.exports = {
             const result = await kripen_siswa.bulkCreate(data);
             const right = data.filter(item => item.predikat === 1).length;
             const examResult = (right*(100/data.length)).toFixed(2)
-            console.log(examResult) 
 
             const uktSiswa = await ukt_siswa.update(
             {
