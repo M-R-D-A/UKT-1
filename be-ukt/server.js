@@ -154,6 +154,9 @@ app.use("/ukt/belati", belati)
 //endpoint Belati Detail
 const belatiDetail = require('./src/api/kategori/belati/belati_detail/belati_detail.router');
 app.use("/ukt/belati_detail", belatiDetail)
+//endpoint Belati Detail
+const kripenDetail = require('./src/api/kategori/kripen/kripen_detail/kripen_detail.router');
+app.use("/ukt/kripen_detail", kripenDetail)
 
 //run server
 server.listen(8800, () => {

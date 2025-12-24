@@ -11,7 +11,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
 
-const belati = () => {
+const kripen = () => {
 
     const [showModalAlert, setShowModalAlert] = useState(false);
     const router = useRouter()
@@ -23,19 +23,19 @@ const belati = () => {
     const updatedOptions = [...selectedButton];
 
     // function set selected button
-    function handleButtonClick(id_belati, selectedOption) {
+    function handleButtonClick(id_kripen, selectedOption) {
         const index = updatedOptions.findIndex(
-            (option) => option.id === id_belati && option.selectedOption === selectedOption
+            (option) => option.id === id_kripen && option.selectedOption === selectedOption
         );
 
-        const idbelati = updatedOptions.findIndex(
-            (option) => option.id === id_belati
+        const idkripen = updatedOptions.findIndex(
+            (option) => option.id === id_kripen
         )
 
         if (index !== -1) {
             updatedOptions[index].selectedOption = null;
         } else {
-            updatedOptions[idbelati].selectedOption = selectedOption
+            updatedOptions[idkripen].selectedOption = selectedOption
         }
 
         setSelectedButton(updatedOptions);
@@ -60,7 +60,7 @@ const belati = () => {
         }
     }, [alert])
 
-    // function handle save nilai belati
+    // function handle save nilai kripen
     const handleSave = () => {
         setShowModalAlert(true);
         // -- data detail -- //
@@ -69,7 +69,7 @@ const belati = () => {
         const dataPenguji = JSON.parse(localStorage.getItem('penguji'))
         const data = selectedButton.map((option) => {
             return {
-                id_belati: option.id,
+                id_kripen: option.id,
                 predikat: option.selectedOption,
             }
         })
@@ -82,17 +82,17 @@ const belati = () => {
         }
         console.log(dataDetail)
         if (alert == true) {
-            axios.post(BASE_URL + `belati_detail/exam`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
+            axios.post(BASE_URL + `kripen_detail/exam`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
                 .then(async res => {
                     console.log(res)
 
-                    const dataDetailBelati = res.data.data
-                    const nilai = dataDetailBelati.nilai
+                    const dataDetailkripen = res.data.data
+                    const nilai = dataDetailkripen.nilai
 
                     // -- ukt siswa  -- //
                     const nilaiUkt = nilai
                     await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
-                        belati: nilaiUkt
+                        kripen: nilaiUkt
                     }, { headers: { Authorization: `Bearer ${token}` } })
                         .then(res => {
                             socket.emit('pushRekap')
@@ -111,23 +111,29 @@ const belati = () => {
         const dataSiswa = JSON.parse(localStorage.getItem('dataSiswa'))
         setDataSiswa(dataSiswa)
         const dataUKCW = [
-            { id: 1, name: "Tusukan Depan 1", selectedOption: null },
-            { id: 2, name: "Tusukan Depan 2", selectedOption: null },
-            { id: 3, name: "Tusukan Belakang 1", selectedOption: null },
-            { id: 4, name: "Tusukan Belakang 2", selectedOption: null },
-            { id: 5, name: "Tusukan Dari Atas 1", selectedOption: null },
-            { id: 6, name: "Tusukan Dari Atas 2", selectedOption: null },
-            { id: 7, name: "Tusukan Dari Bawah 1", selectedOption: null },
-            { id: 8, name: "Tusukan Dari Bawah 2", selectedOption: null },
-            { id: 9, name: "Tusukan Dari Samping 1", selectedOption: null },
-            { id: 10, name: "Tusukan Dari Samping 2", selectedOption: null },
+            { id: 1, name: "Salaman 1", selectedOption: null },
+            { id: 2, name: "Salaman 2", selectedOption: null },
+            { id: 3, name: "Cekikan 1", selectedOption: null },
+            { id: 4, name: "Cekikan 2", selectedOption: null },
+            { id: 5, name: "Pitingan 1", selectedOption: null },
+            { id: 6, name: "Pitingan 2", selectedOption: null },
+            { id: 7, name: "Guntingan 1", selectedOption: null },
+            { id: 8, name: "Guntingan 2", selectedOption: null },
+            { id: 9, name: "Sekapan Tangan Bebas 1", selectedOption: null },
+            { id: 10, name: "Sekapan Tangan Bebas 2", selectedOption: null },
+            { id: 11, name: "Sekapan Tangan Tak Bebas 2", selectedOption: null },
+            { id: 12, name: "Sekapan Tangan Tak Bebas 2", selectedOption: null },
+            { id: 13, name: "Jambakan 1", selectedOption: null },
+            { id: 14, name: "Jambakan 2", selectedOption: null },
         ]
         const dataUktPutih = [
-            { id: 1, name: "Tusukan Depan 1", selectedOption: null },
-            { id: 3, name: "Tusukan Belakang 1", selectedOption: null },
-            { id: 5, name: "Tusukan Dari Atas 1", selectedOption: null },
-            { id: 7, name: "Tusukan Dari Bawah 1", selectedOption: null },
-            { id: 9, name: "Tusukan Dari Samping 1", selectedOption: null },
+            { id: 1, name: "Salaman 1", selectedOption: null },
+            { id: 3, name: "Cekikan 1", selectedOption: null },
+            { id: 5, name: "Pitingan 1", selectedOption: null },
+            { id: 7, name: "Guntingan 1", selectedOption: null },
+            { id: 9, name: "Sekapan Tangan Bebas 1", selectedOption: null },
+            { id: 11, name: "Sekapan Tangan Tak Bebas 1", selectedOption: null },
+            { id: 13, name: "Jambakan 1", selectedOption: null },
         ]
         const data = dataSiswa.tipe_ukt == "UKCW" ? dataUKCW : dataUktPutih
         setSelectedButton(data)
@@ -153,7 +159,7 @@ const belati = () => {
                             <h1 className='tracking-wide'>{dataSiswa.id_ranting}</h1>
                         </div>
 
-                        {/* belati list */}
+                        {/* kripen list */}
                         <div className="space-y-3 mb-10">
                             {selectedButton?.map((item, index) => (
                                 <div key={index + 1} className="grid grid-cols-2 items-center">
@@ -192,7 +198,7 @@ const belati = () => {
                                             hover:bg-gradient-to-r from-[#16D4FC] to-[#9A4BE9] rounded-md p-0.5 mb-4">
                                                 <button className={selectedButton.find(
                                                     (option) =>
-                                                        option.id_belati === item.id &&
+                                                        option.id_kripen === item.id &&
                                                         option.selectedOption === 2
                                                 ) ? "font-semibold bg-green rounded-md text-white py-1.5 w-full uppercase"
                                                     : "font-semibold bg-navy border-2 border-green rounded-md text-white py-1.5 w-full uppercase"}
@@ -216,4 +222,4 @@ const belati = () => {
     )
 }
 
-export default belati
+export default kripen

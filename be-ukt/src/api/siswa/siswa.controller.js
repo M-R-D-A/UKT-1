@@ -139,6 +139,10 @@ module.exports = {
             whereClause["$siswa_teknik.id_siswa$"] = { [Op.is]: null };
         } else if (action == 'sambung') {
             whereClause["$sambung_siswa.id_siswa$"] = { [Op.is]: null };
+        } else if (action == 'belati') {
+            whereClause["$belati_siswa.id_siswa$"] = { [Op.is]: null };
+        } else if (action == 'kripen') {
+            whereClause["$kripen_siswa.id_siswa$"] = { [Op.is]: null };
         }
         siswa.findAll({
             include: [
@@ -179,8 +183,14 @@ module.exports = {
                     attributes: ['id_siswa']
                 },
                 {
-                    model: models.detail_sambung,
-                    as: "sambung_siswa",
+                    model: models.belati_detail,
+                    as: "belati_siswa",
+                    required: false,
+                    attributes: ['id_siswa']
+                },
+                {
+                    model: models.kripen_detail,
+                    as: "kripen_siswa",
                     required: false,
                     attributes: ['id_siswa']
                 },
@@ -336,6 +346,7 @@ module.exports = {
                 }
             ]
         };
+        console.log(action)
 
         if (action == 'senam') {
             whereClause["$senam_siswa.id_siswa$"] = { [Op.is]: null };
@@ -347,6 +358,8 @@ module.exports = {
             whereClause["$siswa_teknik.id_siswa$"] = { [Op.is]: null };
         } else if (action == 'sambung') {
             whereClause["$sambung_siswa.id_siswa$"] = { [Op.is]: null };
+        } else if (action == 'belati') {
+            whereClause["$belati_siswa.id_siswa$"] = { [Op.is]: null };
         }
         siswa
             .findAll({
@@ -390,6 +403,12 @@ module.exports = {
                     {
                         model: models.detail_sambung,
                         as: "sambung_siswa",
+                        required: false,
+                        attributes: ['id_siswa']
+                    },
+                    {
+                        model: models.belati_detail,
+                        as: "belati_siswa",
                         required: false,
                         attributes: ['id_siswa']
                     },

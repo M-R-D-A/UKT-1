@@ -23,10 +23,13 @@ const navLinks = [
     role: "penguji",
     links: [
       { label: "senam", icon: <img src={senamLine}></img>, icon2: <img src={senamFill}></img>},
+      { label: "toya", icon: <img src={senamLine}></img>, icon2: <img src={senamFill}></img>},
       { label: "jurus",  icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
+      { label: "toya",  icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
       { label: "fisik", icon: <img src={fisikLine}></img>, icon2: <img src={fisikFill}></img> },
       { label: "teknik", icon: <img src={teknikLine}></img>, icon2: <img src={teknikFill}></img> },
       { label: "belati", icon: <img src={kniveLine}></img>, icon2: <img src={kniveFill}></img> },
+      { label: "kripen", icon: <img src={kniveLine}></img>, icon2: <img src={kniveFill}></img> },
       { label: "sambung", icon: <img src={srcSambungline}></img>, icon2: <img src={srcSambungfill}></img> },
     ]
   }

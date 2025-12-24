@@ -168,11 +168,11 @@ const detail_event = () => {
 
                         {/* card siswa information */}
                         {(() => {
-                            if (dataPenguji.id_role === 'penguji cabang') {
+                            if (dataPenguji?.id_role === 'penguji cabang') {
                                 console.log('penguji cabang');
                                 return (
                                     <>
-                                        {dataSiswa.filter(a => a.id_event === dataEvent.id_event).map((item, index) => (
+                                        {dataSiswa?.filter(a => a.id_event === dataEvent?.id_event).map((item, index) => (
                                             <button className='w-full text-left' onClick={() => goToNilai(item)} key={index + 1}>
                                                 <div className="bg-navy rounded-md p-3 text-white mb-3 shadow shadow-slate-700 hover:shadow-purple hover:scale-[1.01] transition ease-in-out duration-300">
                                                     <h1 className='text-green tracking-wide text-lg'>{item.nomor_urut}</h1>
@@ -183,11 +183,11 @@ const detail_event = () => {
                                         ))}
                                     </>
                                 )
-                            } else if (dataPenguji.id_role === 'penguji ranting') {
+                            } else if (dataPenguji?.id_role === 'penguji ranting') {
                                 console.log('penguji ranting');
                                 return (
                                     <>
-                                        {dataSiswa.filter(a => a.id_ranting === dataPenguji.id_ranting && a.id_event === dataEvent.id_event).map((item, index) => (
+                                        {dataSiswa?.filter(a => a.id_ranting === dataPenguji?.id_ranting && a.id_event === dataEvent?.id_event).map((item, index) => (
                                             <button className='w-full text-left' onClick={() => goToNilai(item)} key={index + 1}>
                                                 <div className="bg-navy rounded-md p-3 text-white mb-3 shadow shadow-slate-700 hover:shadow-purple hover:scale-[1.01] transition ease-in-out duration-300">
                                                     <h1 className='text-green tracking-wide text-lg'>{item.nomor_urut}</h1>
