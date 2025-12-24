@@ -184,12 +184,15 @@ module.exports = {
             }));
 
             const result = await belati_siswa.bulkCreate(data);
-            const right = data.filter(item => item.predikat === 1).length;
-            const examResult = (right*(100/data.length))
+            const predikat10 = data.filter(item => item.predikat === 2).length;
+            const predikat8 = data.filter(item => item.predikat === 1).length;
+            const examResult10 = (predikat10*(100/data.length)) // (7 * (100/10)) = 70
+            const examResult8 = (predikat8*(80/data.length)) // (3 * (80/10)) = 24
+            const examResult = examResult10 + examResult8 // 94
 
-            const uktSiswa = await ukt_siswa.update(
+            await ukt_siswa.update(
             {
-                belati:examResult
+                belati:examResult.toFixed(2)
             },
             {
                 where: {
