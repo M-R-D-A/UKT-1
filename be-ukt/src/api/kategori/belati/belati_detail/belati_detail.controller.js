@@ -197,7 +197,6 @@ module.exports = {
                 }
             }
             )
-            console.log(uktSiswa)
 
             res.json({
                 message: "All exams inserted successfully",

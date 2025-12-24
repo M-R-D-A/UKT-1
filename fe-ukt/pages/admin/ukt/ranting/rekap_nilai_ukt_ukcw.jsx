@@ -122,11 +122,11 @@ const rekap_nilai_ukt_ukcw = () => {
 
     }, [])
 
-    useEffect(() => {
-        setInterval(() => {
-            socket.emit('pushRekap')
-        }, 3000)
-    }, [])
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         socket.emit('pushRekap')
+    //     }, 3000)
+    // }, [])
     return (
         <>
             {loading
@@ -296,14 +296,14 @@ const rekap_nilai_ukt_ukcw = () => {
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>
-                                            <th className='text-base border font-oswald'>Belati {jenis == 'fisik' && updown == 'upToDown'
+                                            <th className='text-base border font-oswald'>Belati {jenis == 'belati' && updown == 'upToDown'
                                                 ? <button className='rounded-md bg-gray text-lg' onClick={() => {
-                                                    setJenis('fisik');
+                                                    setJenis('belati');
                                                     setUpDown('downToUp');
 
                                                 }}>⌄</button>
                                                 : <button className='rounded-md bg-gray text-lg' onClick={() => {
-                                                    setJenis('fisik');
+                                                    setJenis('belati');
                                                     setUpDown('upToDown');
 
                                                 }}>⌃</button>}</th>
@@ -346,7 +346,7 @@ const rekap_nilai_ukt_ukcw = () => {
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.teknik < 50 && 'text-[#ca3030]'} ${item.teknik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.teknik)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.fisik < 50 && 'text-[#ca3030]'} ${item.fisik > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.fisik)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.sambung < 50 && 'text-[#ca3030]'} ${item.sambung > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.sambung)}</td>
-                                                    <td className={`border-b-2 border-gray border text-lg ${item?.sambung < 50 && 'text-[#ca3030]'} ${item.sambung > 89.99 && 'text-[#7dff5d]'}`}>0</td>
+                                                    <td className={`border-b-2 border-gray border text-lg ${item?.sambung < 50 && 'text-[#ca3030]'} ${item.sambung > 89.99 && 'text-[#7dff5d]'}`}>{formatNumber(item.belati)}</td>
                                                     <td className={`border-b-2 border-gray border text-lg ${item?.sambung < 50 && 'text-[#ca3030]'} ${item.sambung > 89.99 && 'text-[#7dff5d]'}`}>0</td>
                                                     <td className={`border-b-2 border-gray border font-bold text-lg ${((item.keshan + item.senam + item.jurus + item.fisik + item.teknik + item.sambung) / 6) < 50 && 'bg-[#371b1b]'} ${((item.keshan + item.senam + item.jurus + item.fisik + item.teknik + item.sambung) / 6) > 89.99 && 'bg-[#1f371b]'} `}>
                                                         {((item.keshan + item.senam + item.jurus + item.fisik + item.teknik + item.sambung) / 6).toLocaleString('id', { minimumFractionDigits: 1, maximumFractionDigits: 2 })}

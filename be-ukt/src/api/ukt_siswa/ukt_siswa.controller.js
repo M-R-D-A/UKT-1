@@ -43,19 +43,19 @@ module.exports = {
                 id_event: req.params.id
             }
         })
-          .then(data => {
-            const transformedData = data.map(item => ({
-                label: item.rayon,
-                value: item.rayon
-            }));
-            res.json({
-                count: transformedData.length,
-                data: transformedData
+            .then(data => {
+                const transformedData = data.map(item => ({
+                    label: item.rayon,
+                    value: item.rayon
+                }));
+                res.json({
+                    count: transformedData.length,
+                    data: transformedData
+                });
+            })
+            .catch(err => {
+                console.error('Error fetching distinct rayons:', err);
             });
-          })
-          .catch(err => {
-            console.error('Error fetching distinct rayons:', err);
-          });
     },
     controllerGetByEventFiltered: async (req, res) => {
         const { jenis, updown, event, ranting, rayon } = req.body;
@@ -64,16 +64,16 @@ module.exports = {
         let noRayon = {
             id_event: event
         };
-        
+
         let withRayon = {
             id_event: event,
             rayon: {
                 [Op.in]: rayon
             }
         };
-        
+
         let whereCriteria = rayon.length === 0 ? noRayon : withRayon;
-        
+
 
         switch (jenis) {
             case 'senam':
@@ -161,12 +161,15 @@ module.exports = {
             case 'sambung':
                 orderCriteria.push(['sambung', updown === 'downToUp' ? 'ASC' : 'DESC']);
                 break;
+            case 'belati':
+                orderCriteria.push(['belati', updown === 'downToUp' ? 'ASC' : 'DESC']);
+                break;
             case 'keshan':
                 orderCriteria.push(['keshan', updown === 'downToUp' ? 'ASC' : 'DESC']);
                 break;
             case 'all':
                 orderCriteria.push([
-                    Sequelize.literal('(COALESCE(senam, 0) + COALESCE(jurus, 0) + COALESCE(fisik, 0) + COALESCE(teknik, 0) + COALESCE(sambung, 0) + COALESCE(keshan, 0))/6'),
+                    Sequelize.literal('(COALESCE(senam, 0) + COALESCE(jurus, 0) + COALESCE(fisik, 0) + COALESCE(teknik, 0) + COALESCE(sambung, 0) + COALESCE(belati, 0) + COALESCE(keshan, 0))/7'),
                     updown === 'downToUp' ? 'ASC' : 'DESC'
                 ]);
                 break;
@@ -437,7 +440,7 @@ module.exports = {
                 {
                     model: models.siswa,
                     as: "siswa_ukt_siswa",
-                    attributes: ['id_ranting','id_event'],
+                    attributes: ['id_ranting', 'id_event'],
                 }
             ],
             where: {
@@ -626,7 +629,7 @@ module.exports = {
                 {
                     model: models.siswa,
                     as: "siswa_ukt_siswa",
-                    attributes: ['id_ranting','id_event'],
+                    attributes: ['id_ranting', 'id_event'],
                 }
             ],
             where: {
