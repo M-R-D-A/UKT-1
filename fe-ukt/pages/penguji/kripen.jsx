@@ -64,7 +64,6 @@ const kripen = () => {
     const handleSave = () => {
         setShowModalAlert(true);
         // -- data detail -- //
-        const uktSiswa = JSON.parse(localStorage.getItem('dataUktSiswa'))
         const token = localStorage.getItem('tokenPenguji')
         const dataPenguji = JSON.parse(localStorage.getItem('penguji'))
         const data = selectedButton.map((option) => {
@@ -80,27 +79,13 @@ const kripen = () => {
             tipe_ukt: dataSiswa.tipe_ukt,
             ujian: data
         }
-        console.log(dataDetail)
         if (alert == true) {
             axios.post(BASE_URL + `kripen_detail/exam`, dataDetail, { headers: { Authorization: `Bearer ${token}` } })
                 .then(async res => {
                     console.log(res)
 
-                    const dataDetailkripen = res.data.data
-                    const nilai = dataDetailkripen.nilai
-
-                    // -- ukt siswa  -- //
-                    const nilaiUkt = nilai
-                    await axios.put(BASE_URL + `ukt_siswa/${uktSiswa.id_ukt_siswa}`, {
-                        kripen: nilaiUkt
-                    }, { headers: { Authorization: `Bearer ${token}` } })
-                        .then(res => {
-                            socket.emit('pushRekap')
-                            router.back()
-                        })
-                        .catch(err => {
-                            console.log(err.message);
-                        })
+                    socket.emit('pushRekap')
+                    router.back()
                 })
         } else {
             null

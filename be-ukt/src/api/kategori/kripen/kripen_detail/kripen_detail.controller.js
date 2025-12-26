@@ -183,25 +183,29 @@ module.exports = {
                 predikat: item.predikat
             }));
 
-            const result = await kripen_siswa.bulkCreate(data);
-            const right = data.filter(item => item.predikat === 1).length;
-            const examResult = (right*(100/data.length)).toFixed(2)
+            await kripen_siswa.bulkCreate(data);
 
-            const uktSiswa = await ukt_siswa.update(
-            {
-                kripen:examResult
-            },
-            {
-                where: {
-                    id_siswa: req.body.id_siswa
-                }
-            }
-            )
-            console.log(uktSiswa)
+            const total = data.length;
+            const predikat10 = data.filter(i => i.predikat === 2).length;
+            const predikat8 = data.filter(i => i.predikat === 1).length;
+
+            const examResult10 = predikat10 * (100 / total);
+            const examResult8 = predikat8 * (80 / total);
+            const examResult = examResult10 + examResult8;
+            const result1 = {
+                total: Number(examResult.toFixed(2)),
+                plus: Number(examResult10.toFixed(2)),
+                benar: Number(examResult8.toFixed(2))
+            };
+
+            await ukt_siswa.update(
+                { kripen: examResult },
+                { where: { id_siswa: req.body.id_siswa } }
+            );
 
             res.json({
                 message: "All exams inserted successfully",
-                data: result
+                data: result1
             });
 
         } catch (error) {

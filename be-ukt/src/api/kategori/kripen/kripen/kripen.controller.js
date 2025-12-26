@@ -172,7 +172,7 @@ module.exports = {
                 ujian
             } = req.body;
             const detail = {
-                id_penguji,id_siswa,id_event,tipe_ukt
+                id_penguji, id_siswa, id_event, tipe_ukt
             }
             const processDetail = await kripen_detail.create(detail)
             // mapping array ujian jadi banyak row
@@ -183,31 +183,37 @@ module.exports = {
                 predikat: item.predikat
             }));
 
-            const result = await kripen_siswa.bulkCreate(data);
+            await kripen_siswa.bulkCreate(data);
+            const total = data.length;
+
             const predikat10 = data.filter(item => item.predikat === 2).length;
             const predikat8 = data.filter(item => item.predikat === 1).length;
-            const examResult10 = (predikat10*(100/data.length)) // (7 * (100/10)) = 70
-            const examResult8 = (predikat8*(80/data.length)) // (3 * (80/10)) = 24
-            const examResult = examResult10 + examResult8 // 94
-            console.log(examResult10)
-            console.log(examResult8)
-            console.log(examResult)
 
-            const uktSiswa = await ukt_siswa.update(
-            {
-                kripen:examResult
-            },
-            {
-                where: {
-                    id_siswa: req.body.id_siswa
+            const examResult10 = predikat10 * (100 / total);
+            const examResult8 = predikat8 * (80 / total);
+
+            const examResult = examResult10 + examResult8;
+
+            const result1 = {
+                total: Number(examResult.toFixed(2)),
+                plus: Number(examResult10.toFixed(2)),
+                benar: Number(examResult8.toFixed(2))
+            };
+
+            await ukt_siswa.update(
+                {
+                    kripen: examResult
+                },
+                {
+                    where: {
+                        id_siswa: req.body.id_siswa
+                    }
                 }
-            }
             )
-            console.log(uktSiswa)
 
             res.json({
                 message: "All exams inserted successfully",
-                data: result
+                result: "anjing"
             });
 
         } catch (error) {

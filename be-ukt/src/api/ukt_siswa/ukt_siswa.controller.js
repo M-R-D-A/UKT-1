@@ -164,12 +164,15 @@ module.exports = {
             case 'belati':
                 orderCriteria.push(['belati', updown === 'downToUp' ? 'ASC' : 'DESC']);
                 break;
+            case 'kripen':
+                orderCriteria.push(['kripen', updown === 'downToUp' ? 'ASC' : 'DESC']);
+                break;
             case 'keshan':
                 orderCriteria.push(['keshan', updown === 'downToUp' ? 'ASC' : 'DESC']);
                 break;
             case 'all':
                 orderCriteria.push([
-                    Sequelize.literal('(COALESCE(senam, 0) + COALESCE(jurus, 0) + COALESCE(fisik, 0) + COALESCE(teknik, 0) + COALESCE(sambung, 0) + COALESCE(belati, 0) + COALESCE(keshan, 0))/7'),
+                    Sequelize.literal('(COALESCE(senam, 0) + COALESCE(jurus, 0) + COALESCE(fisik, 0) + COALESCE(teknik, 0) + COALESCE(sambung, 0) + COALESCE(belati, 0) + COALESCE(kripen, 0) + COALESCE(keshan, 0))/7'),
                     updown === 'downToUp' ? 'ASC' : 'DESC'
                 ]);
                 break;
