@@ -157,6 +157,12 @@ app.use("/ukt/belati_detail", belatiDetail)
 //endpoint Belati Detail
 const kripenDetail = require('./src/api/kategori/kripen/kripen_detail/kripen_detail.router');
 app.use("/ukt/kripen_detail", kripenDetail)
+//endpoint Belati Detail
+const jurusToyaDetail = require('./src/api/kategori/jurus_toya/jurus_toya_detail/jurus_toya_detail.router');
+app.use("/ukt/jurus_toya_detail", jurusToyaDetail)
+//endpoint senam toya Detail
+const senamToyaDetail = require('./src/api/kategori/senam_toya/senam_toya_detail/senam_toya_detail.router');
+app.use("/ukt/senam_toya_detail", senamToyaDetail)
 
 //run server
 server.listen(8800, () => {

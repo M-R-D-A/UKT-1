@@ -143,6 +143,10 @@ module.exports = {
             whereClause["$belati_siswa.id_siswa$"] = { [Op.is]: null };
         } else if (action == 'kripen') {
             whereClause["$kripen_siswa.id_siswa$"] = { [Op.is]: null };
+        } else if (action == 'jurus_toya') {
+            whereClause["$jurus_toya_siswa.id_siswa$"] = { [Op.is]: null };
+        } else if (action == 'senam_toya') {
+            whereClause["$senam_toya_siswa.id_siswa$"] = { [Op.is]: null };
         }
         siswa.findAll({
             include: [
@@ -191,6 +195,18 @@ module.exports = {
                 {
                     model: models.kripen_detail,
                     as: "kripen_siswa",
+                    required: false,
+                    attributes: ['id_siswa']
+                },
+                {
+                    model: models.jurus_toya_detail,
+                    as: "jurus_toya_siswa",
+                    required: false,
+                    attributes: ['id_siswa']
+                },
+                {
+                    model: models.senam_toya_detail,
+                    as: "senam_toya_siswa",
                     required: false,
                     attributes: ['id_siswa']
                 },

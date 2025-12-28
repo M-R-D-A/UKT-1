@@ -1,5 +1,5 @@
 import React from 'react'
-
+import KripanFill from '../components/icon/svg/08_Kripan/08_kripan_fill.svg'
 //icon
 
 // import jurusSvg from '../components/jurus.svg';
@@ -22,15 +22,15 @@ const navLinks = [
   {
     role: "penguji",
     links: [
-      { label: "senam", icon: <img src={senamLine}></img>, icon2: <img src={senamFill}></img>},
-      { label: "toya", icon: <img src={senamLine}></img>, icon2: <img src={senamFill}></img>},
-      { label: "jurus",  icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
-      { label: "toya",  icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
-      { label: "fisik", icon: <img src={fisikLine}></img>, icon2: <img src={fisikFill}></img> },
-      { label: "teknik", icon: <img src={teknikLine}></img>, icon2: <img src={teknikFill}></img> },
-      { label: "belati", icon: <img src={kniveLine}></img>, icon2: <img src={kniveFill}></img> },
-      { label: "kripen", icon: <img src={kniveLine}></img>, icon2: <img src={kniveFill}></img> },
-      { label: "sambung", icon: <img src={srcSambungline}></img>, icon2: <img src={srcSambungfill}></img> },
+      { label: "senam", link:"senam", icon: <img src={senamLine}></img>, icon2: <img src={senamFill}></img>},
+      { label: "senam toya", link:"senam_toya", icon: <img src={senamLine}></img>, icon2: <img src={senamFill}></img>},
+      { label: "jurus", link:"jurus", icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
+      { label: "jurus toya", link:"jurus_toya",  icon: <img src={jurusLine}></img>, icon2: <img src={jurusFill}></img> },
+      { label: "fisik", link:"fisik", icon: <img src={fisikLine}></img>, icon2: <img src={fisikFill}></img> },
+      { label: "teknik", link:"teknik", icon: <img src={teknikLine}></img>, icon2: <img src={teknikFill}></img> },
+      { label: "belati", link:"belati", icon: <img src={kniveLine}></img>, icon2: <img src={kniveFill}></img> },
+      { label: "kripen", link:"kripen", icon: <img src={KripanFill.src}></img>,  icon2: <img src='../components/icon/svg/08_Kripan/08_kripan_line.svg'></img> },
+      { label: "sambung", link:"sambung", icon: <img src={srcSambungline}></img>, icon2: <img src={srcSambungfill}></img> },
     ]
   }
 ];
@@ -46,19 +46,19 @@ function MainNavigation(props) {
           <nav>
             <ul className="flex gap-6">
               {navItem.links.map((link, index) => (
-                <li key={index+1} onClick={() => setActive(link.label)} >
+                <li key={index+1} onClick={() => setActive(link.link)} >
                   <div className='flex-col px-1 pt-4 py-2 w-12 items-center justify-center'>
                     <div
                     style = {
-                      active === link.label ? {background: '#d4d5d6'} : {background: '#ffffff'} 
+                      active === link.link ? {background: '#d4d5d6'} : {background: '#ffffff'} 
                     } 
                     className={active === link.label ? 'flex rounded-full items-center justify-center transition-all duration-200 ease-linear' :
                       'flex rounded-full items-center justify-center transition-all duration-200 ease-linear'}>
                       <div className='p-2'>
                         <div
                           key={index}
-                          className={active === link.label ? 'text-black text-xl rounded-full' : 'text-gray text-xl rounded-full'}>
-                          {active === link.label ? link.icon2 : link.icon}
+                          className={active === link.link ? 'text-black text-xl rounded-full' : 'text-gray text-xl rounded-full'}>
+                          {active === link.link ? link.icon2 : link.icon}
                         </div>
                       </div>
                     </div>
