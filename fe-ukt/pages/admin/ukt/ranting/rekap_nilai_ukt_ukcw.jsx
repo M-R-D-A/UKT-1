@@ -121,11 +121,11 @@ const rekap_nilai_ukt_ukcw = () => {
 
     }, [])
 
-    // useEffect(() => {
-    //     setInterval(() => {
-    //         socket.emit('pushRekap')
-    //     }, 3000)
-    // }, [])
+    useEffect(() => {
+        setInterval(() => {
+            socket.emit('pushRekap')
+        }, 3000)
+    }, [])
     return (
         <>
             {loading

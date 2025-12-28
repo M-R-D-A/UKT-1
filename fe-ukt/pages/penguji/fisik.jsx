@@ -113,7 +113,6 @@ const fisik = () => {
                 fisik: nilaiUkt
             }, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res => {
-                    console.log(res)
                     socket.emit('pushRekap')
                     router.back()
                 })
