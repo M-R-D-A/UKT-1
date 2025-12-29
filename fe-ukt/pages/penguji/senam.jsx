@@ -70,7 +70,6 @@ const senam = () => {
 
 
     const handleAlertData = (data) => {
-        console.log(data.data)
         if (data.data === true) {
             setAlert(true)
         } else if (data.data === false) {

@@ -1,5 +1,7 @@
 const models = require('../../../../models/index');
 const teknik_detail = models.teknik_detail;
+const teknik_siswa = models.teknik_siswa;
+const ukt_siswa = models.ukt_siswa;
 
 module.exports = {
     controllerGetAll: async (req, res) => {
@@ -248,6 +250,55 @@ module.exports = {
             tipe_ukt: req.body.tipe_ukt
         }
         teknik_detail.create(data)
+            .then(result => {
+                res.json({
+                    message: "data has been inserted",
+                    data: result,
+                })
+            })
+            .catch(error => {
+                res.json({
+                    message: error.message
+                })
+            })
+    },
+    controllerAddExam: async (req, res) => {
+        const { id_penguji, id_event, id_siswa, tipe_ukt, data } = req.body
+        const dataDetail = {
+            id_penguji,
+            id_event,
+            id_siswa,
+            tipe_ukt,
+        }
+        const processDetail = await teknik_detail.create(dataDetail)
+        const dataSiswa = data.map(item => ({
+            id_teknik_detail: processDetail.id_teknik_detail,
+            id_siswa,
+            id_teknik: item.id_teknik,
+            predikat: item.predikat
+        }));
+
+        await teknik_siswa.bulkCreate(dataSiswa)
+        const baik = data.filter(i => i.predikat === "BAIK").length
+        const cukup = data.filter(i => i.predikat === "CUKUP").length
+        const kurang = data.filter(i => i.predikat === "KURANG").length
+
+        // -- redefine nilai -- //
+        const newBaik = baik.length * 3;
+        const newCukup = cukup.length * 2;
+        const newKurang = kurang.length;
+        // -- ukt siswa  -- //
+        const nilaiUkt = newBaik + newCukup + newKurang;
+        await ukt_siswa.update(
+            {
+                teknik: nilaiUkt
+            },
+            {
+                where: {
+                    id_siswa
+                }
+            }
+        )
             .then(result => {
                 res.json({
                     message: "data has been inserted",
